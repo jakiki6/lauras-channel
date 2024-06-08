@@ -4,6 +4,10 @@
   #:use-module (guix build-system gnu)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages autotools)
+  #:use-module (guix download)
+  #:use-module (guix build-system cargo)
+  #:use-module (gnu packages crates-io)
+  #:use-module (gnu packages crates-graphics)
 )
 
 (define-public libgfshare
@@ -79,3 +83,30 @@
       "This package provides encoder/decoder implementation for DEC SIXEL graphics, and some converter programs.")
     (home-page "https://github.com/saitoha/libsixel")
     (license license:expat)))
+
+(define-public clipmon
+  (package
+    (name "clipmon")
+    (version "0.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "clipmon" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0fcspz7dw1vwin7vqizjszwc8qyzpdpz6hvvnrvnrp3gqmbm1ny3"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-calloop" ,rust-calloop-0.9)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-mime" ,rust-mime-0.3)
+                       ("rust-smithay-client-toolkit" ,rust-smithay-client-toolkit-0.15)
+                       ("rust-wayland-client" ,rust-wayland-client-0.29)
+                       ("rust-wayland-protocols" ,rust-wayland-protocols-0.29))))
+    (home-page "https://sr.ht/~whynothugo/clipmon/")
+    (synopsis
+     "clipmon, or clipboard monitor is a wayland helper that keeps the selection when the application that copied exits")
+    (description
+     "This package provides clipmon, or clipboard monitor is a wayland helper that keeps the selection when
+the application that copied exits.")
+    (license license:isc)))
