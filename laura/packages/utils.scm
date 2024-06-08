@@ -8,6 +8,7 @@
   #:use-module (guix build-system cargo)
   #:use-module (gnu packages crates-io)
   #:use-module (gnu packages crates-graphics)
+  #:use-module (laura packages rust-common)
 )
 
 (define-public libgfshare
