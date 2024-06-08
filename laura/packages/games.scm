@@ -9,6 +9,7 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages sdl)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages crates-io)
 )
 
 (define-public fceux 
