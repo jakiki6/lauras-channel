@@ -8,6 +8,8 @@
   #:use-module (guix build-system cargo)
   #:use-module (gnu packages crates-io)
   #:use-module (gnu packages crates-graphics)
+  #:use-module (gnu packages protobuf)
+  #:use-module (gnu packages pkg-config)
   #:use-module (laura packages rust-common)
 )
 
@@ -111,3 +113,24 @@
      "This package provides clipmon, or clipboard monitor is a wayland helper that keeps the selection when
 the application that copied exits.")
     (license license:isc)))
+
+(define-public yara
+  (package
+    (name "yara")
+    (version "4.5.1")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/VirusTotal/yara")
+              (commit "v4.5.1")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1b8fj83lr5m0pma3rj1l5rkjkn69hrfd1hnl5zrjdsik4nq532i4"))))
+    (build-system gnu-build-system)
+    (native-inputs (list autoconf automake libtool pkg-config))
+    (inputs (list protobuf-c))
+    (arguments (list #:tests? #f))
+    (home-page "https://virustotal.github.io/yara/")
+    (synopsis "The pattern matching swiss knife")
+    (description "YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples.")
+    (license license:bsd-3)))
