@@ -99,7 +99,7 @@
     (build-system cargo-build-system)
     (arguments
      `(#:cargo-inputs (("rust-calloop" ,rust-calloop-0.9)
-                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-libc" ,rust-libc-0.2.155)
                        ("rust-mime" ,rust-mime-0.3)
                        ("rust-smithay-client-toolkit" ,rust-smithay-client-toolkit-0.15)
                        ("rust-wayland-client" ,rust-wayland-client-0.29)

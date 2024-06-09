@@ -24,7 +24,7 @@
                        ("rust-amdgpu-top-tui" ,rust-amdgpu-top-tui-0.8)
                        ("rust-gix" ,rust-gix-0.61)
                        ("rust-libamdgpu-top" ,rust-libamdgpu-top-0.8)
-                       ("rust-libc" ,rust-libc-0.2))))
+                       ("rust-libc" ,rust-libc-0.2.155))))
     (home-page "https://github.com/Umio-Yasuno/amdgpu_top")
     (synopsis
      "Tool to displays AMDGPU usage.
