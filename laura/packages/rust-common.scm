@@ -7963,17 +7963,17 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Implementation agnostic descriptor allocator for Vulkan like APIs.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-windows-interface-0.53
+(define-public rust-windows-interface-0.52
   (package
     (name "rust-windows-interface")
-    (version "0.53.0")
+    (version "0.52.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "windows-interface" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0q4bb5zigzr3083kwb7qkhx63dlymwx8gy6mw7jgm25281qmacys"))))
+        (base32 "1la254wzd8qlbxplvb667z5mwdh9jngg1qyhxg6fx9wm00pc73cx"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build? #t
@@ -7986,17 +7986,17 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides The interface macro for the windows crate.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-windows-implement-0.53
+(define-public rust-windows-implement-0.52
   (package
     (name "rust-windows-implement")
-    (version "0.53.0")
+    (version "0.52.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "windows-implement" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1gd05sw9knn8i7n9ip1kdwpxqcwmldja3w32m16chjcjprkc4all"))))
+        (base32 "0il91jkdgnwl20gm8dwbjswsmiq7paif49dyk5kvhwv72wrqq5hj"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build? #t
@@ -8208,17 +8208,17 @@ wrappers for the new DXC HLSL compiler and validator.")
     (description "This package provides Windows error handling.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-windows-core-0.53
+(define-public rust-windows-core-0.52
   (package
     (name "rust-windows-core")
-    (version "0.53.0")
+    (version "0.52.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "windows-core" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1pd58vj252p28xznq7mdcvdw0npxn7dcwnm5kymz2xv3ba4mpk4x"))))
+        (base32 "1nc3qv7sy24x0nlnb32f7alzpd6f72l4p24vl65vydbyil669ark"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build? #t
@@ -8229,23 +8229,23 @@ wrappers for the new DXC HLSL compiler and validator.")
     (description "This package provides Rust for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-windows-0.53
+(define-public rust-windows-0.52
   (package
     (name "rust-windows")
-    (version "0.53.0")
+    (version "0.52.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "windows" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0f5mjwrnrxx3ackid0gv3003vsgr8nisxvhnnymdqh1iz14czigg"))))
+        (base32 "1gnh210qjlprpd1szaq04rjm1zqgdm9j7l9absg0kawi2rwm72p4"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build? #t
-       #:cargo-inputs (("rust-windows-core" ,rust-windows-core-0.53)
-                       ("rust-windows-implement" ,rust-windows-implement-0.53)
-                       ("rust-windows-interface" ,rust-windows-interface-0.53)
+       #:cargo-inputs (("rust-windows-core" ,rust-windows-core-0.52)
+                       ("rust-windows-implement" ,rust-windows-implement-0.52)
+                       ("rust-windows-interface" ,rust-windows-interface-0.52)
                        ("rust-windows-targets" ,rust-windows-targets-0.52))))
     (home-page "https://github.com/microsoft/windows-rs")
     (synopsis "Rust for Windows")
@@ -9039,7 +9039,7 @@ array.")
                        ("rust-presser" ,rust-presser-0.3)
                        ("rust-thiserror" ,rust-thiserror-1.0.61)
                        ("rust-winapi" ,rust-winapi-0.3)
-                       ("rust-windows" ,rust-windows-0.53))))
+                       ("rust-windows" ,rust-windows-0.52))))
     (home-page "https://github.com/Traverse-Research/gpu-allocator")
     (synopsis "Memory allocator for GPU memory in Vulkan and DirectX 12")
     (description
