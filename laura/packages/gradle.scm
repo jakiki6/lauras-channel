@@ -19,6 +19,18 @@
                (base32
                 "07ddff7gpwjqq1fv21867jp4w3444wzzhg2h90g63mgh4vw51dcr"))))))
 
+(define-public java-commons-cli-1.0
+  (package
+    (inherit java-commons-cli)
+    (version "1.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://apache/commons/cli/source/"
+                                  "commons-cli-" version "-src.tar.gz"))
+              (sha256
+               (base32
+                "05hgi2z01fqz374y719gl1dxzqvzci5af071zm7vxrjg9vczipm1"))))))
+
 (define-public gradle-bootstrap
   (package
     (name "gradle-bootstrap")
@@ -43,8 +55,12 @@
             (put-string file "<ivysettings><property name=\"ivy.local.default.root\"             value=\"${ivy.default.ivy.user.dir}/local\" override=\"false\"/><property name=\"ivy.local.default.ivy.pattern\"      value=\"[organisation]/[module]/[revision]/[type]s/[artifact].[ext]\" override=\"false\"/><property name=\"ivy.local.default.artifact.pattern\" value=\"[organisation]/[module]/[revision]/[type]s/[artifact].[ext]\" override=\"false\"/><resolvers><filesystem name=\"local\"><ivy pattern=\"${ivy.local.default.root}/${ivy.local.default.ivy.pattern}\" /><artifact pattern=\"${ivy.local.default.root}/${ivy.local.default.artifact.pattern}\" /></filesystem></resolvers></ivysettings>")
             (close-port file))
           (invoke "zip" "-u" "ivy/ivy-2.0.0.beta2_20080305165542.jar" "org/apache/ivy/core/settings/ivyconf-local.xml")
-          (setenv "CLASSPATH" (string-append (getcwd) "/ivy/ivy-2.0.0.beta2_20080305165542.jar" ":" (getenv "CLASSPATH"))))))))
-    (native-inputs (list zip java-apache-ivy-2.0.0))
+          (setenv "CLASSPATH" (string-append (getcwd) "/ivy/ivy-2.0.0.beta2_20080305165542.jar" ":" (getenv "CLASSPATH")))
+          (setenv "_JAVA_OPTIONS" (string-append "-Duser.home=" (getcwd)))))
+        (add-before 'build 'inject-dependencies (lambda* (#:key inputs #:allow-other-keys)
+          (mkdir-p ".ivy2/local/commons-cli/commons-cli/1.0/jars") (copy-file (string-append (assoc-ref inputs "java-commons-cli") "/lib/m2/commons-cli/commons-cli/1.4/commons-cli-1.4.jar") ".ivy2/local/commons-cli/commons-cli/1.0/jars/commons-cli.jar")
+    )))))
+    (native-inputs (list zip java-apache-ivy-2.0.0 java-commons-cli-1.0))
     (home-page "https://gradle.org")
     (synopsis "Bootstrap gradle")
     (description "Latest gradle buildable without gradle")
