@@ -3,6 +3,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages)
   #:use-module (gnu packages java)
+  #:use-module (gnu packages java-xml)
   #:use-module (gnu packages compression)
   #:use-module (guix build-system ant)
   #:use-module (guix git-download))
@@ -30,6 +31,26 @@
               (sha256
                (base32
                 "05hgi2z01fqz374y719gl1dxzqvzci5af071zm7vxrjg9vczipm1"))))))
+
+(define-public groovy-1.0.0
+  (package
+    (name "groovy")
+    (version "1.0.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/apache/groovy")
+              (commit "GROOVY_1_0")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1rjdb4x9m4fk4dfzpm6zvinz4kb3nzkjj8j64j9m9mpirmf5zdjg"))))
+    (build-system ant-build-system)
+    (inputs (list java-asm-8 java-asm-util-8 java-asm-tree-8 antlr2 java-xstream java-jmock-legacy java-javaee-servletapi java-commons-cli java-junit))
+    (arguments (list #:jar-name "groovy.jar"))
+    (home-page "https://github.com/apache/groovy")
+    (synopsis "Bootstrap Groovy")
+    (description "Bootstrap Groovy")
+    (license license:asl2.0)))
 
 (define-public gradle-bootstrap
   (package
@@ -60,7 +81,7 @@
         (add-before 'build 'inject-dependencies (lambda* (#:key inputs #:allow-other-keys)
           (mkdir-p ".ivy2/local/commons-cli/commons-cli/1.0/jars") (copy-file (string-append (assoc-ref inputs "java-commons-cli") "/lib/m2/commons-cli/commons-cli/1.4/commons-cli-1.4.jar") ".ivy2/local/commons-cli/commons-cli/1.0/jars/commons-cli.jar")
     )))))
-    (native-inputs (list zip java-apache-ivy-2.0.0 java-commons-cli-1.0))
+    (native-inputs (list zip java-apache-ivy-2.0.0 java-commons-cli-1.0 groovy-1.0.0))
     (home-page "https://gradle.org")
     (synopsis "Bootstrap gradle")
     (description "Latest gradle buildable without gradle")
