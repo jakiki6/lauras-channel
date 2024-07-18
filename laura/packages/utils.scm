@@ -10,8 +10,13 @@
   #:use-module (gnu packages crates-graphics)
   #:use-module (gnu packages protobuf)
   #:use-module (gnu packages pkg-config)
-  #:use-module (laura packages rust-common)
-)
+  #:use-module (gnu packages tls)
+  #:use-module (gnu packages multiprecision)
+  #:use-module (gnu packages python)
+  #:use-module (gnu packages perl)
+  #:use-module (guix build utils)
+  #:use-module (guix build-system cmake)
+  #:use-module (laura packages rust-common))
 
 (define-public libgfshare
   (package
@@ -92,26 +97,30 @@
     (name "clipmon")
     (version "0.1.0")
     (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "clipmon" version))
-       (file-name (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32 "0fcspz7dw1vwin7vqizjszwc8qyzpdpz6hvvnrvnrp3gqmbm1ny3"))))
+      (origin
+        (method url-fetch)
+        (uri (crate-uri "clipmon" version))
+        (file-name
+          (string-append name "-" version ".tar.gz"))
+        (sha256
+          (base32
+            "0fcspz7dw1vwin7vqizjszwc8qyzpdpz6hvvnrvnrp3gqmbm1ny3"))))
     (build-system cargo-build-system)
     (arguments
-     `(#:cargo-inputs (("rust-calloop" ,rust-calloop-0.9)
-                       ("rust-libc" ,rust-libc-0.2.155)
-                       ("rust-mime" ,rust-mime-0.3)
-                       ("rust-smithay-client-toolkit" ,rust-smithay-client-toolkit-0.15)
-                       ("rust-wayland-client" ,rust-wayland-client-0.29)
-                       ("rust-wayland-protocols" ,rust-wayland-protocols-0.29))))
+      `(#:cargo-inputs
+        (("rust-calloop" ,rust-calloop-0.9)
+         ("rust-libc" ,rust-libc-0.2.155)
+         ("rust-mime" ,rust-mime-0.3)
+         ("rust-smithay-client-toolkit"
+          ,rust-smithay-client-toolkit-0.15)
+         ("rust-wayland-client" ,rust-wayland-client-0.29)
+         ("rust-wayland-protocols"
+          ,rust-wayland-protocols-0.29))))
     (home-page "https://sr.ht/~whynothugo/clipmon/")
     (synopsis
-     "clipmon, or clipboard monitor is a wayland helper that keeps the selection when the application that copied exits")
+      "clipmon, or clipboard monitor is a wayland helper that keeps the selection when the application that copied exits")
     (description
-     "This package provides clipmon, or clipboard monitor is a wayland helper that keeps the selection when
-the application that copied exits.")
+      "This package provides clipmon, or clipboard monitor is a wayland helper that keeps the selection when\nthe application that copied exits.")
     (license license:isc)))
 
 (define-public yara
@@ -122,15 +131,61 @@ the application that copied exits.")
       (origin
         (method git-fetch)
         (uri (git-reference
-              (url "https://github.com/VirusTotal/yara")
-              (commit "v4.5.1")))
+               (url "https://github.com/VirusTotal/yara")
+               (commit "v4.5.1")))
         (file-name (git-file-name name version))
-        (sha256 (base32 "1b8fj83lr5m0pma3rj1l5rkjkn69hrfd1hnl5zrjdsik4nq532i4"))))
+        (sha256
+          (base32
+            "1b8fj83lr5m0pma3rj1l5rkjkn69hrfd1hnl5zrjdsik4nq532i4"))))
     (build-system gnu-build-system)
-    (native-inputs (list autoconf automake libtool pkg-config))
-    (inputs (list protobuf-c))
+    (native-inputs
+      (list autoconf automake libtool pkg-config))
+    (inputs (list protobuf-c openssl))
     (arguments (list #:tests? #f))
     (home-page "https://virustotal.github.io/yara/")
     (synopsis "The pattern matching swiss knife")
-    (description "YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples.")
+    (description
+      "YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples.")
     (license license:bsd-3)))
+
+(define-public cado-nfs
+  (package
+    (name "cado-nfs")
+    (version "2.3.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://gitlab.inria.fr/cado-nfs/cado-nfs.git")
+               (commit
+                 "2551f43ca06cb31d86fe39847033ac8dedca1938")))
+        (file-name (git-file-name name version))
+        (sha256
+          (base32
+            "1qd75c6qa38xnm2b3h1k7n8g5vf746bkz68ljbpds9ma6rzlwyiw"))))
+    (inputs (list gmp python-3 perl))
+    (build-system cmake-build-system)
+    (arguments
+      `(#:tests?
+        #f
+        #:build-type
+        "Release"
+        #:phases
+        (modify-phases
+          %standard-phases
+          (add-before
+            'patch-generated-file-shebangs
+            'patch-files
+            (lambda* (#:key inputs #:allow-other-keys)
+              (begin
+                (use-modules (guix build utils))
+                (map (lambda (x)
+                       (with-exception-handler (lambda (e) #f) (lambda () (substitute* x (("#! /bin/sh") "#!/bin/sh")))))
+                     (find-files "."))))))))
+    (home-page
+      "https://gitlab.inria.fr/cado-nfs/cado-nfs")
+    (synopsis
+      "An Implementation of the Number Field Sieve Algorithm")
+    (description
+      "Cado-NFS, An Implementation of the Number Field Sieve Algorithm")
+    (license license:lgpl2.1)))

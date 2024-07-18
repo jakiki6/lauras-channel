@@ -28,7 +28,7 @@
         (file-name (git-file-name name version))
         (sha256 (base32 "1k35kpmzxvys8xn3n1nw6kmjxb5c9av46bw4njfilxnjjv2ljcqg"))))
     (inputs
-     (list qtbase-5 qtdeclarative-5 qtx11extras kcoreaddons ki18n kwindowsystem knotifications xcb-util kpipewire))
+     (list qtbase-5 qtdeclarative-5 qtx11extras kcoreaddons-5 ki18n-5 kwindowsystem-5 knotifications-5 xcb-util kpipewire))
     (native-inputs
      (list extra-cmake-modules))
     (build-system cmake-build-system)
