@@ -11516,7 +11516,7 @@ Argument Parser.")
      "This package provides Open a file in the default text editor.")
     (license license:cc0)))
 
-(define-public rust-predicates-3
+(define-public rust-predicates-3.1.0
   (package
     (name "rust-predicates")
     (version "3.1.0")
@@ -11565,7 +11565,7 @@ Argument Parser.")
      "This package provides Glob-matched recursive file system walking.")
     (license license:expat)))
 
-(define-public rust-assert-fs-1
+(define-public rust-assert-fs-1.1.1
   (package
     (name "rust-assert-fs")
     (version "1.1.1")
@@ -11583,7 +11583,7 @@ Argument Parser.")
                        ("rust-anstyle" ,rust-anstyle-1)
                        ("rust-doc-comment" ,rust-doc-comment-0.3)
                        ("rust-globwalk" ,rust-globwalk-0.9)
-                       ("rust-predicates" ,rust-predicates-3)
+                       ("rust-predicates" ,rust-predicates-3.1.0)
                        ("rust-predicates-core" ,rust-predicates-core-1)
                        ("rust-predicates-tree" ,rust-predicates-tree-1)
                        ("rust-tempfile" ,rust-tempfile-3))))
