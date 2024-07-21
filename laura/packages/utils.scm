@@ -328,3 +328,38 @@ enables it to self-document.")
     (description
      "Disk Usage/Free Utility (Linux, BSD, @code{macOS} & Windows).")
     (license license:expat)))
+
+(define-public paper-age
+  (package
+    (name "paper-age")
+    (version "1.3.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "paper-age" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "14n6qv6f39qy8wvw71vfm8y0yfggp975yibqdqdzz61iis46mykv"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-age" ,rust-age-0.10)
+                       ("rust-clap" ,rust-clap-4.5.6)
+                       ("rust-clap-verbosity-flag" ,rust-clap-verbosity-flag-2.2)
+                       ("rust-clap-complete" ,rust-clap-complete-4.5.5)
+                       ("rust-clap-mangen" ,rust-clap-mangen-0.2)
+                       ("rust-env-logger" ,rust-env-logger-0.11)
+                       ("rust-exitcode" ,rust-exitcode-1)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-path-absolutize" ,rust-path-absolutize-3)
+                       ("rust-printpdf" ,rust-printpdf-0.7)
+                       ("rust-printpdf" ,rust-printpdf-0.7)
+                       ("rust-qrcode" ,rust-qrcode-0.14)
+                       ("rust-rpassword" ,rust-rpassword-7))
+       #:cargo-development-inputs (("rust-assert-cmd" ,rust-assert-cmd-2)
+                                   ("rust-assert-fs" ,rust-assert-fs-1)
+                                   ("rust-predicates" ,rust-predicates-3))))
+    (home-page "https://github.com/matiaskorhonen/paper-age")
+    (synopsis "Easy and secure paper backups of secrets")
+    (description
+     "This package provides Easy and secure paper backups of secrets.")
+    (license license:expat)))

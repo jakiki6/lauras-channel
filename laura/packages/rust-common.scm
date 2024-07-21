@@ -11515,3 +11515,930 @@ Argument Parser.")
     (description
      "This package provides Open a file in the default text editor.")
     (license license:cc0)))
+
+(define-public rust-predicates-3
+  (package
+    (name "rust-predicates")
+    (version "3.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "predicates" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1s676s13sva6ikv2qmfmm7n3y3jnzvwbbhy1xzgnr4h58vyppf38"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-anstyle" ,rust-anstyle-1)
+                       ("rust-difflib" ,rust-difflib-0.4)
+                       ("rust-float-cmp" ,rust-float-cmp-0.9)
+                       ("rust-normalize-line-endings" ,rust-normalize-line-endings-0.3)
+                       ("rust-predicates-core" ,rust-predicates-core-1)
+                       ("rust-regex" ,rust-regex-1))))
+    (home-page "https://github.com/assert-rs/predicates-rs")
+    (synopsis "An implementation of boolean-valued predicate functions")
+    (description
+     "This package provides An implementation of boolean-valued predicate functions.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-globwalk-0.9
+  (package
+    (name "rust-globwalk")
+    (version "0.9.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "globwalk" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0mz7bsa66p2rrgnz3l94ac4kbklh7mq8j30iizyxjy4qyvmn1xqb"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-ignore" ,rust-ignore-0.4)
+                       ("rust-walkdir" ,rust-walkdir-2))))
+    (home-page "https://github.com/gilnaa/globwalk")
+    (synopsis "Glob-matched recursive file system walking")
+    (description
+     "This package provides Glob-matched recursive file system walking.")
+    (license license:expat)))
+
+(define-public rust-assert-fs-1
+  (package
+    (name "rust-assert-fs")
+    (version "1.1.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "assert_fs" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1v52l81h93pwk40c7g7bg3g7276cb2afbkdn26dn5vf823hn5mrc"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-anstream" ,rust-anstream-0.6)
+                       ("rust-anstyle" ,rust-anstyle-1)
+                       ("rust-doc-comment" ,rust-doc-comment-0.3)
+                       ("rust-globwalk" ,rust-globwalk-0.9)
+                       ("rust-predicates" ,rust-predicates-3)
+                       ("rust-predicates-core" ,rust-predicates-core-1)
+                       ("rust-predicates-tree" ,rust-predicates-tree-1)
+                       ("rust-tempfile" ,rust-tempfile-3))))
+    (home-page "https://github.com/assert-rs/assert_fs")
+    (synopsis "Filesystem fixtures and assertions for testing")
+    (description
+     "This package provides Filesystem fixtures and assertions for testing.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-qrcode-0.14
+  (package
+    (name "rust-qrcode")
+    (version "0.14.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "qrcode" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1v693x68yg90wfpas5v4bf6cfmnq9dq54qfgd3kb33j07r3851yn"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-image" ,rust-image-0.25))))
+    (home-page "https://github.com/kennytm/qrcode-rust")
+    (synopsis "QR code encoder in Rust")
+    (description "This package provides QR code encoder in Rust.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-xmlwriter-0.1
+  (package
+    (name "rust-xmlwriter")
+    (version "0.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "xmlwriter" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1fg0ldmkgiis6hnxpi1c9gy7v23y0lpi824bp8yp12fi3r82lypc"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/RazrFalcon/xmlwriter")
+    (synopsis "simple, streaming XML writer.")
+    (description "This package provides a simple, streaming XML writer.")
+    (license license:expat)))
+
+(define-public rust-ttf-parser-0.18
+  (package
+    (name "rust-ttf-parser")
+    (version "0.18.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "ttf-parser" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0cvnn99d0i7bd25m9205rikjcscfji6xzqcp90w5aqcwmmqzf286"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/RazrFalcon/ttf-parser")
+    (synopsis
+     "high-level, safe, zero-allocation font parser for TrueType, OpenType, and AAT.")
+    (description
+     "This package provides a high-level, safe, zero-allocation font parser for
+@code{TrueType}, @code{OpenType}, and AAT.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-rustybuzz-0.7
+  (package
+    (name "rust-rustybuzz")
+    (version "0.7.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "rustybuzz" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0siamd66ia90ckmxszapxy280j1lhq0r2xlmndqy5gk1w91dyaqn"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-bytemuck" ,rust-bytemuck-1)
+                       ("rust-libm" ,rust-libm-0.2)
+                       ("rust-smallvec" ,rust-smallvec-1)
+                       ("rust-ttf-parser" ,rust-ttf-parser-0.18)
+                       ("rust-unicode-bidi-mirroring" ,rust-unicode-bidi-mirroring-0.1)
+                       ("rust-unicode-ccc" ,rust-unicode-ccc-0.1)
+                       ("rust-unicode-general-category" ,rust-unicode-general-category-0.6)
+                       ("rust-unicode-script" ,rust-unicode-script-0.5))))
+    (home-page "https://github.com/RazrFalcon/rustybuzz")
+    (synopsis "complete harfbuzz shaping algorithm port to Rust.")
+    (description
+     "This package provides a complete harfbuzz shaping algorithm port to Rust.")
+    (license license:expat)))
+
+(define-public rust-usvg-text-layout-0.35
+  (package
+    (name "rust-usvg-text-layout")
+    (version "0.35.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "usvg-text-layout" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1d7yfqiq9hi8b7jasv5s94kab5v9jibb7f2r5452qrc99rh48l03"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-fontdb" ,rust-fontdb-0.14)
+                       ("rust-kurbo" ,rust-kurbo-0.9)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-rustybuzz" ,rust-rustybuzz-0.7)
+                       ("rust-unicode-bidi" ,rust-unicode-bidi-0.3)
+                       ("rust-unicode-script" ,rust-unicode-script-0.5)
+                       ("rust-unicode-vo" ,rust-unicode-vo-0.1)
+                       ("rust-usvg-tree" ,rust-usvg-tree-0.35))))
+    (home-page "https://github.com/RazrFalcon/resvg")
+    (synopsis "An SVG text layout implementation")
+    (description "This package provides An SVG text layout implementation.")
+    (license license:mpl2.0)))
+
+(define-public rust-tiny-skia-path-0.10
+  (package
+    (name "rust-tiny-skia-path")
+    (version "0.10.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "tiny-skia-path" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0718wy4s962wgwz2x2j08w6qr3m6mvm5c98srrx6ihlsr0sslq1g"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrayref" ,rust-arrayref-0.3)
+                       ("rust-bytemuck" ,rust-bytemuck-1)
+                       ("rust-libm" ,rust-libm-0.2)
+                       ("rust-strict-num" ,rust-strict-num-0.1))))
+    (home-page "https://github.com/RazrFalcon/tiny-skia/tree/master/path")
+    (synopsis "tiny-skia Bezier path implementation")
+    (description
+     "This package provides a tiny-skia Bezier path implementation.")
+    (license license:bsd-3)))
+
+(define-public rust-strict-num-0.1
+  (package
+    (name "rust-strict-num")
+    (version "0.1.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "strict-num" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0cb7l1vhb8zj90mzm8avlk815k40sql9515s865rqdrdfavvldv6"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-float-cmp" ,rust-float-cmp-0.9))))
+    (home-page "https://github.com/RazrFalcon/strict-num")
+    (synopsis "collection of bounded numeric types")
+    (description
+     "This package provides a collection of bounded numeric types.")
+    (license license:expat)))
+
+(define-public rust-usvg-tree-0.35
+  (package
+    (name "rust-usvg-tree")
+    (version "0.35.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "usvg-tree" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "14lbzk9qbr40prjh1ml17r6f5hw10rrkjqqx65fxpji1xpjaffbr"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-rctree" ,rust-rctree-0.5)
+                       ("rust-strict-num" ,rust-strict-num-0.1)
+                       ("rust-svgtypes" ,rust-svgtypes-0.11)
+                       ("rust-tiny-skia-path" ,rust-tiny-skia-path-0.10))))
+    (home-page "https://github.com/RazrFalcon/resvg")
+    (synopsis "An SVG tree representation used by usvg")
+    (description
+     "This package provides An SVG tree representation used by usvg.")
+    (license license:mpl2.0)))
+
+(define-public rust-svgtypes-0.11
+  (package
+    (name "rust-svgtypes")
+    (version "0.11.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "svgtypes" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "19q2xxy8d3sl7406jy8kd4inklp2v62y667sq1l7y9zkww8hcjzd"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-kurbo" ,rust-kurbo-0.9)
+                       ("rust-siphasher" ,rust-siphasher-0.3))))
+    (home-page "https://github.com/RazrFalcon/svgtypes")
+    (synopsis "SVG types parser")
+    (description "This package provides SVG types parser.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-roxmltree-0.18
+  (package
+    (name "rust-roxmltree")
+    (version "0.18.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "roxmltree" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "00mkd2xyrxm8ap39sxpkhzdzfn2m98q3zicf6wd2f6yfa7il08w6"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-xmlparser" ,rust-xmlparser-0.13))))
+    (home-page "https://github.com/RazrFalcon/roxmltree")
+    (synopsis "Represent an XML as a read-only tree")
+    (description "This package provides Represent an XML as a read-only tree.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-kurbo-0.9
+  (package
+    (name "rust-kurbo")
+    (version "0.9.5")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "kurbo" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "16w4k313z8smic4zifpwnxk8alh17dncgj2r40p0ql6rdivsb1dx"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrayvec" ,rust-arrayvec-0.7)
+                       ("rust-libm" ,rust-libm-0.2)
+                       ("rust-mint" ,rust-mint-0.5)
+                       ("rust-schemars" ,rust-schemars-0.8)
+                       ("rust-serde" ,rust-serde-1))))
+    (home-page "https://github.com/linebender/kurbo")
+    (synopsis "2D curves library")
+    (description "This package provides a 2D curves library.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-imagesize-0.12
+  (package
+    (name "rust-imagesize")
+    (version "0.12.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "imagesize" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "114jvqiyv13il1qghv2xm0xqrcjm68fh282hdlzdds6qfgsp7782"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/Roughsketch/imagesize")
+    (synopsis
+     "Quick probing of image dimensions without loading the entire file")
+    (description
+     "This package provides Quick probing of image dimensions without loading the entire file.")
+    (license license:expat)))
+
+(define-public rust-usvg-parser-0.35
+  (package
+    (name "rust-usvg-parser")
+    (version "0.35.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "usvg-parser" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "025liny3hs2ccdyd8rhnag1yq2099q0mg1fq4ycmj4q84cyzk6yi"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-data-url" ,rust-data-url-0.2)
+                       ("rust-flate2" ,rust-flate2-1)
+                       ("rust-imagesize" ,rust-imagesize-0.12)
+                       ("rust-kurbo" ,rust-kurbo-0.9)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-roxmltree" ,rust-roxmltree-0.18)
+                       ("rust-simplecss" ,rust-simplecss-0.2)
+                       ("rust-siphasher" ,rust-siphasher-0.3)
+                       ("rust-svgtypes" ,rust-svgtypes-0.11)
+                       ("rust-usvg-tree" ,rust-usvg-tree-0.35))))
+    (home-page "https://github.com/RazrFalcon/resvg")
+    (synopsis "An SVG parser used by usvg")
+    (description "This package provides An SVG parser used by usvg.")
+    (license license:mpl2.0)))
+
+(define-public rust-usvg-0.35
+  (package
+    (name "rust-usvg")
+    (version "0.35.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "usvg" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1rhirr4z5z94xcr0hs6im5hhky225v9kd4y04i4ghfyrn3grvl0l"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-base64" ,rust-base64-0.21)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-pico-args" ,rust-pico-args-0.5)
+                       ("rust-usvg-parser" ,rust-usvg-parser-0.35)
+                       ("rust-usvg-text-layout" ,rust-usvg-text-layout-0.35)
+                       ("rust-usvg-tree" ,rust-usvg-tree-0.35)
+                       ("rust-xmlwriter" ,rust-xmlwriter-0.1))))
+    (home-page "https://github.com/RazrFalcon/resvg")
+    (synopsis "An SVG simplification library")
+    (description "This package provides An SVG simplification library.")
+    (license license:mpl2.0)))
+
+(define-public rust-memmap2-0.6
+  (package
+    (name "rust-memmap2")
+    (version "0.6.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "memmap2" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0wm8avdjma6j3x5fjdqwxcj89h52pzmwanw46xkn9rnz9albna3d"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-libc" ,rust-libc-0.2)
+                       ("rust-stable-deref-trait" ,rust-stable-deref-trait-1))))
+    (home-page "https://github.com/RazrFalcon/memmap2-rs")
+    (synopsis "Cross-platform Rust API for memory-mapped file IO")
+    (description
+     "This package provides Cross-platform Rust API for memory-mapped file IO.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-fontdb-0.14
+  (package
+    (name "rust-fontdb")
+    (version "0.14.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "fontdb" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "17pwk5s3mn7l3d36plx1b3q9c4lqf93jbjjbx3bhf4zjm2z8r3dg"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-fontconfig-parser" ,rust-fontconfig-parser-0.5)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-memmap2" ,rust-memmap2-0.6)
+                       ("rust-slotmap" ,rust-slotmap-1)
+                       ("rust-tinyvec" ,rust-tinyvec-1)
+                       ("rust-ttf-parser" ,rust-ttf-parser-0.19))))
+    (home-page "https://github.com/RazrFalcon/fontdb")
+    (synopsis "simple, in-memory font database with CSS-like queries.")
+    (description
+     "This package provides a simple, in-memory font database with CSS-like queries.")
+    (license license:expat)))
+
+(define-public rust-svg2pdf-0.8
+  (package
+    (name "rust-svg2pdf")
+    (version "0.8.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "svg2pdf" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1j403ljabh5fdqqdxmim06b05n77r1dnpkhvm9syxnr5gpkkla54"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-clap" ,rust-clap-4)
+                       ("rust-fontdb" ,rust-fontdb-0.14)
+                       ("rust-image" ,rust-image-0.24)
+                       ("rust-miniz-oxide" ,rust-miniz-oxide-0.7)
+                       ("rust-pdf-writer" ,rust-pdf-writer-0.9)
+                       ("rust-termcolor" ,rust-termcolor-1)
+                       ("rust-usvg" ,rust-usvg-0.35))))
+    (home-page "https://github.com/typst/svg2pdf")
+    (synopsis "Convert SVG files to PDFs")
+    (description "This package provides Convert SVG files to PDFs.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-pdf-writer-0.9
+  (package
+    (name "rust-pdf-writer")
+    (version "0.9.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "pdf-writer" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0arksb7ahf389q0r7gjm3y3x4fh4v7nckahwcrp82g06ams15s94"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-itoa" ,rust-itoa-1)
+                       ("rust-memchr" ,rust-memchr-2)
+                       ("rust-ryu" ,rust-ryu-1))))
+    (home-page "https://github.com/typst/pdf-writer")
+    (synopsis "step-by-step PDF writer.")
+    (description "This package provides a step-by-step PDF writer.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-lopdf-0.31
+  (package
+    (name "rust-lopdf")
+    (version "0.31.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "lopdf" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0npqs454hz7z8ycldyi154fxmra0vkmp5xbjbzm346sb32vf3j07"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-encoding-rs" ,rust-encoding-rs-0.8)
+                       ("rust-flate2" ,rust-flate2-1)
+                       ("rust-image" ,rust-image-0.24)
+                       ("rust-itoa" ,rust-itoa-1)
+                       ("rust-linked-hash-map" ,rust-linked-hash-map-0.5)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-md5" ,rust-md5-0.7)
+                       ("rust-nom" ,rust-nom-7)
+                       ("rust-pom" ,rust-pom-3)
+                       ("rust-rayon" ,rust-rayon-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-time" ,rust-time-0.3)
+                       ("rust-weezl" ,rust-weezl-0.1))))
+    (home-page "https://github.com/J-F-Liu/lopdf")
+    (synopsis "Rust library for PDF document manipulation.")
+    (description
+     "This package provides a Rust library for PDF document manipulation.")
+    (license license:expat)))
+
+(define-public rust-unicode-joining-type-0.7
+  (package
+    (name "rust-unicode-joining-type")
+    (version "0.7.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "unicode-joining-type" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1xgn8cjv3r3s9f3zqs3v2k6hv8d43l3z6nkm1047bg5qri3wpy12"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/yeslogic/unicode-joining-type")
+    (synopsis
+     "Fast lookup of the Unicode Joining Type and Joining Group properties")
+    (description
+     "This package provides Fast lookup of the Unicode Joining Type and Joining Group properties.")
+    (license license:asl2.0)))
+
+(define-public rust-unicode-canonical-combining-class-0.5
+  (package
+    (name "rust-unicode-canonical-combining-class")
+    (version "0.5.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "unicode-canonical-combining-class" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0cjwhs1zk5yas1v1g95cxx4i04w4xm9hhz74273q5096z5m5h9b9"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/yeslogic/unicode-canonical-combining-class")
+    (synopsis "Fast lookup of the Canonical Combining Class property")
+    (description
+     "This package provides Fast lookup of the Canonical Combining Class property.")
+    (license license:asl2.0)))
+
+(define-public rust-glyph-names-0.2
+  (package
+    (name "rust-glyph-names")
+    (version "0.2.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "glyph-names" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0zw0pkjcpbvp22alk8kwirn4g33v9i05mdaz5alkn6kc5mq1sly3"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/yeslogic/glyph-names")
+    (synopsis
+     "Mapping of characters to glyph names according to the Adobe Glyph List Specification")
+    (description
+     "This package provides Mapping of characters to glyph names according to the Adobe Glyph List
+Specification.")
+    (license license:bsd-3)))
+
+(define-public rust-allsorts-0.14
+  (package
+    (name "rust-allsorts")
+    (version "0.14.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "allsorts" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0syijn4wasmib28rcy5ln08jikgngwjcw43vdrqv1s67vgmpvdmg"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-bitreader" ,rust-bitreader-0.3)
+                       ("rust-brotli-decompressor" ,rust-brotli-decompressor-2)
+                       ("rust-byteorder" ,rust-byteorder-1)
+                       ("rust-encoding-rs" ,rust-encoding-rs-0.8)
+                       ("rust-flate2" ,rust-flate2-1)
+                       ("rust-glyph-names" ,rust-glyph-names-0.2)
+                       ("rust-itertools" ,rust-itertools-0.10)
+                       ("rust-lazy-static" ,rust-lazy-static-1)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-num-traits" ,rust-num-traits-0.2)
+                       ("rust-ouroboros" ,rust-ouroboros-0.17)
+                       ("rust-pathfinder-geometry" ,rust-pathfinder-geometry-0.5)
+                       ("rust-rustc-hash" ,rust-rustc-hash-1)
+                       ("rust-tinyvec" ,rust-tinyvec-1)
+                       ("rust-ucd-trie" ,rust-ucd-trie-0.1)
+                       ("rust-unicode-canonical-combining-class" ,rust-unicode-canonical-combining-class-0.5)
+                       ("rust-unicode-general-category" ,rust-unicode-general-category-0.6)
+                       ("rust-unicode-joining-type" ,rust-unicode-joining-type-0.7))))
+    (home-page "https://github.com/yeslogic/allsorts")
+    (synopsis
+     "Font parser, shaping engine, and subsetter for OpenType, WOFF, and WOFF2")
+    (description
+     "This package provides Font parser, shaping engine, and subsetter for @code{OpenType}, WOFF, and WOFF2.")
+    (license license:asl2.0)))
+
+(define-public rust-printpdf-0.7
+  (package
+    (name "rust-printpdf")
+    (version "0.7.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "printpdf" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "078b70v7iibk25shbq3nh3nd3y2kf651bnvh967ska9wgk44q2n3"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-allsorts" ,rust-allsorts-0.14)
+                       ("rust-image" ,rust-image-0.24)
+                       ("rust-js-sys" ,rust-js-sys-0.3)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-lopdf" ,rust-lopdf-0.31)
+                       ("rust-owned-ttf-parser" ,rust-owned-ttf-parser-0.19)
+                       ("rust-pdf-writer" ,rust-pdf-writer-0.9)
+                       ("rust-svg2pdf" ,rust-svg2pdf-0.8)
+                       ("rust-time" ,rust-time-0.3)
+                       ("rust-usvg" ,rust-usvg-0.35))))
+    (home-page "https://github.com/fschutt/printpdf")
+    (synopsis "Rust library for writing PDF files")
+    (description "This package provides Rust library for writing PDF files.")
+    (license license:expat)))
+
+(define-public rust-path-dedot-3
+  (package
+    (name "rust-path-dedot")
+    (version "3.1.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "path-dedot" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "15wkx8q3vra34fslzlg1lkq7liyxwqrpbxiz44a28wa7w3bhmfh7"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-lazy-static" ,rust-lazy-static-1)
+                       ("rust-once-cell" ,rust-once-cell-1))))
+    (home-page "https://magiclen.org/path-dedot")
+    (synopsis
+     "library for extending `Path` and `PathBuf` in order to parse the path which contains dots.")
+    (description
+     "This package provides a library for extending `Path` and `@code{PathBuf`} in
+order to parse the path which contains dots.")
+    (license license:expat)))
+
+(define-public rust-path-absolutize-3
+  (package
+    (name "rust-path-absolutize")
+    (version "3.1.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "path-absolutize" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1xc36c5lz187wy452qph3lrr41x8ffgxk1clj2s9b8czwwgkibz4"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-path-dedot" ,rust-path-dedot-3))))
+    (home-page "https://magiclen.org/path-absolutize")
+    (synopsis
+     "library for extending `Path` and `PathBuf` in order to get an absolute path and remove the containing dots.")
+    (description
+     "This package provides a library for extending `Path` and `@code{PathBuf`} in
+order to get an absolute path and remove the containing dots.")
+    (license license:expat)))
+
+(define-public rust-x25519-dalek-2
+  (package
+    (name "rust-x25519-dalek")
+    (version "2.0.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "x25519-dalek" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0xyjgqpsa0q6pprakdp58q1hy45rf8wnqqscgzx0gyw13hr6ir67"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-curve25519-dalek" ,rust-curve25519-dalek-4)
+                       ("rust-rand-core" ,rust-rand-core-0.6)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-zeroize" ,rust-zeroize-1))))
+    (home-page "https://github.com/dalek-cryptography/curve25519-dalek")
+    (synopsis
+     "X25519 elliptic curve Diffie-Hellman key exchange in pure-Rust, using curve25519-dalek")
+    (description
+     "This package provides X25519 elliptic curve Diffie-Hellman key exchange in pure-Rust, using
+curve25519-dalek.")
+    (license license:bsd-3)))
+
+(define-public rust-fiat-crypto-0.2
+  (package
+    (name "rust-fiat-crypto")
+    (version "0.2.9")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "fiat-crypto" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "07c1vknddv3ak7w89n85ik0g34nzzpms6yb845vrjnv9m4csbpi8"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/mit-plv/fiat-crypto")
+    (synopsis "Fiat-crypto generated Rust")
+    (description "This package provides Fiat-crypto generated Rust.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-curve25519-dalek-derive-0.1
+  (package
+    (name "rust-curve25519-dalek-derive")
+    (version "0.1.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "curve25519-dalek-derive" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1cry71xxrr0mcy5my3fb502cwfxy6822k4pm19cwrilrg7hq4s7l"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://github.com/dalek-cryptography/curve25519-dalek")
+    (synopsis "curve25519-dalek Derives")
+    (description "This package provides curve25519-dalek Derives.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-curve25519-dalek-4
+  (package
+    (name "rust-curve25519-dalek")
+    (version "4.1.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "curve25519-dalek" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1gmjb9dsknrr8lypmhkyjd67p1arb8mbfamlwxm7vph38my8pywp"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-cfg-if" ,rust-cfg-if-1)
+                       ("rust-cpufeatures" ,rust-cpufeatures-0.2)
+                       ("rust-curve25519-dalek-derive" ,rust-curve25519-dalek-derive-0.1)
+                       ("rust-digest" ,rust-digest-0.10)
+                       ("rust-ff" ,rust-ff-0.13)
+                       ("rust-fiat-crypto" ,rust-fiat-crypto-0.2)
+                       ("rust-group" ,rust-group-0.13)
+                       ("rust-rand-core" ,rust-rand-core-0.6)
+                       ("rust-rustc-version" ,rust-rustc-version-0.4)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-subtle" ,rust-subtle-2)
+                       ("rust-zeroize" ,rust-zeroize-1))))
+    (home-page "https://github.com/dalek-cryptography/curve25519-dalek")
+    (synopsis
+     "pure-Rust implementation of group operations on ristretto255 and Curve25519")
+    (description
+     "This package provides a pure-Rust implementation of group operations on
+ristretto255 and Curve25519.")
+    (license license:bsd-3)))
+
+(define-public rust-bcrypt-pbkdf-0.10
+  (package
+    (name "rust-bcrypt-pbkdf")
+    (version "0.10.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "bcrypt-pbkdf" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "18pjhsy3m2v0silsp4mjzz8i92zrpqxk9b059zrnk1w8zvhw5ska"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-blowfish" ,rust-blowfish-0.9)
+                       ("rust-pbkdf2" ,rust-pbkdf2-0.12)
+                       ("rust-sha2" ,rust-sha2-0.10)
+                       ("rust-zeroize" ,rust-zeroize-1))))
+    (home-page
+     "https://github.com/RustCrypto/password-hashes/tree/master/bcrypt-pbkdf")
+    (synopsis "bcrypt-pbkdf password-based key derivation function")
+    (description
+     "This package provides bcrypt-pbkdf password-based key derivation function.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-age-core-0.10
+  (package
+    (name "rust-age-core")
+    (version "0.10.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "age-core" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "16shzvisygwknnz4bfs60yfsakwjn4v0rhyvbq9xvg9bpjciiwd5"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-base64" ,rust-base64-0.21)
+                       ("rust-chacha20poly1305" ,rust-chacha20poly1305-0.10)
+                       ("rust-cookie-factory" ,rust-cookie-factory-0.3)
+                       ("rust-hkdf" ,rust-hkdf-0.12)
+                       ("rust-io-tee" ,rust-io-tee-0.1)
+                       ("rust-nom" ,rust-nom-7)
+                       ("rust-rand" ,rust-rand-0.8)
+                       ("rust-secrecy" ,rust-secrecy-0.8)
+                       ("rust-sha2" ,rust-sha2-0.10)
+                       ("rust-tempfile" ,rust-tempfile-3))))
+    (home-page "https://github.com/str4d/rage")
+    (synopsis "[BETA] Common functions used across the age crates")
+    (description
+     "This package provides [BETA] Common functions used across the age crates.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-age-0.10
+  (package
+    (name "rust-age")
+    (version "0.10.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "age" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0zc1m1lm64bx17bvviy5c1p77vjas395b0bsglnml6crn7bzgvpd"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-aes" ,rust-aes-0.8)
+                       ("rust-aes-gcm" ,rust-aes-gcm-0.10)
+                       ("rust-age-core" ,rust-age-core-0.10)
+                       ("rust-base64" ,rust-base64-0.21)
+                       ("rust-bcrypt-pbkdf" ,rust-bcrypt-pbkdf-0.10)
+                       ("rust-bech32" ,rust-bech32-0.9)
+                       ("rust-cbc" ,rust-cbc-0.1)
+                       ("rust-chacha20poly1305" ,rust-chacha20poly1305-0.10)
+                       ("rust-cipher" ,rust-cipher-0.4)
+                       ("rust-console" ,rust-console-0.15)
+                       ("rust-cookie-factory" ,rust-cookie-factory-0.3)
+                       ("rust-ctr" ,rust-ctr-0.9)
+                       ("rust-curve25519-dalek" ,rust-curve25519-dalek-4)
+                       ("rust-futures" ,rust-futures-0.3)
+                       ("rust-hmac" ,rust-hmac-0.12)
+                       ("rust-i18n-embed" ,rust-i18n-embed-0.14)
+                       ("rust-i18n-embed-fl" ,rust-i18n-embed-fl-0.7)
+                       ("rust-is-terminal" ,rust-is-terminal-0.4)
+                       ("rust-lazy-static" ,rust-lazy-static-1)
+                       ("rust-memchr" ,rust-memchr-2)
+                       ("rust-nom" ,rust-nom-7)
+                       ("rust-num-traits" ,rust-num-traits-0.2)
+                       ("rust-pin-project" ,rust-pin-project-1)
+                       ("rust-pinentry" ,rust-pinentry-0.5)
+                       ("rust-rand" ,rust-rand-0.8)
+                       ("rust-rpassword" ,rust-rpassword-7)
+                       ("rust-rsa" ,rust-rsa-0.9)
+                       ("rust-rust-embed" ,rust-rust-embed-8)
+                       ("rust-scrypt" ,rust-scrypt-0.11)
+                       ("rust-sha2" ,rust-sha2-0.10)
+                       ("rust-subtle" ,rust-subtle-2)
+                       ("rust-web-sys" ,rust-web-sys-0.3)
+                       ("rust-which" ,rust-which-4)
+                       ("rust-wsl" ,rust-wsl-0.1)
+                       ("rust-x25519-dalek" ,rust-x25519-dalek-2)
+                       ("rust-zeroize" ,rust-zeroize-1))))
+    (home-page "https://github.com/str4d/rage")
+    (synopsis "[BETA] A simple, secure, and modern encryption library")
+    (description
+     "This package provides [BETA] A simple, secure, and modern encryption library.")
+    (license (list license:expat license:asl2.0))))
