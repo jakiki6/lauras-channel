@@ -2,14 +2,25 @@
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
+  #:use-module (guix gexp)
+  #:use-module (guix transformations)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system cargo)
+  #:use-module (guix build-system meson)
+  #:use-module (guix build-system gnu)
+  #:use-module (gnu packages cmake)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages sdl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages crates-io)
+  #:use-module (gnu packages lua)
+  #:use-module (gnu packages curl)
+  #:use-module (gnu packages algebra)
+  #:use-module (gnu packages perl)
+  #:use-module (gnu packages image)
+  #:use-module (gnu packages serialization)
   #:use-module (laura packages rust-common)
 )
 
@@ -68,3 +79,68 @@
      "This package provides Unreal Engine save file (GVAS) reading/writing.")
     (license license:expat)))
 
+(define-public fftw-float
+  (package
+    (name "fftw-float")
+    (version "3.3.10")
+    (source (origin
+             (method url-fetch)
+             (uri (string-append "ftp://ftp.fftw.org/pub/fftw/fftw-"
+                                 version".tar.gz"))
+             (sha256
+              (base32
+               "0rv4w90b65b2kvjpj8g9bdkl4xqc42q20f5bzpxdrkajk1a35jan"))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:configure-flags
+       '("--enable-shared" "--enable-openmp" "--enable-threads" "--enable-float"
+         ,@(let ((system (or (%current-target-system) (%current-system))))
+             ;; Enable SIMD extensions for codelets.  See details at:
+             ;; <http://fftw.org/fftw3_doc/Installation-on-Unix.html>.
+             (cond
+              ((string-prefix? "x86_64" system)
+               '("--enable-sse2" "--enable-avx" "--enable-avx2"
+                 "--enable-avx512" "--enable-avx-128-fma"))
+              ((string-prefix? "i686" system)
+               '("--enable-sse2"))
+              ((string-prefix? "aarch64" system)
+               ;; Note that fftw supports NEON on 32-bit ARM only when
+               ;; compiled for single-precision.
+               '("--enable-neon"))
+              (else
+               '())))
+         ;; By default '-mtune=native' is used.  However, that may cause the
+         ;; use of ISA extensions (e.g. AVX) that are not necessarily
+         ;; available on the user's machine when that package is built on a
+         ;; different machine.
+         "ax_cv_c_flags__mtune_native=no")))
+    (native-inputs (list perl))
+    (home-page "https://fftw.org")
+    (synopsis "Computing the discrete Fourier transform")
+    (description
+     "FFTW is a C subroutine library for computing the discrete Fourier
+transform (DFT) in one or more dimensions, of arbitrary input size, and of
+both real and complex data (as well as of even/odd data---i.e. the discrete
+cosine/ sine transforms or DCT/DST).")
+    (license license:gpl2+)))
+
+(define-public tpt
+  (package
+    (name "tpt")
+    (version "98.2.365")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/The-Powder-Toy/The-Powder-Toy")
+              (commit "v98.2.365")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "06l39w3ggrzn8799dqll606by4f88kjr60r879w8j26csx1py76g"))))
+    (build-system meson-build-system)
+    (native-inputs (list pkg-config cmake))
+    (inputs (list luajit curl fftw-float zlib libpng sdl2 ((options->transformation `((with-patch . ,(string-append "bzip2=" (dirname (current-filename)) "/files/bzip2-pkg-config.patch")))) bzip2) jsoncpp))
+    (arguments (list #:tests? #f #:configure-flags #~(list "-Dworkaround_elusive_bzip2=false")))
+    (home-page "https://powdertoy.co.uk")
+    (synopsis "The Powder Toy")
+    (description "Written in C++ and using SDL, The Powder Toy is a desktop version of the classic 'falling sand' physics sandbox, it simulates air pressure and velocity as well as heat. ")
+    (license license:gpl3)))

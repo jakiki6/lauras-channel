@@ -1,0 +1,13 @@
+diff --color --recursive --text --unified --new-file a/Makefile b/Makefile
+--- a/Makefile	2019-07-13 19:50:05.000000000 +0200
++++ b/Makefile	2024-07-25 01:17:30.768703360 +0200
+@@ -107,6 +107,8 @@
+ 	echo ".so man1/bzgrep.1" > $(PREFIX)/man/man1/bzfgrep.1
+ 	echo ".so man1/bzmore.1" > $(PREFIX)/man/man1/bzless.1
+ 	echo ".so man1/bzdiff.1" > $(PREFIX)/man/man1/bzcmp.1
++	mkdir $(PREFIX)/lib/pkgconfig
++	bash -c "echo -e \"Name: bzip2\\nDescription: bzip2 compression library\\nVersion: 1.0.8\\n\\nRequires:\\nLibs: -L${$PREFIX/lib} -lbz2\\nCflags: -I${$PREFIX/include}\" > $(PREFIX)/lib/pkgconfig/bzip2.pc"
+ 
+ clean: 
+ 	rm -f *.o libbz2.a bzip2 bzip2recover \
+
