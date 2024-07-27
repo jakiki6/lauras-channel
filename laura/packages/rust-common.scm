@@ -12442,3 +12442,453 @@ ristretto255 and Curve25519.")
     (description
      "This package provides [BETA] A simple, secure, and modern encryption library.")
     (license (list license:expat license:asl2.0))))
+
+(define-public rust-tui-input-0.8
+  (package
+    (name "rust-tui-input")
+    (version "0.8.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "tui-input" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "00fwd3w06kb2w83jcdcffcwbayf8ch5rsria1a04rbx3cgw8brxk"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-crossterm" ,rust-crossterm-0.27)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-termion" ,rust-termion-2)
+                       ("rust-unicode-width" ,rust-unicode-width-0.1))))
+    (home-page "https://github.com/sayanarijit/tui-input")
+    (synopsis "TUI input library supporting multiple backends")
+    (description
+     "This package provides TUI input library supporting multiple backends.")
+    (license license:expat)))
+
+(define-public rust-sorted-vec-0.8
+  (package
+    (name "rust-sorted-vec")
+    (version "0.8.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sorted-vec" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0n3l8v05b2d7yd1arwylx0a6qb4vncps3k7abvfsslbg1fplqwy6"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-serde" ,rust-serde-1))))
+    (home-page "https://gitlab.com/spearman/sorted-vec")
+    (synopsis "Create and maintain sorted vectors and vector-backed sets")
+    (description
+     "This package provides Create and maintain sorted vectors and vector-backed sets.")
+    (license license:asl2.0)))
+
+(define-public rust-csv-sniffer-0.3
+  (package
+    (name "rust-csv-sniffer")
+    (version "0.3.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "csv-sniffer" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0705g1alpvs5ja71nw93ldicr9i2ri431q0sbkai094m7fljmqx1"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-csv" ,rust-csv-1)
+                       ("rust-csv-core" ,rust-csv-core-0.1)
+                       ("rust-memchr" ,rust-memchr-2)
+                       ("rust-regex" ,rust-regex-1))))
+    (home-page "https://github.com/jblondin/csv-sniffer")
+    (synopsis "CSV file format sniffer for Rust")
+    (description "This package provides a CSV file format sniffer for Rust.")
+    (license license:expat)))
+
+(define-public rust-arrow-string-50
+  (package
+    (name "rust-arrow-string")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-string" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "19rjd741xd8rhnv7xp1vw28gb7mnmdyh66vdcfi33kpf59zv7wq0"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-arrow-select" ,rust-arrow-select-50)
+                       ("rust-num" ,rust-num-0.4)
+                       ("rust-regex" ,rust-regex-1)
+                       ("rust-regex-syntax" ,rust-regex-syntax-0.8))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "String kernels for arrow arrays")
+    (description "This package provides String kernels for arrow arrays.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-row-50
+  (package
+    (name "rust-arrow-row")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-row" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1krxv1sb52biybgy4f6d4ywszw7djrdqpjz4jf4lx770gbhkaw00"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-ahash" ,rust-ahash-0.8)
+                       ("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-half" ,rust-half-2)
+                       ("rust-hashbrown" ,rust-hashbrown-0.14))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Arrow row format")
+    (description "This package provides Arrow row format.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-ord-50
+  (package
+    (name "rust-arrow-ord")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-ord" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1gk0q9has0jdbdhkpackvlrqy8mcnx1ajx4f5nc7fh03g44n7n8y"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-arrow-select" ,rust-arrow-select-50)
+                       ("rust-half" ,rust-half-2)
+                       ("rust-num" ,rust-num-0.4))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Ordering kernels for arrow arrays")
+    (description "This package provides Ordering kernels for arrow arrays.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-json-50
+  (package
+    (name "rust-arrow-json")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-json" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "03zf56l3frl61f80245q7x5p52kaa3ir4560gb9lfyirh2972l49"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-cast" ,rust-arrow-cast-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-half" ,rust-half-2)
+                       ("rust-indexmap" ,rust-indexmap-2)
+                       ("rust-lexical-core" ,rust-lexical-core-0.8)
+                       ("rust-num" ,rust-num-0.4)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-serde-json" ,rust-serde-json-1))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Support for parsing JSON format to and from the Arrow format")
+    (description
+     "This package provides Support for parsing JSON format to and from the Arrow format.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-ipc-50
+  (package
+    (name "rust-arrow-ipc")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-ipc" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "03dqxzz6hj21qpv39lbpgfz0awgamyq64gzh0hp6rpj8kgksbph3"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-cast" ,rust-arrow-cast-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-flatbuffers" ,rust-flatbuffers-23)
+                       ("rust-lz4-flex" ,rust-lz4-flex-0.11)
+                       ("rust-zstd" ,rust-zstd-0.13))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Support for the Arrow IPC format")
+    (description "This package provides Support for the Arrow IPC format.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-csv-50
+  (package
+    (name "rust-arrow-csv")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-csv" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "109pk0la2z9asfzmy399hzfgn6xdp4q5achqbcpn24h73whp5bs6"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-cast" ,rust-arrow-cast-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-csv" ,rust-csv-1)
+                       ("rust-csv-core" ,rust-csv-core-0.1)
+                       ("rust-lazy-static" ,rust-lazy-static-1)
+                       ("rust-lexical-core" ,rust-lexical-core-0.8)
+                       ("rust-regex" ,rust-regex-1))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Support for parsing CSV format to and from the Arrow format")
+    (description
+     "This package provides Support for parsing CSV format to and from the Arrow format.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-select-50
+  (package
+    (name "rust-arrow-select")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-select" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "136pzylrxjbxcgxxgfbvjwspx52hks169q288d8ycbciq5rhkqhw"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-ahash" ,rust-ahash-0.8)
+                       ("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-num" ,rust-num-0.4))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Selection kernels for arrow arrays")
+    (description "This package provides Selection kernels for arrow arrays.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-cast-50
+  (package
+    (name "rust-arrow-cast")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-cast" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1vydyjyg964kdw3bfdbkqyndqplgf0qnbwm1fidvy4s15zfyaj74"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-arrow-select" ,rust-arrow-select-50)
+                       ("rust-base64" ,rust-base64-0.21)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-comfy-table" ,rust-comfy-table-7)
+                       ("rust-half" ,rust-half-2)
+                       ("rust-lexical-core" ,rust-lexical-core-0.8)
+                       ("rust-num" ,rust-num-0.4))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Cast kernel and utilities for Apache Arrow")
+    (description
+     "This package provides Cast kernel and utilities for Apache Arrow.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-schema-50
+  (package
+    (name "rust-arrow-schema")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-schema" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0a80kvnf66rkkp8500wn0jkj5rnhj9l957r6klvnklbw3z0fkwqg"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-serde" ,rust-serde-1))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Defines the logical types for arrow arrays")
+    (description
+     "This package provides Defines the logical types for arrow arrays.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-data-50
+  (package
+    (name "rust-arrow-data")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-data" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0kn6fjjpg4lfkvr0h7jqda0qphii196iiqaw2g9klbqn3awl9mk7"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-half" ,rust-half-2)
+                       ("rust-num" ,rust-num-0.4))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Array data abstractions for Apache Arrow")
+    (description
+     "This package provides Array data abstractions for Apache Arrow.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-buffer-50
+  (package
+    (name "rust-arrow-buffer")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-buffer" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "192s1xlvzfrfjw65has71clxa9y8hmzbqmi7qvxxzg012w35nqb9"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bytes" ,rust-bytes-1)
+                       ("rust-half" ,rust-half-2)
+                       ("rust-num" ,rust-num-0.4))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Buffer abstractions for Apache Arrow")
+    (description "This package provides Buffer abstractions for Apache Arrow.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-array-50
+  (package
+    (name "rust-arrow-array")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-array" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "02cnfz4n865n74cii7h6svhf5wdfbc11l254jz4qxdr1gzmzx46k"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-ahash" ,rust-ahash-0.8)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-chrono-tz" ,rust-chrono-tz-0.8)
+                       ("rust-half" ,rust-half-2)
+                       ("rust-hashbrown" ,rust-hashbrown-0.14)
+                       ("rust-num" ,rust-num-0.4))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Array abstractions for Apache Arrow")
+    (description "This package provides Array abstractions for Apache Arrow.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-arith-50
+  (package
+    (name "rust-arrow-arith")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow-arith" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "01aplk8ppkk3bc5i92qlyk2mj5kxdxaklqn6wynvrhcha85bsfkm"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-half" ,rust-half-2)
+                       ("rust-num" ,rust-num-0.4))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Arrow arithmetic kernels")
+    (description "This package provides Arrow arithmetic kernels.")
+    (license license:asl2.0)))
+
+(define-public rust-arrow-50
+  (package
+    (name "rust-arrow")
+    (version "50.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "arrow" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1377lks8shrrq3klps6h1q0gd73qwd0wbgc5k7a2kn54zd1m6a5a"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrow-arith" ,rust-arrow-arith-50)
+                       ("rust-arrow-array" ,rust-arrow-array-50)
+                       ("rust-arrow-buffer" ,rust-arrow-buffer-50)
+                       ("rust-arrow-cast" ,rust-arrow-cast-50)
+                       ("rust-arrow-csv" ,rust-arrow-csv-50)
+                       ("rust-arrow-data" ,rust-arrow-data-50)
+                       ("rust-arrow-ipc" ,rust-arrow-ipc-50)
+                       ("rust-arrow-json" ,rust-arrow-json-50)
+                       ("rust-arrow-ord" ,rust-arrow-ord-50)
+                       ("rust-arrow-row" ,rust-arrow-row-50)
+                       ("rust-arrow-schema" ,rust-arrow-schema-50)
+                       ("rust-arrow-select" ,rust-arrow-select-50)
+                       ("rust-arrow-string" ,rust-arrow-string-50)
+                       ("rust-pyo3" ,rust-pyo3-0.20)
+                       ("rust-rand" ,rust-rand-0.8))))
+    (home-page "https://github.com/apache/arrow-rs")
+    (synopsis "Rust implementation of Apache Arrow")
+    (description "This package provides Rust implementation of Apache Arrow.")
+    (license license:asl2.0)))

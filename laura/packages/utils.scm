@@ -363,3 +363,34 @@ enables it to self-document.")
     (description
      "This package provides Easy and secure paper backups of secrets.")
     (license license:expat)))
+
+(define-public csvlens
+  (package
+    (name "csvlens")
+    (version "0.9.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "csvlens" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0gvw0lz8jsk88vpnfb6zv0rnm9pshj4rjbifx5cxkq9biin9qnvj"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:tests? #f
+       #:cargo-inputs (("rust-anyhow" ,rust-anyhow-1)
+                       ("rust-arboard" ,rust-arboard-3)
+                       ("rust-arrow" ,rust-arrow-50)
+                       ("rust-clap" ,rust-clap-4)
+                       ("rust-crossterm" ,rust-crossterm-0.27)
+                       ("rust-csv" ,rust-csv-1)
+                       ("rust-csv-sniffer" ,rust-csv-sniffer-0.3)
+                       ("rust-ratatui" ,rust-ratatui-0.25)
+                       ("rust-regex" ,rust-regex-1)
+                       ("rust-sorted-vec" ,rust-sorted-vec-0.8)
+                       ("rust-tempfile" ,rust-tempfile-3)
+                       ("rust-tui-input" ,rust-tui-input-0.8))))
+    (home-page "https://github.com/YS-L/csvlens")
+    (synopsis "Command line csv viewer")
+    (description "This package provides Command line csv viewer.")
+    (license license:expat)))
