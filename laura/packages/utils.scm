@@ -18,9 +18,12 @@
   #:use-module (gnu packages golang)
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages golang-check)
+  #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages glib)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
+  #:use-module (guix build-system python)
   #:use-module (guix gexp)
   #:use-module (laura packages rust-common))
 
@@ -394,3 +397,99 @@ enables it to self-document.")
     (synopsis "Command line csv viewer")
     (description "This package provides Command line csv viewer.")
     (license license:expat)))
+
+(define-public libglibutil
+  (package
+    (name "libglibutil")
+    (version "1.0.79")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/sailfishos/libglibutil")
+              (commit "1.0.79")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1zn0h9f8bd4kwqz33b8719r1wwbx790qvwl05w1yqrm0z270m6sh"))))
+    (build-system gnu-build-system)
+    (arguments `(#:tests? #f #:phases (modify-phases %standard-phases (delete 'configure) (add-before 'build 'fix-makefile (lambda* (#:key outputs #:allow-other-keys)
+      (begin
+        (substitute* "Makefile" (("CC \\?\\= \\$\\(CROSS_COMPILE\\)gcc") (string-append "CC := gcc\nDESTDIR := " (assoc-ref outputs "out"))) (("install:") "pre-install:") (("install-dev: install") "install: pre-install") (("usr\\/") "") (("\\$\\(ABS_LIBDIR\\)\\|") "$(DESTDIR)/$(LIBDIR)|")))
+        (substitute* "libglibutil.pc.in" (("\\/usr\\/include") "@libdir@/../include")))))))
+    (inputs (list glib))
+    (native-inputs (list pkg-config))
+    (home-page "https://github.com/sailfishos/libglibutil")
+    (synopsis "Library of glib utilities.")
+    (description "Library of glib utilities.")
+    (license license:bsd-3)))
+
+(define-public libgbinder
+  (package
+    (name "libgbinder")
+    (version "1.1.40")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/mer-hybris/libgbinder")
+              (commit "1.1.40")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0z293a1cr3hxkxlyi0cd6syd5dj9jhbx91plzl6nziviprwd9zbf"))))
+    (build-system gnu-build-system)
+    (arguments `(#:tests? #f #:phases (modify-phases %standard-phases (delete 'configure) (add-before 'build 'fix-makefile (lambda* (#:key outputs #:allow-other-keys)
+      (begin
+        (substitute* "Makefile" (("CC \\?\\= \\$\\(CROSS_COMPILE\\)gcc") (string-append "CC := gcc\nDESTDIR := " (assoc-ref outputs "out"))) (("install:") "pre-install:") (("install-dev: install") "install: pre-install") (("usr\\/") "") (("\\$\\(ABS_LIBDIR\\)\\|") "$(DESTDIR)/$(LIBDIR)|")))
+        (substitute* "libgbinder.pc.in" (("\\/usr\\/include") "@libdir@/../include"))
+        (substitute* "include/gbinder_types.h" (("gutil_types.h") "gutil/gutil_types.h")))))))
+    (inputs (list glib))
+    (native-inputs (list pkg-config))
+    (propagated-inputs (list libglibutil))
+    (home-page "https://github.com/mer-hybris/libgbinder")
+    (synopsis "GLib-style interface to binder")
+    (description "GLib-style interface to binder (Android IPC mechanism)")
+    (license license:bsd-3)))
+
+(define-public python-gbinder
+  (package
+    (name "python-gbinder")
+    (version "2.10")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/erfanoabdi/gbinder-python")
+              (commit "1.1.2")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1qxadb1ccmdwnwj4p15sm2i3b7cjaxh7far1jk9sxrblwh7497ds"))))
+    (build-system python-build-system)
+    (arguments `(#:phases (modify-phases %standard-phases (add-before 'build 'cythonize (lambda* (#:key outputs #:allow-other-keys) (substitute* "setup.py" (("USE_CYTHON = False") "USE_CYTHON = True")(("extension_kwargs = pkgconfig\\('libgbinder', extension_kwargs\\)") "extension_kwargs = pkgconfig('libgbinder', extension_kwargs)\nextension_kwargs = pkgconfig('libglibutil', extension_kwargs)")))))))
+    (inputs (list python-cython libgbinder libglibutil glib))
+    (native-inputs (list pkg-config))
+    (home-page "https://github.com/erfanoabdi/gbinder-python")
+    (synopsis "Python bindings for libgbinder")
+    (description "Cython extension module for gbinder")
+    (license license:gpl3)))
+
+(define-public waydroid
+  (package
+    (name "waydroid")
+    (version "1.4.2")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/waydroid/waydroid")
+              (commit "1.4.2")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1cp528ybksgf1ifawygm2zqrxh870i264sqbk272775p4a36zlgx"))))
+    (build-system gnu-build-system)
+    (arguments `(#:tests? #f #:phases (modify-phases %standard-phases (delete 'configure) (delete 'build)
+        (add-before 'install 'patch-environment (lambda* (#:key outputs #:allow-other-keys)
+          (substitute* "Makefile" (("PREFIX := /usr") (string-append "PREFIX := " (assoc-ref outputs "out") "\nUSE_SYSTEMD := 0")) (("\\/etc") "$(PREFIX)/etc"))))
+        (add-after 'install 'wrap-script (lambda* (#:key inputs outputs #:allow-other-keys)
+          (wrap-program (string-append (assoc-ref outputs "out") "/bin/waydroid") `("PYTHONPATH" suffix (,(string-append (assoc-ref inputs "python-gbinder") "/lib/python3.10/site-packages") ,(string-append (assoc-ref inputs "python-dbus") "/lib/python3.10/site-packages")))))))))
+    (inputs (list python-3.10))
+    (propagated-inputs (list python-gbinder python-dbus))
+    (home-page "https://waydro.id")
+    (synopsis "Waydroid uses a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu.")
+    (description "Waydroid uses Linux namespaces (user, pid, uts, net, mount, ipc) to run a full Android system in a container and provide Android applications on any GNU/Linux-based platform.")
+    (license license:gpl3)))
