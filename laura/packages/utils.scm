@@ -20,6 +20,7 @@
   #:use-module (gnu packages golang-check)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages glib)
+  #:use-module (gnu packages virtualization)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
