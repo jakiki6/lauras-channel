@@ -383,7 +383,7 @@ enables it to self-document.")
     (arguments
      `(#:tests? #f
        #:cargo-inputs (("rust-anyhow" ,rust-anyhow-1)
-                       ("rust-arboard" ,rust-arboard-3)
+                       ("rust-arboard" ,rust-arboard-3.4)
                        ("rust-arrow" ,rust-arrow-50)
                        ("rust-clap" ,rust-clap-4)
                        ("rust-crossterm" ,rust-crossterm-0.27)

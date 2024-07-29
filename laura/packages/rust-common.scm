@@ -7421,7 +7421,7 @@ common image formats.")
      "This package provides simple way to interact with Windows clipboard.")
     (license license:boost1.0)))
 
-(define-public rust-arboard-3
+(define-public rust-arboard-3.4
   (package
     (name "rust-arboard")
     (version "3.4.0")
@@ -7695,7 +7695,7 @@ over AT-SPI.")
     (arguments
      `(#:skip-build? #t
        #:cargo-inputs (("rust-accesskit-winit" ,rust-accesskit-winit-0.16)
-                       ("rust-arboard" ,rust-arboard-3)
+                       ("rust-arboard" ,rust-arboard-3.4)
                        ("rust-document-features" ,rust-document-features-0.2)
                        ("rust-egui" ,rust-egui-0.27)
                        ("rust-log" ,rust-log-0.4.21)
