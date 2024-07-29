@@ -495,3 +495,29 @@ enables it to self-document.")
     (synopsis "Waydroid uses a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu.")
     (description "Waydroid uses Linux namespaces (user, pid, uts, net, mount, ipc) to run a full Android system in a container and provide Android applications on any GNU/Linux-based platform.")
     (license license:gpl3)))
+
+(define-public Amogus-File-Encoder
+  (package
+    (name "Amogus-File-Encoder")
+    (version "sus")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/RegularRabbit05/Amogus-File-Encoder")
+              (commit "sus")))
+        (modules '((guix build utils)))
+        (snippet #~(begin
+                      (substitute* "main.cpp" (("getpid\\(\\)") "1"))
+                      (make-file-writable "CMakeLists.txt")
+                      (let ((output-port (open-file "CMakeLists.txt" "a")))
+                        (display "\ninstall(TARGETS AmogusCoder)\n" output-port)
+                        (close output-port))))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "04z1i34y2y3g7d8qvdfjwxk98qybbc49qzzpplvpgmn4iwhikm4s"))))
+    (build-system cmake-build-system)
+    (arguments (list #:tests? #f #:build-type "Release"))
+    (home-page "https://github.com/RegularRabbit05/Amogus-File-Encoder")
+    (synopsis "Encode and decode your files and strings in a sussy way!")
+    (description "Because Base64 is overrated. Now with -600% compression rates!")
+    (license (license:non-copyleft "file://LICENSE.md"))))
