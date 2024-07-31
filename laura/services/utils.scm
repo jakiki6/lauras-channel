@@ -15,7 +15,7 @@
           (documentation "Launch the waydroid container")
           (start #~(make-forkexec-constructor
                      (list (string-append #$waydroid "/bin/waydroid") "container" "start")))
-          (stop #~(make-kill-deconstructor)))))
+          (stop #~(make-kill-destructor)))))
 
 (define-public waydroid-service-type
   (service-type
