@@ -11,8 +11,7 @@
   #:use-module (gnu packages crates-crypto)
   #:use-module (gnu packages crates-tls)
   #:use-module (gnu packages crates-io)
-  #:use-module (gnu packages crypto)
-)
+  #:use-module (gnu packages crypto))
 
 (define-public rust-gix-worktree-state-0.9
   (package
