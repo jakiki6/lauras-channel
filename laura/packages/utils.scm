@@ -22,6 +22,7 @@
   #:use-module (gnu packages glib)
   #:use-module (gnu packages virtualization)
   #:use-module (gnu packages dns)
+  #:use-module (gnu packages llvm)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -521,3 +522,32 @@ enables it to self-document.")
     (synopsis "Encode and decode your files and strings in a sussy way!")
     (description "Because Base64 is overrated. Now with -600% compression rates!")
     (license (license:non-copyleft "file://LICENSE.md"))))
+
+(define-public encpipe
+  (package
+    (name "encpipe")
+    (version "0.5")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/jedisct1/encpipe")
+              (recursive? #t)
+              (commit "0.5")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1mk178kf7vbk92hshylfm20giy8dgncc16s9if1hrffrdi4hllb2"))
+        (snippet `(begin
+          (use-modules (guix build utils))
+          (substitute* "Makefile" (("-march=native ") ""))))))
+    (build-system gnu-build-system)
+    (arguments `(#:tests? #f #:phases (modify-phases %standard-phases
+      (delete 'configure)
+      (add-before 'build 'env (lambda* (#:key outputs #:allow-other-keys)
+        (setenv "CC" "gcc")))
+      (replace 'install (lambda* (#:key outputs #:allow-other-keys)
+        (begin
+          (install-file "encpipe" (string-append (assoc-ref outputs "out") "/bin"))))))))
+    (home-page "https://github.com/jedisct1/encpipe")
+    (synopsis "The dum^H^H^Hsimplest encryption tool in the world.")
+    (description "It was faster to write than remember how to use GnuPG and OpenSSL.")
+    (license license:isc)))
