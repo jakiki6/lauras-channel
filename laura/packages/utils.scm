@@ -551,3 +551,30 @@ enables it to self-document.")
     (synopsis "The dum^H^H^Hsimplest encryption tool in the world.")
     (description "It was faster to write than remember how to use GnuPG and OpenSSL.")
     (license license:isc)))
+
+(define-public coremark
+  (package
+    (name "coremark")
+    (version "1.01")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/eembc/coremark")
+              (commit "v1.01")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "17sdf01715w0fwhlgl21w5hc9d97ixkrgx20vyglz2w418cwk1b7"))
+        (snippet `(begin
+          (use-modules (guix build utils))
+          (substitute* "Makefile" (("rerun score") "compile"))))))
+    (build-system gnu-build-system)
+    (arguments `(#:tests? #f #:phases (modify-phases %standard-phases
+      (delete 'configure)
+      (replace 'install (lambda* (#:key outputs #:allow-other-keys)
+        (begin
+          (rename-file "coremark.exe" "coremark")
+          (install-file "coremark" (string-append (assoc-ref outputs "out") "/bin"))))))))
+    (home-page "https://github.com/eembc/coremark")
+    (synopsis "CoreMark® is an industry-standard benchmark that measures the performance of central processing units (CPU) and embedded microcrontrollers (MCU).")
+    (description "CoreMark's primary goals are simplicity and providing a method for testing only a processor's core features. For more information about EEMBC's comprehensive embedded benchmark suites, please see www.eembc.org.")
+    (license license:asl2.0)))

@@ -20,6 +20,7 @@ Software that I've ported so far:
 * [waydroid](https://waydro.id)
 * [something my friend made](https://github.com/RegularRabbit05/Amogus-File-Encoder)
 * [encpipe](https://github.com/jedisct1/encpipe)
+* [coremark](https://github.com/eembc/coremark)
 
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))
