@@ -578,3 +578,23 @@ enables it to self-document.")
     (synopsis "CoreMark® is an industry-standard benchmark that measures the performance of central processing units (CPU) and embedded microcrontrollers (MCU).")
     (description "CoreMark's primary goals are simplicity and providing a method for testing only a processor's core features. For more information about EEMBC's comprehensive embedded benchmark suites, please see www.eembc.org.")
     (license license:asl2.0)))
+
+(define-public ent
+  (package
+    (name "ent")
+    (version "1.2")
+    (source
+      (origin
+        (method url-fetch)
+        (uri "http://deb.debian.org/debian/pool/main/e/ent/ent_1.2debian.orig.tar.gz")
+        (sha256 (base32 "0jfhqzf5iwn5c7bb0kr9h9x5znxammlwxgqn6hvryc0dnci3gxid"))))
+    (build-system gnu-build-system)
+    (arguments `(#:tests? #f #:phases (modify-phases %standard-phases
+      (delete 'configure)
+      (replace 'install (lambda* (#:key outputs #:allow-other-keys)
+        (begin
+          (install-file "ent" (string-append (assoc-ref outputs "out") "/bin"))))))))
+    (home-page "https://www.fourmilab.ch/random/")
+    (synopsis "Pseudorandom number sequence test program")
+    (description "This program applies various tests to sequences of bytes stored in files and reports the results of those tests. The program is useful for those evaluating pseudorandom number generators for encryption and statistical sampling applications, compression algorithms, and other applications where the information density of a file is of interest.")
+    (license license:public-domain)))
