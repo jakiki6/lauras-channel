@@ -22,6 +22,7 @@ Software that I've ported so far:
 * [encpipe](https://github.com/jedisct1/encpipe)
 * [coremark](https://github.com/eembc/coremark)
 * [ent](https://www.fourmilab.ch/random/)
+* [pesign](https://github.com/rhboot/pesign)
 
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))

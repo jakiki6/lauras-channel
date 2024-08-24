@@ -6,6 +6,7 @@
   #:use-module (gnu packages autotools)
   #:use-module (guix download)
   #:use-module (guix build-system cargo)
+  #:use-module (gnu packages)
   #:use-module (gnu packages crates-io)
   #:use-module (gnu packages crates-graphics)
   #:use-module (gnu packages protobuf)
@@ -23,6 +24,10 @@
   #:use-module (gnu packages virtualization)
   #:use-module (gnu packages dns)
   #:use-module (gnu packages llvm)
+  #:use-module (gnu packages popt)
+  #:use-module (gnu packages linux)
+  #:use-module (gnu packages nss)
+  #:use-module (gnu packages man)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -598,3 +603,32 @@ enables it to self-document.")
     (synopsis "Pseudorandom number sequence test program")
     (description "This program applies various tests to sequences of bytes stored in files and reports the results of those tests. The program is useful for those evaluating pseudorandom number generators for encryption and statistical sampling applications, compression algorithms, and other applications where the information density of a file is of interest.")
     (license license:public-domain)))
+
+(define-public pesign
+  (package
+    (name "pesign")
+    (version "116")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/rhboot/pesign")
+              (commit "116")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0fnqfiivj46bha4hsnwiqy8vq8b4i3w2dig0h9h2k4j7yq7r5qvj"))))
+    (build-system gnu-build-system)
+    (native-inputs (list pkg-config mandoc))
+    (inputs (list popt efivar nspr nss openssl `(,util-linux "lib")))
+    (arguments `(#:tests? #f #:phases (modify-phases %standard-phases
+      (delete 'configure)
+      (add-before 'build 'fix-env (lambda* (#:key inputs outputs #:allow-other-keys)
+        (setenv "LIBRARY_PATH" (string-append
+          (getenv "LIBRARY_PATH") ":"
+          (assoc-ref inputs "nss") "/lib/nss"))
+        (substitute* "Make.defaults"
+          (("DESTDIR.*\\?.*$") (string-append "DESTDIR = " (assoc-ref outputs "out") "\n"))
+          (("/usr/") "/")))))))
+    (home-page "https://github.com/rhboot/pesign")
+    (synopsis "Linux tools for signed PE-COFF binaries")
+    (description "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications.")
+    (license license:gpl2)))
