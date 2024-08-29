@@ -4,7 +4,7 @@
   #:use-module (gnu packages)
   #:use-module (gnu packages squirrel))
 
-(define squirrel-3.2
+(define-public squirrel-3.2
   (package
     (inherit squirrel)
     (version "3.2")
@@ -16,8 +16,7 @@
                                   "_stable.tar.gz"))
               (file-name (string-append "squirrel-" version ".tar.gz"))
               (patches (list (search-patch "laura/packages/patches/squirrel-no-cmake-files.patch")))
+              (patch-flags '("-p1" "--binary"))
               (sha256
                (base32
                 "1nw1ghr4nxsvpk5bm9q0arrx4zrjpq5bai5sc17vj90by19187r1"))))))
-
-squirrel-3.2

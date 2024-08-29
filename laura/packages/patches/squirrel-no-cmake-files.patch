@@ -1,16 +1,43 @@
 diff --color --recursive --text --unified a/CMakeLists.txt b/CMakeLists.txt
 --- a/CMakeLists.txt	2020-06-12 17:36:11.000000000 +0200
-+++ b/CMakeLists.txt	2024-08-29 22:17:21.594789021 +0200
-@@ -81,12 +81,6 @@
-   COMPATIBILITY AnyNewerVersion
-   )
- 
++++ b/CMakeLists.txt	2024-08-29 22:33:50.158299141 +0200
+@@ -72,38 +72,3 @@
+     COMPONENT Development
+     )
+ endif()
+-
+-include(CMakePackageConfigHelpers)
+-
+-write_basic_package_version_file(
+-  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/squirrel/squirrel-config-version.cmake"
+-  VERSION "${squirrel_VERSION}"
+-  COMPATIBILITY AnyNewerVersion
+-  )
+-
 -configure_package_config_file(
 -  "${CMAKE_CURRENT_SOURCE_DIR}/squirrel-config.cmake.in"
 -  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/squirrel/squirrel-config.cmake"
 -  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/squirrel"
 -  )
 -
- export(EXPORT squirrel
-   NAMESPACE squirrel::
-   FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/squirrel/squirrel-targets.cmake"
+-export(EXPORT squirrel
+-  NAMESPACE squirrel::
+-  FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/squirrel/squirrel-targets.cmake"
+-  )
+-
+-if(NOT SQ_DISABLE_INSTALLER AND NOT SQ_DISABLE_CMAKE_INSTALLER)
+-  install(FILES
+-    "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/squirrel/squirrel-config-version.cmake"
+-    "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/squirrel/squirrel-config.cmake"
+-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/squirrel"
+-    COMPONENT Development
+-    )
+-
+-  install(EXPORT squirrel
+-    NAMESPACE squirrel::
+-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/squirrel"
+-    FILE "squirrel-targets.cmake"
+-    COMPONENT Development
+-    )
+-endif()
+
