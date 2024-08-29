@@ -22,8 +22,7 @@
   #:use-module (gnu packages perl)
   #:use-module (gnu packages image)
   #:use-module (gnu packages serialization)
-  #:use-module (laura packages rust-common)
-)
+  #:use-module (laura packages rust-common))
 
 (define-public fceux 
   (package
