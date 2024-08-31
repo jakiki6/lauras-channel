@@ -24,6 +24,9 @@ Software that I've ported so far:
 * [ent](https://www.fourmilab.ch/random/)
 * [pesign](https://github.com/rhboot/pesign)
 
+Software that I've binary ported but does not build from source yet:
+* [sbctl](https://github.com/Foxboron/sbctl)
+
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))
 * [CADO-NFS](https://gitlab.inria.fr/cado-nfs/cado-nfs)

@@ -6,6 +6,7 @@
   #:use-module (gnu packages autotools)
   #:use-module (guix download)
   #:use-module (guix build-system cargo)
+  #:use-module (guix build-system copy)
   #:use-module (gnu packages)
   #:use-module (gnu packages crates-io)
   #:use-module (gnu packages crates-graphics)
@@ -632,3 +633,19 @@ enables it to self-document.")
     (synopsis "Linux tools for signed PE-COFF binaries")
     (description "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications.")
     (license license:gpl2)))
+
+(define-public sbctl
+  (package
+    (name "sbctl")
+    (version "0.15.4")
+    (source
+      (origin
+        (method url-fetch)
+        (uri "https://github.com/Foxboron/sbctl/releases/download/0.15.4/sbctl-0.15.4-linux-amd64.tar.gz")
+        (sha256 (base32 "1iv2zny6i70mk0324y12v0z9p4wjblcisi16yj2qd9r5gdil1i2v"))))
+    (build-system copy-build-system)
+    (arguments `(#:install-plan '(("sbctl" "bin/sbctl"))))
+    (home-page "https://github.com/Foxboron/sbctl")
+    (synopsis "Secure Boot key manager")
+    (description "sbctl intends to be a user-friendly secure boot key manager capable of setting up secure boot, offer key management capabilities, and keep track of files that needs to be signed in the boot chain.")
+    (license license:expat)))
