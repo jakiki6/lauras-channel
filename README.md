@@ -23,6 +23,7 @@ Software that I've ported so far:
 * [coremark](https://github.com/eembc/coremark)
 * [ent](https://www.fourmilab.ch/random/)
 * [pesign](https://github.com/rhboot/pesign)
+* [cerca](https://github.com/cblgh/cerca)
 
 Software that I've binary ported but does not build from source yet:
 * [sbctl](https://github.com/Foxboron/sbctl)
