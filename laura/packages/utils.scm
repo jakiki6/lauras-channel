@@ -669,6 +669,7 @@ enables it to self-document.")
     (arguments
       `(#:import-path "cerca"
         #:go ,go-1.23
+        #:build-flags (list "-ldflags=-s -w --buildid=none")
         #:phases (modify-phases %standard-phases
          (add-before 'build 'deref-symlinks
            (lambda* (#:key inputs #:allow-other-keys)
