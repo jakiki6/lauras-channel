@@ -33,6 +33,7 @@
   #:use-module (gnu packages man)
   #:use-module (gnu packages golang-web)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages cross-base)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -783,3 +784,6 @@ enables it to self-document.")
     (synopsis "Command-line interface for Wasmtime")
     (description "This package provides Command-line interface for Wasmtime.")
     (license license:asl2.0)))
+
+(define-public gcc-cross-riscv64-linux-gnu-toolchain
+  (cross-gcc-toolchain "riscv64-linux-gnu"))
