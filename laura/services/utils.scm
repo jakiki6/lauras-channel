@@ -11,10 +11,11 @@
 (define (waydroid-shepherd-service config)
   (list (shepherd-service
           (provision '(waydroid))
-          (requirement '(loopback))
+          (requirement '(loopback dbus-system))
           (documentation "Launch the waydroid container")
           (start #~(make-forkexec-constructor
-                     (list (string-append #$waydroid "/bin/waydroid") "container" "start")))
+                     (list (string-append #$waydroid "/bin/waydroid") "container" "start")
+                     #:environment-variables `("PATH=/run/current-system/profile/bin:/run/current-system/profile/sbin")))
           (stop #~(make-kill-destructor)))))
 
 (define-public waydroid-service-type
