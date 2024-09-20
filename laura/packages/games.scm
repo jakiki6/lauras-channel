@@ -22,6 +22,12 @@
   #:use-module (gnu packages perl)
   #:use-module (gnu packages image)
   #:use-module (gnu packages serialization)
+  #:use-module (gnu packages gcc)
+  #:use-module (gnu packages base)
+  #:use-module (gnu packages gtk)
+  #:use-module (gnu packages glib)
+  #:use-module (nonguix licenses)
+  #:use-module (nonguix build-system binary)
   #:use-module (laura packages rust-common))
 
 (define-public fceux 
@@ -99,3 +105,46 @@
     (synopsis "The Powder Toy")
     (description "Written in C++ and using SDL, The Powder Toy is a desktop version of the classic 'falling sand' physics sandbox, it simulates air pressure and velocity as well as heat. ")
     (license license:gpl3)))
+
+(define-public minecraft-launcher
+  (let ((launcher-version "2.2.1441"))
+    (package
+      (name "minecraft-launcher")
+      (version launcher-version)
+      (supported-systems '("x86_64-linux"))
+      (source
+        (origin
+          (method url-fetch)
+          ; look at https://launchermeta.mojang.com/v1/products/launcher/6f083b80d5e6fabbc4236f81d0d8f8a350c665a9/linux.json
+          (uri "https://piston-data.mojang.com/v1/objects/bb5d7a5bd5476db2ce04f52b5c7a74ad8db455a7/minecraft-launcher")
+          (sha256 (base32 "0wf2faz9c0pkj555akhlx2alcl5qh1ilmd1p1d9w48sm7gicck69"))))
+      (build-system binary-build-system)
+      (arguments
+       `(#:phases (modify-phases %standard-phases
+           (add-before 'patchelf 'make-executable
+             (lambda _ (chmod "minecraft-launcher" 493)))
+           (add-after 'install 'wrap
+             (lambda* (#:key inputs outputs #:allow-other-keys)
+               (wrap-program (string-append (assoc-ref outputs "out") "/bin/minecraft-launcher")
+                 `("LD_LIBRARY_PATH" ":" =
+                   (,(string-append (assoc-ref inputs "glibc") "/lib")
+                    ,(string-append (assoc-ref inputs "gcc:lib") "/lib")
+                    ,(string-append (assoc-ref inputs "gdk-pixbuf") "/lib")
+                    ,(string-append (assoc-ref inputs "glib") "/lib")
+                    ,(string-append (assoc-ref inputs "gtk+") "/lib")
+                    ,(string-append (assoc-ref inputs "curl") "/lib")))))))
+         #:patchelf-plan
+         `(("minecraft-launcher" ("glibc" "gcc:lib" "gdk-pixbuf" "glib" "gtk+" "curl")))
+         #:install-plan
+         `(("minecraft-launcher" "bin/"))))
+      (inputs
+       `(("gcc:lib" ,gcc "lib")
+         ("glibc" ,glibc)
+         ("gdk-pixbuf" ,gdk-pixbuf)
+         ("glib" ,glib)
+         ("gtk+" ,gtk+)
+         ("curl" ,curl)))
+      (synopsis "Proprietary Minecraft launcher")
+      (description "Minecraft launcher binary")
+      (home-page "https://www.minecraft.net/")
+      (license (nonfree "https://minecraft.net/terms")))))
