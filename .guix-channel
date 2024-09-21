@@ -1,0 +1,7 @@
+(channel
+ (version 0)
+ (url "https://github.com/jakiki6/lauras-channel")
+ (dependencies
+  (channel
+   (name nonguix)
+   (url "https://gitlab.com/nonguix/nonguix"))))
