@@ -129,7 +129,7 @@
       (arguments
        `(#:phases (modify-phases %standard-phases
            (add-before 'patchelf 'make-executable
-             (lambda _ (chmod "minecraft-launcher" 493)))
+             (lambda _ (chmod "minecraft-launcher" #o755)))
            (add-after 'install 'wrap
              (lambda* (#:key inputs outputs #:allow-other-keys)
                (wrap-program (string-append (assoc-ref outputs "out") "/bin/minecraft-launcher")

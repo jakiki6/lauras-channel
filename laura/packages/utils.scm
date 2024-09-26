@@ -787,3 +787,30 @@ enables it to self-document.")
 
 (define-public gcc-cross-riscv64-linux-gnu-toolchain
   (cross-gcc-toolchain "riscv64-linux-gnu"))
+
+(define-public leopard
+  (package
+    (name "leopard")
+    (version "2")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/catid/leopard")
+              (commit "6e5725ebdf9da4370b0bcc4f70fa8eb66f4e6198")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0hbcd97q972ifp88ypd9y1w5nm5x08xbbzc35fwj35kvlpsnz4vi"))
+        (snippet
+          '(begin
+             (chmod "CMakeLists.txt" #o644)
+             (let ((out (open-file "CMakeLists.txt" "a")))
+               (display "add_library(leopard SHARED ${LIB_SOURCE_FILES})\ninstall(TARGETS bench_leopard DESTINATION bin)\ninstall(TARGETS leopard DESTINATION lib)\ninstall(FILES leopard.h DESTINATION include)\n" out)
+               (close-port out))
+             (use-modules (guix build utils))
+             (substitute* "CMakeLists.txt" (("-march=native") "-march=haswell"))))))
+    (build-system cmake-build-system)
+    (arguments (list #:tests? #f #:build-type "Release"))
+    (home-page "https://github.com/catid/leopard")
+    (synopsis "Leopard-RS : O(N Log N) MDS Reed-Solomon Block Erasure Code for Large Data")
+    (description "Leopard-RS is a fast library for Erasure Correction Coding. From a block of equally sized original data pieces, it generates recovery symbols that can be used to recover lost original data.")
+    (license license:bsd-3)))
