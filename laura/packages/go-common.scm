@@ -35,31 +35,6 @@
     (description "ANSI escape sequence parser and definitions")
     (license license:expat)))
 
-(define-public go-github-spf13-afero
-  (package
-    (name "go-github-spf13-afero")
-    (version "1.11.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/spf13/afero")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (patches (list (search-patch "laura/packages/patches/afero-nuke-google.patch")))
-       (sha256
-        (base32 "10c8q6bgib8vbj45z1c4gwl9ihn2wqhyxjaa2dy77mvb6rq7gdgs"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:import-path "github.com/spf13/afero"))
-    (propagated-inputs `(("go-golang-org-x-tools" ,go-golang-org-x-tools)))
-    (home-page "https://github.com/spf13/afero")
-    (synopsis "A FileSystem Abstraction System for Go")
-    (description
-     "Afero is a filesystem framework providing a simple, uniform and universal API interacting with any filesystem, as an abstraction layer providing interfaces, types and methods. Afero has an exceptionally clean interface and simple design without needless constructors or initialization methods.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-carlmjohnson-requests
   (package
     (name "go-github-com-carlmjohnson-requests")
