@@ -22,6 +22,7 @@
   #:use-module (gnu packages golang)
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages golang-check)
+  #:use-module (gnu packages golang-crypto)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages virtualization)
@@ -34,6 +35,7 @@
   #:use-module (gnu packages golang-web)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages cross-base)
+  #:use-module (gnu packages version-control)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -640,22 +642,6 @@ enables it to self-document.")
     (description "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications.")
     (license license:gpl2)))
 
-(define-public sbctl
-  (package
-    (name "sbctl")
-    (version "0.15.4")
-    (source
-      (origin
-        (method url-fetch)
-        (uri "https://github.com/Foxboron/sbctl/releases/download/0.15.4/sbctl-0.15.4-linux-amd64.tar.gz")
-        (sha256 (base32 "1iv2zny6i70mk0324y12v0z9p4wjblcisi16yj2qd9r5gdil1i2v"))))
-    (build-system copy-build-system)
-    (arguments `(#:install-plan '(("sbctl" "bin/sbctl"))))
-    (home-page "https://github.com/Foxboron/sbctl")
-    (synopsis "Secure Boot key manager")
-    (description "sbctl intends to be a user-friendly secure boot key manager capable of setting up secure boot, offer key management capabilities, and keep track of files that needs to be signed in the boot chain.")
-    (license license:expat)))
-
 (define-public cerca
   (package
     (name "cerca")
@@ -814,3 +800,44 @@ enables it to self-document.")
     (synopsis "Leopard-RS : O(N Log N) MDS Reed-Solomon Block Erasure Code for Large Data")
     (description "Leopard-RS is a fast library for Erasure Correction Coding. From a block of equally sized original data pieces, it generates recovery symbols that can be used to recover lost original data.")
     (license license:bsd-3)))
+
+(define-public sbctl
+  (package
+    (name "sbctl")
+    (version "0.15.4")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Foxboron/sbctl")
+             (commit "a53a6ba59ccf")))
+       (file-name (git-file-name name version))
+       (modules '((guix build utils)))
+       (snippet #~(invoke (string-append #$git "/bin/git") "apply" #$(local-file (search-patch "laura/packages/patches/sbctl-remove-tpm-and-landlock-support.patch"))))
+       (sha256
+        (base32 "0qgf3ywpv1rxplhk2jj7zzvyyagk90lxqs7brn4ai7i4pp6v9bq8"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:unpack-path "github.com/foxboron/sbctl"
+      #:import-path "github.com/foxboron/sbctl/cmd/sbctl"))
+    (propagated-inputs (list go-golang-org-x-sys
+                             go-golang-org-x-exp
+                             go-github-com-spf13-cobra
+                             go-github-com-spf13-afero
+                             go-github-com-onsi-gomega
+                             go-github-com-google-uuid
+                             go-github-com-goccy-go-yaml
+                             go-github-com-foxboron-go-uefi-authenticode
+                             go-github-com-foxboron-go-uefi-efi
+                             go-github-com-foxboron-go-uefi-efivar
+                             go-github-com-foxboron-go-uefi-efivarfs
+                             go-github-com-foxboron-go-uefi-pkcs7
+                             go-github-com-fatih-color))
+    (home-page "https://github.com/foxboron/sbctl")
+    (synopsis "sbctl - Secure Boot Manager")
+    (description
+     "sbctl intends to be a user-friendly secure boot key manager capable of setting
+up secure boot, offer key management capabilities, and keep track of files that
+needs to be signed in the boot chain.")
+    (license license:expat)))
