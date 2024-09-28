@@ -24,8 +24,6 @@ Software that I've ported so far:
 * [ent](https://www.fourmilab.ch/random/)
 * [pesign](https://github.com/rhboot/pesign)
 * [cerca](https://github.com/cblgh/cerca)
-
-Software that I've binary ported but does not build from source yet:
 * [sbctl](https://github.com/Foxboron/sbctl)
 
 Things that are still in progress:
