@@ -813,7 +813,7 @@ enables it to self-document.")
              (commit "a53a6ba59ccf")))
        (file-name (git-file-name name version))
        (modules '((guix build utils)))
-       (snippet #~(invoke (string-append #$git "/bin/git") "apply" #$(local-file (search-patch "laura/packages/patches/sbctl-remove-tpm-and-landlock-support.patch"))))
+       (snippet #~(begin (invoke (string-append #$git "/bin/git") "apply" #$(local-file (search-patch "laura/packages/patches/sbctl-remove-tpm-and-landlock-support.patch"))) (delete-file-recursively "tests")))
        (sha256
         (base32 "0qgf3ywpv1rxplhk2jj7zzvyyagk90lxqs7brn4ai7i4pp6v9bq8"))))
     (build-system go-build-system)
