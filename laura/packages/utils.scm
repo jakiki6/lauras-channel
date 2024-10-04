@@ -36,6 +36,8 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages cross-base)
   #:use-module (gnu packages version-control)
+  #:use-module (gnu packages qt)
+  #:use-module (gnu packages xdisorg)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -841,3 +843,30 @@ enables it to self-document.")
 up secure boot, offer key management capabilities, and keep track of files that
 needs to be signed in the boot chain.")
     (license license:expat)))
+
+(define-public ricochet-refresh
+  (package
+    (name "ricochet-refresh")
+    (version "3.0.27")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/blueprint-freespeech/ricochet-refresh")
+              (recursive? #t)
+              (commit "v3.0.27-release")))
+        (file-name (git-file-name name version))
+        (modules '((guix build utils)))
+        (snippet '(substitute* "src/ricochet-refresh/CMakeLists.txt" (("MultimediaQuick") "MultimediaQuickPrivate")))
+        (sha256 (base32 "06clv5cbmwf6j3lby5fqbxvyadsy7cffy72257mhcn07dqwk2jz9"))))
+    (build-system cmake-build-system)
+    (arguments
+      `(#:tests? #f
+        #:build-type "Release"
+        #:phases (modify-phases %standard-phases
+          (add-before 'configure 'chdir (lambda _ (chdir "src"))))))
+    (inputs (list openssl qtbase qtdeclarative qttools qtmultimedia protobuf libxkbcommon))
+    (home-page "https://www.ricochetrefresh.net/")
+    (synopsis "Anonymous peer-to-peer instant messaging")
+    (description "Ricochet Refresh is an instant messenger where no one knows your identity, who you're talking to, or what you're talking about.")
+    (license license:bsd-3)))
