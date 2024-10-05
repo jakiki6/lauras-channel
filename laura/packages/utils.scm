@@ -856,16 +856,18 @@ needs to be signed in the boot chain.")
               (recursive? #t)
               (commit "v3.0.27-release")))
         (file-name (git-file-name name version))
-        (modules '((guix build utils)))
-        (snippet '(substitute* "src/ricochet-refresh/CMakeLists.txt" (("MultimediaQuick") "MultimediaQuickPrivate")))
         (sha256 (base32 "06clv5cbmwf6j3lby5fqbxvyadsy7cffy72257mhcn07dqwk2jz9"))))
     (build-system cmake-build-system)
     (arguments
       `(#:tests? #f
         #:build-type "Release"
         #:phases (modify-phases %standard-phases
-          (add-before 'configure 'chdir (lambda _ (chdir "src"))))))
-    (inputs (list openssl qtbase qtdeclarative qttools qtmultimedia protobuf libxkbcommon))
+          (add-before 'configure 'chdir (lambda _ (chdir "src")))
+          (add-after 'install 'wrap
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (wrap-program (string-append (assoc-ref outputs "out") "/bin/ricochet-refresh")
+                `(QML2_IMPORT_PATH suffix (,(string-append (assoc-ref inputs "qtdeclarative") "/lib/qt5/qml") ,(string-append (assoc-ref inputs "qtquickcontrols") "/lib/qt5/qml")))))))))
+    (inputs (list openssl qtbase-5 qtdeclarative-5 qttools-5 qtmultimedia-5 qtquickcontrols-5 qtquickcontrols2-5 protobuf libxkbcommon))
     (home-page "https://www.ricochetrefresh.net/")
     (synopsis "Anonymous peer-to-peer instant messaging")
     (description "Ricochet Refresh is an instant messenger where no one knows your identity, who you're talking to, or what you're talking about.")
