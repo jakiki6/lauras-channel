@@ -39,10 +39,13 @@
   #:use-module (gnu packages qt)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages cmake)
+  #:use-module (gnu packages freedesktop)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
   #:use-module (guix build-system python)
+  #:use-module (guix build-system meson)
   #:use-module (guix gexp)
   #:use-module (laura packages go-common)
   #:use-module (laura packages rust-common))
@@ -899,3 +902,24 @@ needs to be signed in the boot chain.")
     (synopsis "Activate Linux watermark for Wayland")
     (description "The \"Activate Windows\" watermark ported to Linux with Gtk Layer Shell")
     (license license:expat)))
+
+(define-public wshowkeys
+  (package
+    (name "wshowkeys")
+    (version "1.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://git.sr.ht/~sircmpwn/wshowkeys")
+              (commit "6388a49e0f431d6d5fcbd152b8ae4fa8e87884ee")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "10kafdja5cwbypspwhvaxjz3hvf51vqjzbgdasl977193cvxgmbs"))))
+    (build-system meson-build-system)
+    (native-inputs (list cmake pkg-config))
+    (inputs (list cairo libinput pango wayland wayland-protocols libxkbcommon))
+    (arguments `(#:tests? #f))
+    (home-page "https://git.sr.ht/~sircmpwn/wshowkeys")
+    (synopsis "Displays keys being pressed on a Wayland session")
+    (description "Displays keypresses on screen on supported Wayland compositors (requires wlr_layer_shell_v1 support).")
+    (license license:gpl3)))
