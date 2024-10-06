@@ -26,6 +26,7 @@ Software that I've ported so far:
 * [cerca](https://github.com/cblgh/cerca)
 * [sbctl](https://github.com/Foxboron/sbctl)
 * [Ricochet Refresh](https://github.com/blueprint-freespeech/ricochet-refresh)
+* [activate-linux](https://github.com/Kljunas2/activate-linux)
 
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))
