@@ -923,3 +923,23 @@ needs to be signed in the boot chain.")
     (synopsis "Displays keys being pressed on a Wayland session")
     (description "Displays keypresses on screen on supported Wayland compositors (requires wlr_layer_shell_v1 support).")
     (license license:gpl3)))
+
+(define-public liboqs
+  (package
+    (name "liboqs")
+    (version "0.11.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/open-quantum-safe/liboqs")
+              (commit "0.11.0")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0cv7v2cxdjavc24a10b5vp2ayf21r551gj6hqwif78f9z8j7av7q"))))
+    (build-system cmake-build-system)
+    (inputs (list openssl))
+    (arguments `(#:tests? #f #:build-type "Release"))
+    (home-page "https://openquantumsafe.org/")
+    (synopsis "liboqs is an open source C library for quantum-safe cryptographic algorithms.")
+    (description "C library for prototyping and experimenting with quantum-resistant cryptography")
+    (license license:expat)))
