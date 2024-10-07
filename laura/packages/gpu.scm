@@ -1,10 +1,10 @@
 (define-module (laura packages gpu)
   #:use-module (guix packages)
+  #:use-module (gnu packages xdisorg)
   #:use-module (guix download)
   #:use-module (guix build-system cargo)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (laura packages rust-common)
-)
+  #:use-module (laura packages rust-common))
 
 (define-public amdgpu-top
   (package
@@ -18,6 +18,7 @@
        (sha256
         (base32 "09ya3szw6fn1dia7wrngxaicvy6j0liawahflyagif577v2jphv9"))))
     (build-system cargo-build-system)
+    (inputs (list libdrm))
     (arguments
      `(#:cargo-inputs (("rust-amdgpu-top-gui" ,rust-amdgpu-top-gui-0.8)
                        ("rust-amdgpu-top-json" ,rust-amdgpu-top-json-0.8)
