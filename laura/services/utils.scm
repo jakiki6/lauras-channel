@@ -3,6 +3,7 @@
   #:use-module (gnu services)
   #:use-module (gnu services shepherd)
   #:use-module (gnu services dbus)
+  #:use-module (gnu packages wine)
   #:use-module (laura packages utils))
 
 (define (waydroid-activation config)
@@ -33,3 +34,30 @@
               (lambda (config) (list waydroid)))))
     (default-value #f)
     (description "Run waydroid")))
+
+(define (wine-binfmt-service config)
+  (list (shepherd-service
+          (provision '(wine-binfmt))
+          (requirement '(file-system-/proc/sys/fs/binfmt_misc))
+          (documentation "Do the registration")
+          (start #~(lambda _
+                     (begin
+                       (let ((file (open-file "/proc/sys/fs/binfmt_misc/register" "w")))
+                         (begin
+                           (display (string-append ":wine64:M::MZ::" #$wine64 "/bin/wine:") file)
+                           (close file)))
+                        #t)))
+          (stop #~(lambda _
+                    (begin
+                      (delete-file "/proc/sys/fs/binfmt_misc/wine64")
+                      #t))))))
+
+(define-public wine-binfmt-service-type
+  (service-type
+    (name 'wine-binfmt)
+    (extensions
+      (list (service-extension
+              shepherd-root-service-type
+              wine-binfmt-service)))
+    (default-value #f)
+    (description "Register wine as a binfmt handler for exe files.")))
