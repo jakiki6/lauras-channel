@@ -29,6 +29,7 @@ Software that I've ported so far:
 * [activate-linux](https://github.com/Kljunas2/activate-linux)
 * [wshowkeys](https://git.sr.ht/~sircmpwn/wshowkeys)
 * [liboqs](https://github.com/open-quantum-safe/liboqs)
+* [pacman](https://gitlab.archlinux.org/pacman/pacman)
 
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))
