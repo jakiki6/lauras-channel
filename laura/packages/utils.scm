@@ -943,3 +943,28 @@ needs to be signed in the boot chain.")
     (synopsis "liboqs is an open source C library for quantum-safe cryptographic algorithms.")
     (description "C library for prototyping and experimenting with quantum-resistant cryptography")
     (license license:expat)))
+
+(define-public vbmeta-disable-verification
+  (package
+    (name "vbmeta-disable-verification")
+    (version "1.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/libxzr/vbmeta-disable-verification")
+              (commit "v1.0")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1qzgf463xj7ks1hrmmsh0hvb67hraayz8qzjn4y3s3bn95k92pls"))))
+    (build-system gnu-build-system)
+    (arguments (list
+                #:phases #~(modify-phases %standard-phases
+                  (replace 'configure (lambda _ (chdir "jni")))
+                  (replace 'build (lambda _ (system "gcc -O2 -o vbmeta-disable-verification main.c")))
+                  (delete 'check)
+                  (replace 'install (lambda* (#:key outputs #:allow-other-keys)
+                    (install-file "vbmeta-disable-verification" (string-append (assoc-ref outputs "out") "/bin/")))))))
+    (home-page "https://github.com/libxzr/vbmeta-disable-verification")
+    (synopsis "Patch Android vbmeta image and disable verification flags inside.")
+    (description "Give it a vbmeta image and then verification will be disabled on it.")
+    (license license:expat)))
