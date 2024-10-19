@@ -174,3 +174,39 @@
       (description "Minecraft launcher binary")
       (home-page "https://www.minecraft.net/")
       (license (nonfree "https://minecraft.net/terms")))))
+
+(define-public ScuffedMinecraft
+  (package
+    (name "ScuffedMinecraft")
+    (version "1.3.0-pre-alpha")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/EvanatorM/ScuffedMinecraft")
+              (commit "pre-alpha-v1.3.0")))
+        (file-name (git-file-name name version))
+        (modules '((guix build utils)))
+        (snippet #~(substitute* "ScuffedMinecraft/src/Application.cpp"
+                     (("#include <thread>") "#include <thread>\n#include <libgen.h>")
+                     (("int main\\(\\)") "int main(int argc, char *argv[])")
+                     (("glfwInit\\(\\);") "glfwInit();\nchdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
+        (sha256 (base32 "15g2rc1ny6z88smsaryvqpy0mzm36b5fcc92595x6gakw5f8n20n"))))
+    (build-system cmake-build-system)
+    (inputs (list glfw-3.4 mesa))
+    (arguments (list
+                #:tests? #f
+                #:build-type "Release"
+                #:phases #~(modify-phases %standard-phases
+                  (add-before 'configure 'chdir-to-source
+                    (lambda _ (chdir "ScuffedMinecraft")))
+                  (replace 'install (lambda* (#:key inputs outputs #:allow-other-keys)
+                    (begin
+                      (install-file "../ScuffedMinecraft/bin/scuffed_mc" (string-append (assoc-ref outputs "out") "/bin/"))
+                      (mkdir-p (string-append (assoc-ref outputs "out") "/share/scuffed_mc/assets"))
+                      (copy-recursively "../ScuffedMinecraft/assets" (string-append (assoc-ref outputs "out") "/share/scuffed_mc/assets"))
+                      (wrap-program (string-append (assoc-ref outputs "out") "/bin/scuffed_mc") `("LD_LIBRARY_PATH" = ,(list (string-append (assoc-ref inputs "mesa") "/lib"))))))))))
+    (home-page "https://github.com/EvanatorM/ScuffedMinecraft")
+    (synopsis "A Minecraft Clone in C++")
+    (description "A Minecraft clone made in C++ and OpenGL")
+    (license license:expat)))

@@ -31,6 +31,7 @@ Software that I've ported so far:
 * [liboqs](https://github.com/open-quantum-safe/liboqs)
 * [pacman](https://gitlab.archlinux.org/pacman/pacman)
 * [vbmeta-disable-verification](https://github.com/libxzr/vbmeta-disable-verification)
+* [ScuffedMinecraft](https://github.com/EvanatorM/ScuffedMinecraft)
 
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))
