@@ -36,3 +36,10 @@ Software that I've ported so far:
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))
 * [CADO-NFS](https://gitlab.inria.fr/cado-nfs/cado-nfs)
+
+Services:
+* waydroid
+
+Home services:
+* wineserver
+* pulseaudio
