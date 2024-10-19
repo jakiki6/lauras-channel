@@ -2,7 +2,7 @@
   #:use-module (guix gexp)
   #:use-module (gnu home services)
   #:use-module (gnu home services shepherd)
-  #:use-module (gnu packages wine))
+  #:use-module (gnu packages pulseaudio))
 
 (define (home-pulseaudio-shepherd-service config)
   (list (shepherd-service
