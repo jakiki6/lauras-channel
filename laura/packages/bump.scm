@@ -4,6 +4,8 @@
   #:use-module (guix git-download)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build-system gnu)
+  #:use-module (guix build-system cmake)
+  #:use-module (guix gexp)
   #:use-module (gnu packages)
   #:use-module (gnu packages squirrel)
   #:use-module (gnu packages fpga)
@@ -13,7 +15,17 @@
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages python)
   #:use-module (gnu packages man)
-  #:use-module (gnu packages perl))
+  #:use-module (gnu packages perl)
+  #:use-module (gnu packages bash)
+  #:use-module (gnu packages image)
+  #:use-module (gnu packages gl)
+  #:use-module (gnu packages linux)
+  #:use-module (gnu packages qt)
+  #:use-module (gnu packages glib)
+  #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages xdisorg)
+  #:use-module (gnu packages gcc))
 
 (define-public squirrel-3.2
   (package
