@@ -49,9 +49,10 @@
        (sha256
         (base32 "1nw1ghr4nxsvpk5bm9q0arrx4zrjpq5bai5sc17vj90by19187r1"))))))
 
-(define iverilog-fixed
+(define-public iverilog-fixed
   (package
     (inherit iverilog)
+    (version "12.0-1")
     (inputs (list zlib))))
 
 (define-public yosys-0.46
