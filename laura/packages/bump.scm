@@ -43,3 +43,25 @@
               (sha256
                (base32
                 "1nw1ghr4nxsvpk5bm9q0arrx4zrjpq5bai5sc17vj90by19187r1"))))))
+
+(define iverilog-fixed
+  (package
+    (inherit iverilog)
+    (inputs (list zlib))))
+
+(define-public yosys-0.46
+   (package
+     (inherit yosys)
+     (name "yosys")
+     (version "0.46")
+     (source (origin
+               (method git-fetch)
+               (uri (git-reference
+                     (url "https://github.com/YosysHQ/yosys")
+                     (commit version)))
+               (sha256
+                (base32
+                 "1zj7vbpy6v1wn4p5cjs4hdjd467a1j1aj2qhs148bl2s6mzq3p86"))
+               (file-name (git-file-name name version))))
+    (inputs (modify-inputs (package-inputs yosys)
+      (replace "iverilog" iverilog-fixed)))))
