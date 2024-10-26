@@ -1,5 +1,6 @@
 ;; from https://codeberg.org/hako/Rosenthal/src/commit/1deb97ada4d7d8c2d501738fcc1532a605de51a7/rosenthal/packages/wm.scm
 ;; it is licensed under the GPLv3+
+;; I've bumped hyprland to 0.44.1
 
 (define-module (laura packages hyprland)
   #:use-module ((guix licenses) #:prefix license:)

@@ -43,3 +43,7 @@ Services:
 Home services:
 * wineserver
 * pulseaudio
+
+Bumped stuff:
+* Squirrel 3.2
+* Hyprland 0.44.1
