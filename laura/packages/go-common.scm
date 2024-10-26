@@ -394,3 +394,96 @@ utilize secure boot and UEFI. This also includes unit-testing to ensure the
 library is compatible with existing tools, and integration tests to ensure the
 library is able of deal with future UEFI revisions.")
     (license license:expat)))
+
+(define-public go-github-com-spencercw-go-xz
+  (package
+    (name "go-github-com-spencercw-go-xz")
+    (version "0.0.0-20181128201811-c82a2123b492")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/spencercw/go-xz")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0f5cm8bznjgwq51xqfxpwzp7k57hj7b0dcp0lq6kzik4qqzm1rhy"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/spencercw/go-xz"))
+    (home-page "https://github.com/spencercw/go-xz")
+    (synopsis #f)
+    (description #f)
+    (license #f)))
+
+(define-public go-github-com-acarl005-stripansi
+  (package
+    (name "go-github-com-acarl005-stripansi")
+    (version "0.0.0-20180116102854-5a71ef0e047d")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/acarl005/stripansi")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "02sxiishdixm791jqbkmhdcvc712l0fb8rqmibxzgc61h0qs6rs3"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/acarl005/stripansi"))
+    (home-page "https://github.com/acarl005/stripansi")
+    (synopsis "Strip ANSI")
+    (description "This Go package removes ANSI escape codes from strings.")
+    (license license:expat)))
+
+(define-public go-github-com-vbauerster-mpb-v5
+  (package
+    (name "go-github-com-vbauerster-mpb-v5")
+    (version "5.4.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/vbauerster/mpb")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0asijjny34mcs7afr4haxnkz5mjx75243i72h4h5a5sbvydfx43m"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/vbauerster/mpb/v5"))
+    (propagated-inputs (list go-golang-org-x-sys
+                             go-github-com-mattn-go-runewidth
+                             go-github-com-acarl005-stripansi
+                             go-github-com-vividcortex-ewma))
+    (home-page "https://github.com/vbauerster/mpb")
+    (synopsis "Multi Progress Bar")
+    (description
+     "Package mpb is a library for rendering progress bars in terminal applications.")
+    (license license:unlicense)))
+
+(define-public go-github-com-valyala-gozstd
+  (package
+    (name "go-github-com-valyala-gozstd")
+    (version "1.21.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/valyala/gozstd")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1wskjbrb73j315vk615n9irhv0w993gf74b4h16kckrddkr3zp7k"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/valyala/gozstd"))
+    (home-page "https://github.com/valyala/gozstd")
+    (synopsis "gozstd - go wrapper for")
+    (description "Package gozstd is Go wrapper for zstd.")
+    (license license:expat)))

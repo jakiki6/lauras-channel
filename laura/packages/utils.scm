@@ -968,3 +968,30 @@ needs to be signed in the boot chain.")
     (synopsis "Patch Android vbmeta image and disable verification flags inside.")
     (description "Give it a vbmeta image and then verification will be disabled on it.")
     (license license:expat)))
+
+(define-public payload-dumper-go
+  (package
+    (name "payload-dumper-go")
+    (version "0.0.0-20241018080004-d8ba4911ebd7")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ssut/payload-dumper-go")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1d7rdmx04wi29hbafih3hv4lrp5dyrnpsylhzc5r7gmn7sp08xij"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/ssut/payload-dumper-go"))
+    (propagated-inputs (list go-google-golang-org-protobuf
+                             go-github-com-vbauerster-mpb-v5
+                             go-github-com-spencercw-go-xz
+                             go-github-com-dustin-go-humanize
+                             go-github-com-valyala-gozstd))
+    (home-page "https://github.com/ssut/payload-dumper-go")
+    (synopsis "payload-dumper-go")
+    (description "An android OTA payload dumper written in Go.")
+    (license license:asl2.0)))
