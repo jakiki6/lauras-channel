@@ -338,6 +338,7 @@ abstractions for an application to render on a Wayland session (in a window) or 
            wayland-protocols-for-hyprland
            xcb-util-errors
            xcb-util-wm))
+    (propagated-inputs (list xorg-server-xwayland))
     (home-page "https://hyprland.org")
     (synopsis "Dynamic tiling Wayland compositor")
     (description
