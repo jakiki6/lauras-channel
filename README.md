@@ -33,6 +33,7 @@ Software that I've ported so far:
 * [vbmeta-disable-verification](https://github.com/libxzr/vbmeta-disable-verification)
 * [ScuffedMinecraft](https://github.com/EvanatorM/ScuffedMinecraft)
 * [payload-dumper-go](https://github.com/ssut/payload-dumper-go)
+* [wl-screenrec](https://github.com/russelltg/wl-screenrec)
 
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))
