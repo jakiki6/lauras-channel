@@ -2,11 +2,11 @@
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix build-system cargo)
-  #:use-module ((guix licenses) #:prefix license:)
+  #:use-module ((guix licenses)
+                #:prefix license:)
   #:use-module (gnu packages crypto)
   #:use-module (gnu packages crates-io)
-  #:use-module (laura packages rust-common)
-)
+  #:use-module (laura packages rust-common))
 
 (define-public drand-rs
   (package

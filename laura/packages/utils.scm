@@ -84,341 +84,6 @@
      "Because Base64 is overrated. Now with -600% compression rates!")
     (license (license:non-copyleft "file://LICENSE.md"))))
 
-(define-public cerca
-  (package
-    (name "cerca")
-    (version "0.0.0-20240906135835-1f4d8ff974ed")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/cblgh/cerca")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "17wsk87p1v5wsxdfypc293nrsdx4nna2q9ldwf89r6bia3978gsi"))))
-    (build-system go-build-system)
-    (arguments
-     `(#:import-path "cerca"
-       #:go ,go-1.23
-       #:build-flags (list "-ldflags=-s -w --buildid=none")
-       #:phases (modify-phases %standard-phases
-                  (add-before 'build 'deref-symlinks
-                    (lambda* (#:key inputs #:allow-other-keys)
-                      (begin
-                        (delete-file-recursively
-                         "src/golang.org/x/net/publicsuffix/data")
-                        (copy-recursively (string-append (assoc-ref inputs
-                                                          "go-golang-org-x-net")
-                                           "/src/golang.org/x/net/publicsuffix/data")
-                         "src/golang.org/x/net/publicsuffix/data")))))))
-    (propagated-inputs (list go-golang-org-x-time
-                             go-golang-org-x-exp
-                             go-github-com-microcosm-cc-bluemonday
-                             go-github-com-mattn-go-sqlite3
-                             go-github-com-matthewhartstonge-argon2
-                             go-github-com-komkom-toml
-                             go-github-com-gorilla-sessions
-                             go-github-com-gomarkdown-markdown
-                             go-github-com-cblgh-plain
-                             go-github-com-carlmjohnson-requests))
-    (home-page "https://github.com/cblgh/cerca")
-    (synopsis "Cerca")
-    (description "a forum software")
-    (license license:agpl3+)))
-
-(define-public coremark
-  (package
-    (name "coremark")
-    (version "1.01")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/eembc/coremark")
-             (commit "v1.01")))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "17sdf01715w0fwhlgl21w5hc9d97ixkrgx20vyglz2w418cwk1b7"))
-       (snippet `(begin
-                   (use-modules (guix build utils))
-                   (substitute* "Makefile"
-                     (("rerun score")
-                      "compile"))))))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:tests? #f
-       #:phases (modify-phases %standard-phases
-                  (delete 'configure)
-                  (replace 'install
-                    (lambda* (#:key outputs #:allow-other-keys)
-                      (begin
-                        (rename-file "coremark.exe" "coremark")
-                        (install-file "coremark"
-                                      (string-append (assoc-ref outputs "out")
-                                                     "/bin"))))))))
-    (home-page "https://github.com/eembc/coremark")
-    (synopsis
-     "CoreMark® is an industry-standard benchmark that measures the performance of central processing units (CPU) and embedded microcrontrollers (MCU).")
-    (description
-     "CoreMark's primary goals are simplicity and providing a method for testing only a processor's core features. For more information about EEMBC's comprehensive embedded benchmark suites, please see www.eembc.org.")
-    (license license:asl2.0)))
-
-(define-public encpipe
-  (package
-    (name "encpipe")
-    (version "0.5")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/jedisct1/encpipe")
-             (recursive? #t)
-             (commit "0.5")))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1mk178kf7vbk92hshylfm20giy8dgncc16s9if1hrffrdi4hllb2"))
-       (snippet `(begin
-                   (use-modules (guix build utils))
-                   (substitute* "Makefile"
-                     (("-march=native ")
-                      ""))))))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:tests? #f
-       #:phases (modify-phases %standard-phases
-                  (delete 'configure)
-                  (add-before 'build 'env
-                    (lambda* (#:key outputs #:allow-other-keys)
-                      (setenv "CC" "gcc")))
-                  (replace 'install
-                    (lambda* (#:key outputs #:allow-other-keys)
-                      (begin
-                        (install-file "encpipe"
-                                      (string-append (assoc-ref outputs "out")
-                                                     "/bin"))))))))
-    (home-page "https://github.com/jedisct1/encpipe")
-    (synopsis "The dum^H^H^Hsimplest encryption tool in the world.")
-    (description
-     "It was faster to write than remember how to use GnuPG and OpenSSL.")
-    (license license:isc)))
-
-(define-public ent
-  (package
-    (name "ent")
-    (version "1.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri
-        "http://deb.debian.org/debian/pool/main/e/ent/ent_1.2debian.orig.tar.gz")
-       (sha256
-        (base32 "0jfhqzf5iwn5c7bb0kr9h9x5znxammlwxgqn6hvryc0dnci3gxid"))))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:tests? #f
-       #:phases (modify-phases %standard-phases
-                  (delete 'configure)
-                  (replace 'install
-                    (lambda* (#:key outputs #:allow-other-keys)
-                      (begin
-                        (install-file "ent"
-                                      (string-append (assoc-ref outputs "out")
-                                                     "/bin"))))))))
-    (home-page "https://www.fourmilab.ch/random/")
-    (synopsis "Pseudorandom number sequence test program")
-    (description
-     "This program applies various tests to sequences of bytes stored in files and reports the results of those tests. The program is useful for those evaluating pseudorandom number generators for encryption and statistical sampling applications, compression algorithms, and other applications where the information density of a file is of interest.")
-    (license license:public-domain)))
-
-(define-public pesign
-  (package
-    (name "pesign")
-    (version "116")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/rhboot/pesign")
-             (commit "116")))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0fnqfiivj46bha4hsnwiqy8vq8b4i3w2dig0h9h2k4j7yq7r5qvj"))))
-    (build-system gnu-build-system)
-    (native-inputs (list pkg-config mandoc))
-    (inputs (list popt
-                  efivar
-                  nspr
-                  nss
-                  openssl
-                  `(,util-linux "lib")))
-    (arguments
-     `(#:tests? #f
-       #:phases (modify-phases %standard-phases
-                  (delete 'configure)
-                  (add-before 'build 'fix-env
-                    (lambda* (#:key inputs outputs #:allow-other-keys)
-                      (setenv "LIBRARY_PATH"
-                              (string-append (getenv "LIBRARY_PATH") ":"
-                                             (assoc-ref inputs "nss")
-                                             "/lib/nss"))
-                      (substitute* "Make.defaults"
-                        (("DESTDIR.*\\?.*$")
-                         (string-append "DESTDIR = "
-                                        (assoc-ref outputs "out") "\n"))
-                        (("/usr/")
-                         "/")))))))
-    (home-page "https://github.com/rhboot/pesign")
-    (synopsis "Linux tools for signed PE-COFF binaries")
-    (description
-     "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications.")
-    (license license:gpl2)))
-
-(define-public wasmtime
-  (package
-    (name "wasmtime")
-    (version "24.0.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "wasmtime-cli" version))
-       (file-name (string-append name "-" version ".tar.gz"))
-       (modules '((guix build utils)))
-       (snippet #~(begin
-                    (substitute* "Cargo.toml"
-                      (("1.78.0")
-                       "1.77.0"))))
-       (sha256
-        (base32 "1q0m6wycrdw7vv9b73ckqmcx5fh7xim1m5dh0f4xrihdff1ys5j2"))))
-    (build-system cargo-build-system)
-    (native-inputs (list pkg-config))
-    (inputs (list (list zstd "lib")))
-    (arguments
-     `(#:tests? #f
-       #:cargo-inputs (("rust-anyhow" ,rust-anyhow-1)
-                       ("rust-anyhow" ,rust-anyhow-1)
-                       ("rust-async-trait" ,rust-async-trait-0.1)
-                       ("rust-bytes" ,rust-bytes-1)
-                       ("rust-cfg-if" ,rust-cfg-if-1)
-                       ("rust-clap" ,rust-clap-4)
-                       ("rust-http" ,rust-http-1)
-                       ("rust-http-body-util" ,rust-http-body-util-0.1.1)
-                       ("rust-humantime" ,rust-humantime-2)
-                       ("rust-hyper" ,rust-hyper-1.3)
-                       ("rust-listenfd" ,rust-listenfd-1)
-                       ("rust-log" ,rust-log-0.4)
-                       ("rust-once-cell" ,rust-once-cell-1)
-                       ("rust-rustix" ,rust-rustix-0.38.34)
-                       ("rust-serde" ,rust-serde-1)
-                       ("rust-serde-derive" ,rust-serde-derive-1.203)
-                       ("rust-serde-json" ,rust-serde-json-1)
-                       ("rust-target-lexicon" ,rust-target-lexicon-0.12.16)
-                       ("rust-tempfile" ,rust-tempfile-3)
-                       ("rust-tokio" ,rust-tokio-1)
-                       ("rust-tracing" ,rust-tracing-0.1)
-                       ("rust-wasi-common" ,rust-wasi-common-24)
-                       ("rust-wasmparser" ,rust-wasmparser-0.215)
-                       ("rust-wasmtime" ,rust-wasmtime-24)
-                       ("rust-wasmtime-cache" ,rust-wasmtime-cache-24)
-                       ("rust-wasmtime-cli-flags" ,rust-wasmtime-cli-flags-24)
-                       ("rust-wasmtime-cranelift" ,rust-wasmtime-cranelift-24)
-                       ("rust-wasmtime-environ" ,rust-wasmtime-environ-24)
-                       ("rust-wasmtime-explorer" ,rust-wasmtime-explorer-24)
-                       ("rust-wasmtime-wasi" ,rust-wasmtime-wasi-24)
-                       ("rust-wasmtime-wasi-http" ,rust-wasmtime-wasi-http-24)
-                       ("rust-wasmtime-wasi-keyvalue" ,rust-wasmtime-wasi-keyvalue-24)
-                       ("rust-wasmtime-wasi-nn" ,rust-wasmtime-wasi-nn-24)
-                       ("rust-wasmtime-wasi-runtime-config" ,rust-wasmtime-wasi-runtime-config-24)
-                       ("rust-wasmtime-wasi-threads" ,rust-wasmtime-wasi-threads-24)
-                       ("rust-wasmtime-wast" ,rust-wasmtime-wast-24)
-                       ("rust-wat" ,rust-wat-1))
-       #:cargo-development-inputs (("rust-async-trait" ,rust-async-trait-0.1)
-                                   ("rust-bstr" ,rust-bstr-1)
-                                   ("rust-bytesize" ,rust-bytesize-1)
-                                   ("rust-capstone" ,rust-capstone-0.12)
-                                   ("rust-cranelift-codegen" ,rust-cranelift-codegen-0.111)
-                                   ("rust-cranelift-reader" ,rust-cranelift-reader-0.111)
-                                   ("rust-criterion" ,rust-criterion-0.5)
-                                   ("rust-env-logger" ,rust-env-logger-0.10)
-                                   ("rust-filecheck" ,rust-filecheck-0.5)
-                                   ("rust-libc" ,rust-libc-0.2)
-                                   ("rust-libtest-mimic" ,rust-libtest-mimic-0.7)
-                                   ("rust-log" ,rust-log-0.4)
-                                   ("rust-memchr" ,rust-memchr-2)
-                                   ("rust-num-cpus" ,rust-num-cpus-1)
-                                   ("rust-object" ,rust-object-0.36)
-                                   ("rust-rayon" ,rust-rayon-1)
-                                   ("rust-serde" ,rust-serde-1)
-                                   ("rust-serde-json" ,rust-serde-json-1)
-                                   ("rust-similar" ,rust-similar-2)
-                                   ("rust-tempfile" ,rust-tempfile-3)
-                                   ("rust-tokio" ,rust-tokio-1)
-                                   ("rust-toml" ,rust-toml-0.8)
-                                   ("rust-walkdir" ,rust-walkdir-2)
-                                   ("rust-wasmtime" ,rust-wasmtime-24)
-                                   ("rust-wasmtime-component-util" ,rust-wasmtime-component-util-24)
-                                   ("rust-wasmtime-wast" ,rust-wasmtime-wast-24)
-                                   ("rust-wast" ,rust-wast-215)
-                                   ("rust-wat" ,rust-wat-1)
-                                   ("rust-windows-sys" ,rust-windows-sys-0.52)
-                                   ("rust-wit-component" ,rust-wit-component-0.215))))
-    (home-page "https://github.com/bytecodealliance/wasmtime")
-    (synopsis "Command-line interface for Wasmtime")
-    (description "This package provides Command-line interface for Wasmtime.")
-    (license license:asl2.0)))
-
-(define-public waydroid
-  (package
-    (name "waydroid")
-    (version "1.4.2")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/waydroid/waydroid")
-             (commit "1.4.2")))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1cp528ybksgf1ifawygm2zqrxh870i264sqbk272775p4a36zlgx"))))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:tests? #f
-       #:phases (modify-phases %standard-phases
-                  (delete 'configure)
-                  (delete 'build)
-                  (add-before 'install 'patch-environment
-                    (lambda* (#:key outputs #:allow-other-keys)
-                      (substitute* "Makefile"
-                        (("PREFIX := /usr")
-                         (string-append "PREFIX := "
-                                        (assoc-ref outputs "out")
-                                        "\nUSE_SYSTEMD := 0"))
-                        (("\\/etc")
-                         "$(PREFIX)/etc"))))
-                  (add-after 'install 'wrap-script
-                    (lambda* (#:key inputs outputs #:allow-other-keys)
-                      (wrap-program (string-append (assoc-ref outputs "out")
-                                                   "/bin/waydroid")
-                        `("PYTHONPATH" suffix
-                          (,(string-append (assoc-ref inputs "python-gbinder")
-                                           "/lib/python3.10/site-packages") ,(string-append
-                                                                              (assoc-ref
-                                                                               inputs
-                                                                               "python-dbus")
-                                                                              "/lib/python3.10/site-packages")
-                           ,(string-append (assoc-ref inputs
-                                                      "python-pygobject")
-                                           "/lib/python3.10/site-packages")))))))))
-    (inputs (list python-3.10))
-    (propagated-inputs (list python-gbinder python-dbus python-pygobject lxc
-                             dnsmasq))
-    (home-page "https://waydro.id")
-    (synopsis
-     "Waydroid uses a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu.")
-    (description
-     "Waydroid uses Linux namespaces (user, pid, uts, net, mount, ipc) to run a full Android system in a container and provide Android applications on any GNU/Linux-based platform.")
-    (license license:gpl3)))
-
 (define-public gcc-cross-riscv64-linux-gnu-toolchain
   (cross-gcc-toolchain "riscv64-linux-gnu"))
 
@@ -512,6 +177,49 @@
      "Cado-NFS, An Implementation of the Number Field Sieve Algorithm")
     (license license:lgpl2.1)))
 
+(define-public cerca
+  (package
+    (name "cerca")
+    (version "0.0.0-20240906135835-1f4d8ff974ed")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/cblgh/cerca")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "17wsk87p1v5wsxdfypc293nrsdx4nna2q9ldwf89r6bia3978gsi"))))
+    (build-system go-build-system)
+    (arguments
+     `(#:import-path "cerca"
+       #:go ,go-1.23
+       #:build-flags (list "-ldflags=-s -w --buildid=none")
+       #:phases (modify-phases %standard-phases
+                  (add-before 'build 'deref-symlinks
+                    (lambda* (#:key inputs #:allow-other-keys)
+                      (begin
+                        (delete-file-recursively
+                         "src/golang.org/x/net/publicsuffix/data")
+                        (copy-recursively (string-append (assoc-ref inputs
+                                                          "go-golang-org-x-net")
+                                           "/src/golang.org/x/net/publicsuffix/data")
+                         "src/golang.org/x/net/publicsuffix/data")))))))
+    (propagated-inputs (list go-golang-org-x-time
+                             go-golang-org-x-exp
+                             go-github-com-microcosm-cc-bluemonday
+                             go-github-com-mattn-go-sqlite3
+                             go-github-com-matthewhartstonge-argon2
+                             go-github-com-komkom-toml
+                             go-github-com-gorilla-sessions
+                             go-github-com-gomarkdown-markdown
+                             go-github-com-cblgh-plain
+                             go-github-com-carlmjohnson-requests))
+    (home-page "https://github.com/cblgh/cerca")
+    (synopsis "Cerca")
+    (description "a forum software")
+    (license license:agpl3+)))
+
 (define-public clipmon
   (package
     (name "clipmon")
@@ -538,6 +246,43 @@
      "This package provides clipmon, or clipboard monitor is a wayland helper that keeps the selection when
 the application that copied exits.")
     (license license:isc)))
+
+(define-public coremark
+  (package
+    (name "coremark")
+    (version "1.01")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/eembc/coremark")
+             (commit "v1.01")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "17sdf01715w0fwhlgl21w5hc9d97ixkrgx20vyglz2w418cwk1b7"))
+       (snippet `(begin
+                   (use-modules (guix build utils))
+                   (substitute* "Makefile"
+                     (("rerun score")
+                      "compile"))))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:tests? #f
+       #:phases (modify-phases %standard-phases
+                  (delete 'configure)
+                  (replace 'install
+                    (lambda* (#:key outputs #:allow-other-keys)
+                      (begin
+                        (rename-file "coremark.exe" "coremark")
+                        (install-file "coremark"
+                                      (string-append (assoc-ref outputs "out")
+                                                     "/bin"))))))))
+    (home-page "https://github.com/eembc/coremark")
+    (synopsis
+     "CoreMark® is an industry-standard benchmark that measures the performance of central processing units (CPU) and embedded microcrontrollers (MCU).")
+    (description
+     "CoreMark's primary goals are simplicity and providing a method for testing only a processor's core features. For more information about EEMBC's comprehensive embedded benchmark suites, please see www.eembc.org.")
+    (license license:asl2.0)))
 
 (define-public csvlens
   (package
@@ -600,6 +345,73 @@ the application that copied exits.")
     (description
      "Disk Usage/Free Utility (Linux, BSD, @code{macOS} & Windows).")
     (license license:expat)))
+
+(define-public encpipe
+  (package
+    (name "encpipe")
+    (version "0.5")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/jedisct1/encpipe")
+             (recursive? #t)
+             (commit "0.5")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1mk178kf7vbk92hshylfm20giy8dgncc16s9if1hrffrdi4hllb2"))
+       (snippet `(begin
+                   (use-modules (guix build utils))
+                   (substitute* "Makefile"
+                     (("-march=native ")
+                      ""))))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:tests? #f
+       #:phases (modify-phases %standard-phases
+                  (delete 'configure)
+                  (add-before 'build 'env
+                    (lambda* (#:key outputs #:allow-other-keys)
+                      (setenv "CC" "gcc")))
+                  (replace 'install
+                    (lambda* (#:key outputs #:allow-other-keys)
+                      (begin
+                        (install-file "encpipe"
+                                      (string-append (assoc-ref outputs "out")
+                                                     "/bin"))))))))
+    (home-page "https://github.com/jedisct1/encpipe")
+    (synopsis "The dum^H^H^Hsimplest encryption tool in the world.")
+    (description
+     "It was faster to write than remember how to use GnuPG and OpenSSL.")
+    (license license:isc)))
+
+(define-public ent
+  (package
+    (name "ent")
+    (version "1.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri
+        "http://deb.debian.org/debian/pool/main/e/ent/ent_1.2debian.orig.tar.gz")
+       (sha256
+        (base32 "0jfhqzf5iwn5c7bb0kr9h9x5znxammlwxgqn6hvryc0dnci3gxid"))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:tests? #f
+       #:phases (modify-phases %standard-phases
+                  (delete 'configure)
+                  (replace 'install
+                    (lambda* (#:key outputs #:allow-other-keys)
+                      (begin
+                        (install-file "ent"
+                                      (string-append (assoc-ref outputs "out")
+                                                     "/bin"))))))))
+    (home-page "https://www.fourmilab.ch/random/")
+    (synopsis "Pseudorandom number sequence test program")
+    (description
+     "This program applies various tests to sequences of bytes stored in files and reports the results of those tests. The program is useful for those evaluating pseudorandom number generators for encryption and statistical sampling applications, compression algorithms, and other applications where the information density of a file is of interest.")
+    (license license:public-domain)))
 
 (define-public go-github-com-iglou-eu-go-wildcard
   (package
@@ -965,6 +777,49 @@ install(FILES leopard.h DESTINATION include)
     (description "An android OTA payload dumper written in Go.")
     (license license:asl2.0)))
 
+(define-public pesign
+  (package
+    (name "pesign")
+    (version "116")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/rhboot/pesign")
+             (commit "116")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0fnqfiivj46bha4hsnwiqy8vq8b4i3w2dig0h9h2k4j7yq7r5qvj"))))
+    (build-system gnu-build-system)
+    (native-inputs (list pkg-config mandoc))
+    (inputs (list popt
+                  efivar
+                  nspr
+                  nss
+                  openssl
+                  `(,util-linux "lib")))
+    (arguments
+     `(#:tests? #f
+       #:phases (modify-phases %standard-phases
+                  (delete 'configure)
+                  (add-before 'build 'fix-env
+                    (lambda* (#:key inputs outputs #:allow-other-keys)
+                      (setenv "LIBRARY_PATH"
+                              (string-append (getenv "LIBRARY_PATH") ":"
+                                             (assoc-ref inputs "nss")
+                                             "/lib/nss"))
+                      (substitute* "Make.defaults"
+                        (("DESTDIR.*\\?.*$")
+                         (string-append "DESTDIR = "
+                                        (assoc-ref outputs "out") "\n"))
+                        (("/usr/")
+                         "/")))))))
+    (home-page "https://github.com/rhboot/pesign")
+    (synopsis "Linux tools for signed PE-COFF binaries")
+    (description
+     "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications.")
+    (license license:gpl2)))
+
 (define-public python-gbinder
   (package
     (name "python-gbinder")
@@ -1125,6 +980,151 @@ needs to be signed in the boot chain.")
     (description
      "Give it a vbmeta image and then verification will be disabled on it.")
     (license license:expat)))
+
+(define-public wasmtime
+  (package
+    (name "wasmtime")
+    (version "24.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "wasmtime-cli" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (modules '((guix build utils)))
+       (snippet #~(begin
+                    (substitute* "Cargo.toml"
+                      (("1.78.0")
+                       "1.77.0"))))
+       (sha256
+        (base32 "1q0m6wycrdw7vv9b73ckqmcx5fh7xim1m5dh0f4xrihdff1ys5j2"))))
+    (build-system cargo-build-system)
+    (native-inputs (list pkg-config))
+    (inputs (list (list zstd "lib")))
+    (arguments
+     `(#:tests? #f
+       #:cargo-inputs (("rust-anyhow" ,rust-anyhow-1)
+                       ("rust-anyhow" ,rust-anyhow-1)
+                       ("rust-async-trait" ,rust-async-trait-0.1)
+                       ("rust-bytes" ,rust-bytes-1)
+                       ("rust-cfg-if" ,rust-cfg-if-1)
+                       ("rust-clap" ,rust-clap-4)
+                       ("rust-http" ,rust-http-1)
+                       ("rust-http-body-util" ,rust-http-body-util-0.1.1)
+                       ("rust-humantime" ,rust-humantime-2)
+                       ("rust-hyper" ,rust-hyper-1.3)
+                       ("rust-listenfd" ,rust-listenfd-1)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-rustix" ,rust-rustix-0.38.34)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-serde-derive" ,rust-serde-derive-1.203)
+                       ("rust-serde-json" ,rust-serde-json-1)
+                       ("rust-target-lexicon" ,rust-target-lexicon-0.12.16)
+                       ("rust-tempfile" ,rust-tempfile-3)
+                       ("rust-tokio" ,rust-tokio-1)
+                       ("rust-tracing" ,rust-tracing-0.1)
+                       ("rust-wasi-common" ,rust-wasi-common-24)
+                       ("rust-wasmparser" ,rust-wasmparser-0.215)
+                       ("rust-wasmtime" ,rust-wasmtime-24)
+                       ("rust-wasmtime-cache" ,rust-wasmtime-cache-24)
+                       ("rust-wasmtime-cli-flags" ,rust-wasmtime-cli-flags-24)
+                       ("rust-wasmtime-cranelift" ,rust-wasmtime-cranelift-24)
+                       ("rust-wasmtime-environ" ,rust-wasmtime-environ-24)
+                       ("rust-wasmtime-explorer" ,rust-wasmtime-explorer-24)
+                       ("rust-wasmtime-wasi" ,rust-wasmtime-wasi-24)
+                       ("rust-wasmtime-wasi-http" ,rust-wasmtime-wasi-http-24)
+                       ("rust-wasmtime-wasi-keyvalue" ,rust-wasmtime-wasi-keyvalue-24)
+                       ("rust-wasmtime-wasi-nn" ,rust-wasmtime-wasi-nn-24)
+                       ("rust-wasmtime-wasi-runtime-config" ,rust-wasmtime-wasi-runtime-config-24)
+                       ("rust-wasmtime-wasi-threads" ,rust-wasmtime-wasi-threads-24)
+                       ("rust-wasmtime-wast" ,rust-wasmtime-wast-24)
+                       ("rust-wat" ,rust-wat-1))
+       #:cargo-development-inputs (("rust-async-trait" ,rust-async-trait-0.1)
+                                   ("rust-bstr" ,rust-bstr-1)
+                                   ("rust-bytesize" ,rust-bytesize-1)
+                                   ("rust-capstone" ,rust-capstone-0.12)
+                                   ("rust-cranelift-codegen" ,rust-cranelift-codegen-0.111)
+                                   ("rust-cranelift-reader" ,rust-cranelift-reader-0.111)
+                                   ("rust-criterion" ,rust-criterion-0.5)
+                                   ("rust-env-logger" ,rust-env-logger-0.10)
+                                   ("rust-filecheck" ,rust-filecheck-0.5)
+                                   ("rust-libc" ,rust-libc-0.2)
+                                   ("rust-libtest-mimic" ,rust-libtest-mimic-0.7)
+                                   ("rust-log" ,rust-log-0.4)
+                                   ("rust-memchr" ,rust-memchr-2)
+                                   ("rust-num-cpus" ,rust-num-cpus-1)
+                                   ("rust-object" ,rust-object-0.36)
+                                   ("rust-rayon" ,rust-rayon-1)
+                                   ("rust-serde" ,rust-serde-1)
+                                   ("rust-serde-json" ,rust-serde-json-1)
+                                   ("rust-similar" ,rust-similar-2)
+                                   ("rust-tempfile" ,rust-tempfile-3)
+                                   ("rust-tokio" ,rust-tokio-1)
+                                   ("rust-toml" ,rust-toml-0.8)
+                                   ("rust-walkdir" ,rust-walkdir-2)
+                                   ("rust-wasmtime" ,rust-wasmtime-24)
+                                   ("rust-wasmtime-component-util" ,rust-wasmtime-component-util-24)
+                                   ("rust-wasmtime-wast" ,rust-wasmtime-wast-24)
+                                   ("rust-wast" ,rust-wast-215)
+                                   ("rust-wat" ,rust-wat-1)
+                                   ("rust-windows-sys" ,rust-windows-sys-0.52)
+                                   ("rust-wit-component" ,rust-wit-component-0.215))))
+    (home-page "https://github.com/bytecodealliance/wasmtime")
+    (synopsis "Command-line interface for Wasmtime")
+    (description "This package provides Command-line interface for Wasmtime.")
+    (license license:asl2.0)))
+
+(define-public waydroid
+  (package
+    (name "waydroid")
+    (version "1.4.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/waydroid/waydroid")
+             (commit "1.4.2")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1cp528ybksgf1ifawygm2zqrxh870i264sqbk272775p4a36zlgx"))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:tests? #f
+       #:phases (modify-phases %standard-phases
+                  (delete 'configure)
+                  (delete 'build)
+                  (add-before 'install 'patch-environment
+                    (lambda* (#:key outputs #:allow-other-keys)
+                      (substitute* "Makefile"
+                        (("PREFIX := /usr")
+                         (string-append "PREFIX := "
+                                        (assoc-ref outputs "out")
+                                        "\nUSE_SYSTEMD := 0"))
+                        (("\\/etc")
+                         "$(PREFIX)/etc"))))
+                  (add-after 'install 'wrap-script
+                    (lambda* (#:key inputs outputs #:allow-other-keys)
+                      (wrap-program (string-append (assoc-ref outputs "out")
+                                                   "/bin/waydroid")
+                        `("PYTHONPATH" suffix
+                          (,(string-append (assoc-ref inputs "python-gbinder")
+                                           "/lib/python3.10/site-packages") ,(string-append
+                                                                              (assoc-ref
+                                                                               inputs
+                                                                               "python-dbus")
+                                                                              "/lib/python3.10/site-packages")
+                           ,(string-append (assoc-ref inputs
+                                                      "python-pygobject")
+                                           "/lib/python3.10/site-packages")))))))))
+    (inputs (list python-3.10))
+    (propagated-inputs (list python-gbinder python-dbus python-pygobject lxc
+                             dnsmasq))
+    (home-page "https://waydro.id")
+    (synopsis
+     "Waydroid uses a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu.")
+    (description
+     "Waydroid uses Linux namespaces (user, pid, uts, net, mount, ipc) to run a full Android system in a container and provide Android applications on any GNU/Linux-based platform.")
+    (license license:gpl3)))
 
 (define-public wshowkeys
   (package

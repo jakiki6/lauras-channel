@@ -3,7 +3,8 @@
   #:use-module (guix download)
   #:use-module (guix build-system go)
   #:use-module (guix build-system trivial)
-  #:use-module ((guix licenses) #:prefix license:)
+  #:use-module ((guix licenses)
+                #:prefix license:)
   #:use-module (guix git-download)
   #:use-module (gnu packages)
   #:use-module (guix build utils)
@@ -15,30 +16,26 @@
   #:use-module (gnu packages golang-web)
   #:use-module (gnu packages golang-xyz))
 
-(define-public go-github-com-charmbracelet-x-ansi
+(define-public go-github-com-acarl005-stripansi
   (package
-    (name "go-github-com-charmbracelet-x-ansi")
-    (version "0.1.4")
+    (name "go-github-com-acarl005-stripansi")
+    (version "0.0.0-20180116102854-5a71ef0e047d")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
-             (url "https://github.com/charmbracelet/x")
-             (commit (string-append "ansi/v" version))))
+             (url "https://github.com/acarl005/stripansi")
+             (commit (go-version->git-ref version))))
        (file-name (git-file-name name version))
-       (snippet '(begin
-         (use-modules (guix build utils))
-         (copy-recursively "ansi" ".")
-         (delete-file-recursively "ansi")))
        (sha256
-        (base32 "1j33791lkz4jzvm220dg82wr79gxncfflpqrlz34vhm7215fwbx0"))))
+        (base32 "02sxiishdixm791jqbkmhdcvc712l0fb8rqmibxzgc61h0qs6rs3"))))
     (build-system go-build-system)
     (arguments
-     `(#:import-path "github.com/charmbracelet/x/ansi"))
-    (propagated-inputs (list go-github-com-rivo-uniseg))
-    (home-page "https://pkg.go.dev/github.com/charmbracelet/x/ansi")
-    (synopsis "ansi")
-    (description "ANSI escape sequence parser and definitions")
+     (list
+      #:import-path "github.com/acarl005/stripansi"))
+    (home-page "https://github.com/acarl005/stripansi")
+    (synopsis "Strip ANSI")
+    (description "This Go package removes ANSI escape codes from strings.")
     (license license:expat)))
 
 (define-public go-github-com-carlmjohnson-requests
@@ -59,11 +56,15 @@
      `(#:go ,go-1.22
        #:import-path "github.com/carlmjohnson/requests"
        #:phases (modify-phases %standard-phases
-         (add-before 'build 'deref-symlinks
-           (lambda* (#:key inputs #:allow-other-keys)
-             (begin
-               (delete-file-recursively "src/golang.org/x/net/publicsuffix/data")
-               (copy-recursively (string-append (assoc-ref inputs "go-golang-org-x-net") "/src/golang.org/x/net/publicsuffix/data") "src/golang.org/x/net/publicsuffix/data")))))))
+                  (add-before 'build 'deref-symlinks
+                    (lambda* (#:key inputs #:allow-other-keys)
+                      (begin
+                        (delete-file-recursively
+                         "src/golang.org/x/net/publicsuffix/data")
+                        (copy-recursively (string-append (assoc-ref inputs
+                                                          "go-golang-org-x-net")
+                                           "/src/golang.org/x/net/publicsuffix/data")
+                         "src/golang.org/x/net/publicsuffix/data")))))))
     (propagated-inputs (list go-golang-org-x-net))
     (home-page "https://github.com/carlmjohnson/requests")
     (synopsis "Requests")
@@ -96,6 +97,207 @@ easier to build requests and custom transports.")
     (synopsis "")
     (description "")
     (license #f)))
+
+(define-public go-github-com-charmbracelet-x-ansi
+  (package
+    (name "go-github-com-charmbracelet-x-ansi")
+    (version "0.1.4")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/charmbracelet/x")
+             (commit (string-append "ansi/v" version))))
+       (file-name (git-file-name name version))
+       (snippet '(begin
+                   (use-modules (guix build utils))
+                   (copy-recursively "ansi" ".")
+                   (delete-file-recursively "ansi")))
+       (sha256
+        (base32 "1j33791lkz4jzvm220dg82wr79gxncfflpqrlz34vhm7215fwbx0"))))
+    (build-system go-build-system)
+    (arguments
+     `(#:import-path "github.com/charmbracelet/x/ansi"))
+    (propagated-inputs (list go-github-com-rivo-uniseg))
+    (home-page "https://pkg.go.dev/github.com/charmbracelet/x/ansi")
+    (synopsis "ansi")
+    (description "ANSI escape sequence parser and definitions")
+    (license license:expat)))
+
+(define-public go-github-com-foxboron-go-uefi-authenticode
+  (package
+    (name "go-github-com-foxboron-go-uefi-authenticode")
+    (version "0.0.0-20240805124652-e2076f0e58ca")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Foxboron/go-uefi")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:unpack-path "github.com/foxboron/go-uefi"
+      #:import-path "github.com/foxboron/go-uefi/authenticode"))
+    (propagated-inputs (list go-github-com-spf13-afero
+                             go-github-com-netflix-go-expect
+                             go-golang-org-x-text
+                             go-golang-org-x-sys
+                             go-golang-org-x-crypto
+                             go-go-mozilla-org-pkcs7
+                             go-github-com-pkg-errors))
+    (home-page "https://github.com/foxboron/go-uefi")
+    (synopsis "go-uefi")
+    (description
+     "This package provides a UEFI library written to interact with Linux efivars.
+The goal is to provide a Go library to enable application authors to better
+utilize secure boot and UEFI. This also includes unit-testing to ensure the
+library is compatible with existing tools, and integration tests to ensure the
+library is able of deal with future UEFI revisions.")
+    (license license:expat)))
+
+(define-public go-github-com-foxboron-go-uefi-efi
+  (package
+    (name "go-github-com-foxboron-go-uefi-efi")
+    (version "0.0.0-20240805124652-e2076f0e58ca")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Foxboron/go-uefi")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:unpack-path "github.com/foxboron/go-uefi"
+      #:import-path "github.com/foxboron/go-uefi/efi"))
+    (propagated-inputs (list go-github-com-spf13-afero
+                             go-github-com-netflix-go-expect
+                             go-golang-org-x-text
+                             go-golang-org-x-sys
+                             go-golang-org-x-crypto
+                             go-go-mozilla-org-pkcs7
+                             go-github-com-pkg-errors))
+    (home-page "https://github.com/foxboron/go-uefi")
+    (synopsis "go-uefi")
+    (description
+     "This package provides a UEFI library written to interact with Linux efivars.
+The goal is to provide a Go library to enable application authors to better
+utilize secure boot and UEFI. This also includes unit-testing to ensure the
+library is compatible with existing tools, and integration tests to ensure the
+library is able of deal with future UEFI revisions.")
+    (license license:expat)))
+
+(define-public go-github-com-foxboron-go-uefi-efivar
+  (package
+    (name "go-github-com-foxboron-go-uefi-efivar")
+    (version "0.0.0-20240805124652-e2076f0e58ca")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Foxboron/go-uefi")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:unpack-path "github.com/foxboron/go-uefi"
+      #:import-path "github.com/foxboron/go-uefi/efivar"))
+    (propagated-inputs (list go-github-com-spf13-afero
+                             go-github-com-netflix-go-expect
+                             go-golang-org-x-text
+                             go-golang-org-x-sys
+                             go-golang-org-x-crypto
+                             go-go-mozilla-org-pkcs7
+                             go-github-com-pkg-errors))
+    (home-page "https://github.com/foxboron/go-uefi")
+    (synopsis "go-uefi")
+    (description
+     "This package provides a UEFI library written to interact with Linux efivars.
+The goal is to provide a Go library to enable application authors to better
+utilize secure boot and UEFI. This also includes unit-testing to ensure the
+library is compatible with existing tools, and integration tests to ensure the
+library is able of deal with future UEFI revisions.")
+    (license license:expat)))
+
+(define-public go-github-com-foxboron-go-uefi-efivarfs
+  (package
+    (name "go-github-com-foxboron-go-uefi-efivarfs")
+    (version "0.0.0-20240805124652-e2076f0e58ca")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Foxboron/go-uefi")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:unpack-path "github.com/foxboron/go-uefi"
+      #:import-path "github.com/foxboron/go-uefi/efivarfs"))
+    (propagated-inputs (list go-github-com-spf13-afero
+                             go-github-com-netflix-go-expect
+                             go-golang-org-x-text
+                             go-golang-org-x-sys
+                             go-golang-org-x-crypto
+                             go-go-mozilla-org-pkcs7
+                             go-github-com-pkg-errors))
+    (home-page "https://github.com/foxboron/go-uefi")
+    (synopsis "go-uefi")
+    (description
+     "This package provides a UEFI library written to interact with Linux efivars.
+The goal is to provide a Go library to enable application authors to better
+utilize secure boot and UEFI. This also includes unit-testing to ensure the
+library is compatible with existing tools, and integration tests to ensure the
+library is able of deal with future UEFI revisions.")
+    (license license:expat)))
+
+(define-public go-github-com-foxboron-go-uefi-pkcs7
+  (package
+    (name "go-github-com-foxboron-go-uefi-pkcs7")
+    (version "0.0.0-20240805124652-e2076f0e58ca")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Foxboron/go-uefi")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:unpack-path "github.com/foxboron/go-uefi"
+      #:import-path "github.com/foxboron/go-uefi/pkcs7"))
+    (propagated-inputs (list go-github-com-spf13-afero
+                             go-github-com-netflix-go-expect
+                             go-golang-org-x-text
+                             go-golang-org-x-sys
+                             go-golang-org-x-crypto
+                             go-go-mozilla-org-pkcs7
+                             go-github-com-pkg-errors))
+    (home-page "https://github.com/foxboron/go-uefi")
+    (synopsis "go-uefi")
+    (description
+     "This package provides a UEFI library written to interact with Linux efivars.
+The goal is to provide a Go library to enable application authors to better
+utilize secure boot and UEFI. This also includes unit-testing to ensure the
+library is compatible with existing tools, and integration tests to ensure the
+library is able of deal with future UEFI revisions.")
+    (license license:expat)))
 
 (define-public go-github-com-gomarkdown-markdown
   (package
@@ -196,205 +398,6 @@ lifecycle.  This package only focuses on expecting output and sending input
 through it's psuedoterminal.")
     (license license:asl2.0)))
 
-(define-public go-go-mozilla-org-pkcs7
-  (package
-    (name "go-go-mozilla-org-pkcs7")
-    (version "0.9.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/mozilla-services/pkcs7")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0n9z6qv1rxhrdy2h7glidvma39d4fhly5r5lm445pj6ka6ss3xq9"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:tests? #f
-      #:import-path "go.mozilla.org/pkcs7"))
-    (home-page "https://go.mozilla.org/pkcs7")
-    (synopsis "pkcs7")
-    (description
-     "Package pkcs7 implements parsing and generation of some PKCS#7 structures.")
-    (license license:expat)))
-
-(define-public go-github-com-foxboron-go-uefi-authenticode
-  (package
-    (name "go-github-com-foxboron-go-uefi-authenticode")
-    (version "0.0.0-20240805124652-e2076f0e58ca")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/Foxboron/go-uefi")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:unpack-path "github.com/foxboron/go-uefi"
-      #:import-path "github.com/foxboron/go-uefi/authenticode"))
-    (propagated-inputs (list go-github-com-spf13-afero
-                             go-github-com-netflix-go-expect
-                             go-golang-org-x-text
-                             go-golang-org-x-sys
-                             go-golang-org-x-crypto
-                             go-go-mozilla-org-pkcs7
-                             go-github-com-pkg-errors))
-    (home-page "https://github.com/foxboron/go-uefi")
-    (synopsis "go-uefi")
-    (description
-     "This package provides a UEFI library written to interact with Linux efivars.
-The goal is to provide a Go library to enable application authors to better
-utilize secure boot and UEFI. This also includes unit-testing to ensure the
-library is compatible with existing tools, and integration tests to ensure the
-library is able of deal with future UEFI revisions.")
-    (license license:expat)))
-    
-(define-public go-github-com-foxboron-go-uefi-efi
-  (package
-    (name "go-github-com-foxboron-go-uefi-efi")
-    (version "0.0.0-20240805124652-e2076f0e58ca")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/Foxboron/go-uefi")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:unpack-path "github.com/foxboron/go-uefi"
-      #:import-path "github.com/foxboron/go-uefi/efi"))
-    (propagated-inputs (list go-github-com-spf13-afero
-                             go-github-com-netflix-go-expect
-                             go-golang-org-x-text
-                             go-golang-org-x-sys
-                             go-golang-org-x-crypto
-                             go-go-mozilla-org-pkcs7
-                             go-github-com-pkg-errors))
-    (home-page "https://github.com/foxboron/go-uefi")
-    (synopsis "go-uefi")
-    (description
-     "This package provides a UEFI library written to interact with Linux efivars.
-The goal is to provide a Go library to enable application authors to better
-utilize secure boot and UEFI. This also includes unit-testing to ensure the
-library is compatible with existing tools, and integration tests to ensure the
-library is able of deal with future UEFI revisions.")
-    (license license:expat)))
-    
-(define-public go-github-com-foxboron-go-uefi-efivar
-  (package
-    (name "go-github-com-foxboron-go-uefi-efivar")
-    (version "0.0.0-20240805124652-e2076f0e58ca")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/Foxboron/go-uefi")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:unpack-path "github.com/foxboron/go-uefi"
-      #:import-path "github.com/foxboron/go-uefi/efivar"))
-    (propagated-inputs (list go-github-com-spf13-afero
-                             go-github-com-netflix-go-expect
-                             go-golang-org-x-text
-                             go-golang-org-x-sys
-                             go-golang-org-x-crypto
-                             go-go-mozilla-org-pkcs7
-                             go-github-com-pkg-errors))
-    (home-page "https://github.com/foxboron/go-uefi")
-    (synopsis "go-uefi")
-    (description
-     "This package provides a UEFI library written to interact with Linux efivars.
-The goal is to provide a Go library to enable application authors to better
-utilize secure boot and UEFI. This also includes unit-testing to ensure the
-library is compatible with existing tools, and integration tests to ensure the
-library is able of deal with future UEFI revisions.")
-    (license license:expat)))
-    
-(define-public go-github-com-foxboron-go-uefi-efivarfs
-  (package
-    (name "go-github-com-foxboron-go-uefi-efivarfs")
-    (version "0.0.0-20240805124652-e2076f0e58ca")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/Foxboron/go-uefi")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:unpack-path "github.com/foxboron/go-uefi"
-      #:import-path "github.com/foxboron/go-uefi/efivarfs"))
-    (propagated-inputs (list go-github-com-spf13-afero
-                             go-github-com-netflix-go-expect
-                             go-golang-org-x-text
-                             go-golang-org-x-sys
-                             go-golang-org-x-crypto
-                             go-go-mozilla-org-pkcs7
-                             go-github-com-pkg-errors))
-    (home-page "https://github.com/foxboron/go-uefi")
-    (synopsis "go-uefi")
-    (description
-     "This package provides a UEFI library written to interact with Linux efivars.
-The goal is to provide a Go library to enable application authors to better
-utilize secure boot and UEFI. This also includes unit-testing to ensure the
-library is compatible with existing tools, and integration tests to ensure the
-library is able of deal with future UEFI revisions.")
-    (license license:expat)))
-    
-(define-public go-github-com-foxboron-go-uefi-pkcs7
-  (package
-    (name "go-github-com-foxboron-go-uefi-pkcs7")
-    (version "0.0.0-20240805124652-e2076f0e58ca")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/Foxboron/go-uefi")
-             (commit (go-version->git-ref version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0a3aaddm2zk3p1r25shfy6z7xwj15zzx6ym3g5s1pxi0gzy90mgj"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:unpack-path "github.com/foxboron/go-uefi"
-      #:import-path "github.com/foxboron/go-uefi/pkcs7"))
-    (propagated-inputs (list go-github-com-spf13-afero
-                             go-github-com-netflix-go-expect
-                             go-golang-org-x-text
-                             go-golang-org-x-sys
-                             go-golang-org-x-crypto
-                             go-go-mozilla-org-pkcs7
-                             go-github-com-pkg-errors))
-    (home-page "https://github.com/foxboron/go-uefi")
-    (synopsis "go-uefi")
-    (description
-     "This package provides a UEFI library written to interact with Linux efivars.
-The goal is to provide a Go library to enable application authors to better
-utilize secure boot and UEFI. This also includes unit-testing to ensure the
-library is compatible with existing tools, and integration tests to ensure the
-library is able of deal with future UEFI revisions.")
-    (license license:expat)))
-
 (define-public go-github-com-spencercw-go-xz
   (package
     (name "go-github-com-spencercw-go-xz")
@@ -417,26 +420,26 @@ library is able of deal with future UEFI revisions.")
     (description #f)
     (license #f)))
 
-(define-public go-github-com-acarl005-stripansi
+(define-public go-github-com-valyala-gozstd
   (package
-    (name "go-github-com-acarl005-stripansi")
-    (version "0.0.0-20180116102854-5a71ef0e047d")
+    (name "go-github-com-valyala-gozstd")
+    (version "1.21.2")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
-             (url "https://github.com/acarl005/stripansi")
-             (commit (go-version->git-ref version))))
+             (url "https://github.com/valyala/gozstd")
+             (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "02sxiishdixm791jqbkmhdcvc712l0fb8rqmibxzgc61h0qs6rs3"))))
+        (base32 "1wskjbrb73j315vk615n9irhv0w993gf74b4h16kckrddkr3zp7k"))))
     (build-system go-build-system)
     (arguments
      (list
-      #:import-path "github.com/acarl005/stripansi"))
-    (home-page "https://github.com/acarl005/stripansi")
-    (synopsis "Strip ANSI")
-    (description "This Go package removes ANSI escape codes from strings.")
+      #:import-path "github.com/valyala/gozstd"))
+    (home-page "https://github.com/valyala/gozstd")
+    (synopsis "gozstd - go wrapper for")
+    (description "Package gozstd is Go wrapper for zstd.")
     (license license:expat)))
 
 (define-public go-github-com-vbauerster-mpb-v5
@@ -466,24 +469,26 @@ library is able of deal with future UEFI revisions.")
      "Package mpb is a library for rendering progress bars in terminal applications.")
     (license license:unlicense)))
 
-(define-public go-github-com-valyala-gozstd
+(define-public go-go-mozilla-org-pkcs7
   (package
-    (name "go-github-com-valyala-gozstd")
-    (version "1.21.2")
+    (name "go-go-mozilla-org-pkcs7")
+    (version "0.9.0")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
-             (url "https://github.com/valyala/gozstd")
+             (url "https://github.com/mozilla-services/pkcs7")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1wskjbrb73j315vk615n9irhv0w993gf74b4h16kckrddkr3zp7k"))))
+        (base32 "0n9z6qv1rxhrdy2h7glidvma39d4fhly5r5lm445pj6ka6ss3xq9"))))
     (build-system go-build-system)
     (arguments
      (list
-      #:import-path "github.com/valyala/gozstd"))
-    (home-page "https://github.com/valyala/gozstd")
-    (synopsis "gozstd - go wrapper for")
-    (description "Package gozstd is Go wrapper for zstd.")
+      #:tests? #f
+      #:import-path "go.mozilla.org/pkcs7"))
+    (home-page "https://go.mozilla.org/pkcs7")
+    (synopsis "pkcs7")
+    (description
+     "Package pkcs7 implements parsing and generation of some PKCS#7 structures.")
     (license license:expat)))

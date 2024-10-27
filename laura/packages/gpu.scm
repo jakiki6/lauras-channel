@@ -3,7 +3,8 @@
   #:use-module (gnu packages xdisorg)
   #:use-module (guix download)
   #:use-module (guix build-system cargo)
-  #:use-module ((guix licenses) #:prefix license:)
+  #:use-module ((guix licenses)
+                #:prefix license:)
   #:use-module (laura packages rust-common))
 
 (define-public amdgpu-top
