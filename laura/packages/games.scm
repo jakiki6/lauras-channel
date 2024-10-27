@@ -34,6 +34,18 @@
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages xml)
+  #:use-module (gnu packages audio)
+  #:use-module (gnu packages llvm)
+  #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages vulkan)
+  #:use-module (gnu packages libusb)
+  #:use-module (gnu packages tls)
+  #:use-module (gnu packages digest)
+  #:use-module (gnu packages upnp)
+  #:use-module (gnu packages cpp)
+  #:use-module (gnu packages xiph)
+  #:use-module (gnu packages video)
+  #:use-module (gnu packages commencement)
   #:use-module (nonguix licenses)
   #:use-module (nonguix build-system binary)
   #:use-module (laura packages rust-common))
@@ -285,3 +297,40 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
     (description
      "This package provides Unreal Engine save file (GVAS) reading/writing.")
     (license license:expat)))
+
+(define-public rpcs3
+  (package
+    (name "rpcs3")
+    (version "0.0.33")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/rpcs3/rpcs3/")
+              (commit "v0.0.33")
+              (recursive? #t)))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0annwam8k2jhl9qiwqmvkaydk75wzsql2ba141vakvz2kc9rwpmj"))))
+    (build-system cmake-build-system)
+    (arguments (list #:build-type "Release"
+                     #:configure-flags #~(list "-Wno-dev" "-DUSE_SYSTEM_OPENAL=ON"
+                       "-DUSE_SYSTEM_CURL=ON" "-DUSE_SYSTEM_LIBPNG=ON"
+                       "-DUSE_SYSTEM_ZLIB=ON" "-DUSE_SYSTEM_WOLFSSL=ON"
+                       "-DUSE_SYSTEM_FLATBUFFERS=ON" "-DUSE_SYSTEM_PUGIXML=ON"
+                       "-DUSE_SYSTEM_LIBUSB=ON" "-DUSE_SYSTEM_XXHASH=ON"
+                       "-DUSE_SYSTEM_MVK=ON" "-DUSE_SYSTEM_FAUDIO=ON"
+                       "-DUSE_SYSTEM_FFMPEG=ON" "-DUSE_SYSTEM_SDL=ON"
+                       "-DUSE_NATIVE_INSTRUCTIONS=OFF")
+                    #:phases #~(modify-phases %standard-phases
+                      (add-before 'build 'fix-source (lambda _
+                        (substitute* "../source/rpcs3/Emu/Cell/PPUThread.cpp" (("std::fesetround\\(FE_TONEAREST\\);") ""))
+                        (substitute* "../source/rpcs3/Emu/Cell/SPUThread.cpp" (("std::fesetround\\(FE_TOWARDZERO\\);") "")))))))
+    (native-inputs (list pkg-config gcc-toolchain-14))
+    (inputs (list zlib mesa libglvnd openal glew llvm-16 curl qtbase qtmultimedia
+                  qtsvg wayland libxkbcommon vulkan-headers libusb libevdev eudev
+                  vulkan-loader sdl2 wolfssl pugixml yaml-cpp xxhash libpng faudio
+                  miniupnpc rtmidi asmjit cubeb speex glslang hidapi flatbuffers ffmpeg))
+    (home-page "https://rpcs3.net")
+    (synopsis "PlayStation 3 emulator and debugger.")
+    (description "The world's first free and open-source PlayStation 3 emulator/debugger, written in C++ for Windows, Linux, macOS and FreeBSD.")
+    (license license:gpl2)))

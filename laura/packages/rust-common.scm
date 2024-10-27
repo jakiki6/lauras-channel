@@ -2179,7 +2179,7 @@ checksums.")
      "This package provides Automatically generates Rust FFI bindings to C and C++ libraries.")
     (license license:bsd-3)))
 
-(define-public rust-bitflags-2
+(define-public rust-bitflags-2.6
   (package
     (name "rust-bitflags")
     (version "2.6.0")
@@ -2621,7 +2621,7 @@ library, download https://github.com/dropbox/rust-brotli.")
      "This package provides Safe, zero-cost downcasting for limited compile-time specialization.")
     (license license:expat)))
 
-(define-public rust-cc-1
+(define-public rust-cc-1.1
   (package
     (name "rust-cc")
     (version "1.1.31")
@@ -4719,7 +4719,7 @@ an environment variable.")
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build? #t
-       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2)
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2.6)
                        ("rust-ffmpeg-sys-next" ,rust-ffmpeg-sys-next-7)
                        ("rust-image" ,rust-image-0.25)
                        ("rust-libc" ,rust-libc-0.2))))
@@ -4745,7 +4745,7 @@ an environment variable.")
     (arguments
      `(#:skip-build? #t
        #:cargo-inputs (("rust-bindgen" ,rust-bindgen-0.70)
-                       ("rust-cc" ,rust-cc-1)
+                       ("rust-cc" ,rust-cc-1.1)
                        ("rust-libc" ,rust-libc-0.2)
                        ("rust-num-cpus" ,rust-num-cpus-1)
                        ("rust-pkg-config" ,rust-pkg-config-0.3)
