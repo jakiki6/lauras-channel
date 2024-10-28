@@ -50,44 +50,6 @@
   #:use-module (nonguix build-system binary)
   #:use-module (laura packages rust-common))
 
-(define-public tpt
-  (package
-    (name "tpt")
-    (version "98.2.365")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/The-Powder-Toy/The-Powder-Toy")
-             (commit "v98.2.365")))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "06l39w3ggrzn8799dqll606by4f88kjr60r879w8j26csx1py76g"))))
-    (build-system meson-build-system)
-    (native-inputs (list pkg-config cmake))
-    (inputs (list luajit
-                  curl
-                  fftwf
-                  zlib
-                  libpng
-                  sdl2
-                  ((options->transformation `((with-patch unquote
-                                                          (string-append
-                                                           "bzip2="
-                                                           (search-patch
-                                                            "laura/packages/patches/bzip2-pkg-config.patch")))))
-                   bzip2)
-                  jsoncpp))
-    (arguments
-     (list
-      #:tests? #f
-      #:configure-flags #~(list "-Dworkaround_elusive_bzip2=false")))
-    (home-page "https://powdertoy.co.uk")
-    (synopsis "The Powder Toy")
-    (description
-     "Written in C++ and using SDL, The Powder Toy is a desktop version of the classic 'falling sand' physics sandbox, it simulates air pressure and velocity as well as heat. ")
-    (license license:gpl3)))
-
 (define-public minecraft-launcher
   (let ((launcher-version "2.2.1441"))
     (package
@@ -267,6 +229,126 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
     (home-page "https://fceux.com")
     (license license:gpl2)))
 
+(define-public rpcs3
+  (package
+    (name "rpcs3")
+    (version "0.0.33")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/rpcs3/rpcs3/")
+             (commit "v0.0.33")
+             (recursive? #t)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0annwam8k2jhl9qiwqmvkaydk75wzsql2ba141vakvz2kc9rwpmj"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:build-type "Release"
+      #:configure-flags #~(list "-Wno-dev"
+                                "-DUSE_SYSTEM_OPENAL=ON"
+                                "-DUSE_SYSTEM_CURL=ON"
+                                "-DUSE_SYSTEM_LIBPNG=ON"
+                                "-DUSE_SYSTEM_ZLIB=ON"
+                                "-DUSE_SYSTEM_WOLFSSL=OFF"
+                                "-DUSE_SYSTEM_FLATBUFFERS=ON"
+                                "-DUSE_SYSTEM_PUGIXML=ON"
+                                "-DUSE_SYSTEM_LIBUSB=ON"
+                                "-DUSE_SYSTEM_XXHASH=ON"
+                                "-DUSE_SYSTEM_MVK=ON"
+                                "-DUSE_SYSTEM_FAUDIO=ON"
+                                "-DUSE_SYSTEM_FFMPEG=ON"
+                                "-DUSE_SYSTEM_SDL=ON"
+                                "-DUSE_NATIVE_INSTRUCTIONS=OFF")
+      #:phases #~(modify-phases %standard-phases
+                   (add-before 'build 'fix-source
+                     (lambda _
+                       (substitute* "../source/rpcs3/Emu/Cell/PPUThread.cpp"
+                         (("std::fesetround\\(FE_TONEAREST\\);")
+                          ""))
+                       (substitute* "../source/rpcs3/Emu/Cell/SPUThread.cpp"
+                         (("std::fesetround\\(FE_TOWARDZERO\\);")
+                          "")))))))
+    (native-inputs (list pkg-config gcc-toolchain-14))
+    (inputs (list zlib
+                  mesa
+                  libglvnd
+                  openal
+                  glew
+                  llvm-16
+                  curl
+                  qtbase
+                  qtmultimedia
+                  qtsvg
+                  wayland
+                  libxkbcommon
+                  vulkan-headers
+                  libusb
+                  libevdev
+                  eudev
+                  vulkan-loader
+                  sdl2
+                  pugixml
+                  yaml-cpp
+                  xxhash
+                  libpng
+                  faudio
+                  miniupnpc
+                  rtmidi
+                  asmjit
+                  cubeb
+                  speex
+                  glslang
+                  hidapi
+                  flatbuffers
+                  ffmpeg))
+    (home-page "https://rpcs3.net")
+    (synopsis "PlayStation 3 emulator and debugger.")
+    (description
+     "The world's first free and open-source PlayStation 3 emulator/debugger, written in C++ for Windows, Linux, macOS and FreeBSD.")
+    (license license:gpl2)))
+
+(define-public tpt
+  (package
+    (name "tpt")
+    (version "98.2.365")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/The-Powder-Toy/The-Powder-Toy")
+             (commit "v98.2.365")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "06l39w3ggrzn8799dqll606by4f88kjr60r879w8j26csx1py76g"))))
+    (build-system meson-build-system)
+    (native-inputs (list pkg-config cmake))
+    (inputs (list luajit
+                  curl
+                  fftwf
+                  zlib
+                  libpng
+                  sdl2
+                  ((options->transformation `((with-patch unquote
+                                                          (string-append
+                                                           "bzip2="
+                                                           (search-patch
+                                                            "laura/packages/patches/bzip2-pkg-config.patch")))))
+                   bzip2)
+                  jsoncpp))
+    (arguments
+     (list
+      #:tests? #f
+      #:configure-flags #~(list "-Dworkaround_elusive_bzip2=false")))
+    (home-page "https://powdertoy.co.uk")
+    (synopsis "The Powder Toy")
+    (description
+     "Written in C++ and using SDL, The Powder Toy is a desktop version of the classic 'falling sand' physics sandbox, it simulates air pressure and velocity as well as heat. ")
+    (license license:gpl3)))
+
 (define-public uesave
   (package
     (name "uesave")
@@ -297,41 +379,3 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
     (description
      "This package provides Unreal Engine save file (GVAS) reading/writing.")
     (license license:expat)))
-
-(define-public rpcs3
-  (package
-    (name "rpcs3")
-    (version "0.0.33")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/rpcs3/rpcs3/")
-              (commit "v0.0.33")
-              (recursive? #t)))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "0annwam8k2jhl9qiwqmvkaydk75wzsql2ba141vakvz2kc9rwpmj"))))
-    (build-system cmake-build-system)
-    (arguments (list #:tests? #f
-                     #:build-type "Release"
-                     #:configure-flags #~(list "-Wno-dev" "-DUSE_SYSTEM_OPENAL=ON"
-                       "-DUSE_SYSTEM_CURL=ON" "-DUSE_SYSTEM_LIBPNG=ON"
-                       "-DUSE_SYSTEM_ZLIB=ON" "-DUSE_SYSTEM_WOLFSSL=OFF"
-                       "-DUSE_SYSTEM_FLATBUFFERS=ON" "-DUSE_SYSTEM_PUGIXML=ON"
-                       "-DUSE_SYSTEM_LIBUSB=ON" "-DUSE_SYSTEM_XXHASH=ON"
-                       "-DUSE_SYSTEM_MVK=ON" "-DUSE_SYSTEM_FAUDIO=ON"
-                       "-DUSE_SYSTEM_FFMPEG=ON" "-DUSE_SYSTEM_SDL=ON"
-                       "-DUSE_NATIVE_INSTRUCTIONS=OFF")
-                    #:phases #~(modify-phases %standard-phases
-                      (add-before 'build 'fix-source (lambda _
-                        (substitute* "../source/rpcs3/Emu/Cell/PPUThread.cpp" (("std::fesetround\\(FE_TONEAREST\\);") ""))
-                        (substitute* "../source/rpcs3/Emu/Cell/SPUThread.cpp" (("std::fesetround\\(FE_TOWARDZERO\\);") "")))))))
-    (native-inputs (list pkg-config gcc-toolchain-14))
-    (inputs (list zlib mesa libglvnd openal glew llvm-16 curl qtbase qtmultimedia
-                  qtsvg wayland libxkbcommon vulkan-headers libusb libevdev eudev
-                  vulkan-loader sdl2 pugixml yaml-cpp xxhash libpng faudio miniupnpc
-                  rtmidi asmjit cubeb speex glslang hidapi flatbuffers ffmpeg))
-    (home-page "https://rpcs3.net")
-    (synopsis "PlayStation 3 emulator and debugger.")
-    (description "The world's first free and open-source PlayStation 3 emulator/debugger, written in C++ for Windows, Linux, macOS and FreeBSD.")
-    (license license:gpl2)))
