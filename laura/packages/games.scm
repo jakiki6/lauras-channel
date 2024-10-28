@@ -312,10 +312,11 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
         (file-name (git-file-name name version))
         (sha256 (base32 "0annwam8k2jhl9qiwqmvkaydk75wzsql2ba141vakvz2kc9rwpmj"))))
     (build-system cmake-build-system)
-    (arguments (list #:build-type "Release"
+    (arguments (list #:tests? #f
+                     #:build-type "Release"
                      #:configure-flags #~(list "-Wno-dev" "-DUSE_SYSTEM_OPENAL=ON"
                        "-DUSE_SYSTEM_CURL=ON" "-DUSE_SYSTEM_LIBPNG=ON"
-                       "-DUSE_SYSTEM_ZLIB=ON" "-DUSE_SYSTEM_WOLFSSL=ON"
+                       "-DUSE_SYSTEM_ZLIB=ON" "-DUSE_SYSTEM_WOLFSSL=OFF"
                        "-DUSE_SYSTEM_FLATBUFFERS=ON" "-DUSE_SYSTEM_PUGIXML=ON"
                        "-DUSE_SYSTEM_LIBUSB=ON" "-DUSE_SYSTEM_XXHASH=ON"
                        "-DUSE_SYSTEM_MVK=ON" "-DUSE_SYSTEM_FAUDIO=ON"
@@ -328,8 +329,8 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
     (native-inputs (list pkg-config gcc-toolchain-14))
     (inputs (list zlib mesa libglvnd openal glew llvm-16 curl qtbase qtmultimedia
                   qtsvg wayland libxkbcommon vulkan-headers libusb libevdev eudev
-                  vulkan-loader sdl2 wolfssl pugixml yaml-cpp xxhash libpng faudio
-                  miniupnpc rtmidi asmjit cubeb speex glslang hidapi flatbuffers ffmpeg))
+                  vulkan-loader sdl2 pugixml yaml-cpp xxhash libpng faudio miniupnpc
+                  rtmidi asmjit cubeb speex glslang hidapi flatbuffers ffmpeg))
     (home-page "https://rpcs3.net")
     (synopsis "PlayStation 3 emulator and debugger.")
     (description "The world's first free and open-source PlayStation 3 emulator/debugger, written in C++ for Windows, Linux, macOS and FreeBSD.")
