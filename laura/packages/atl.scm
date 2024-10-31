@@ -45,9 +45,13 @@
               "https://gitlab.com/android_translation_layer/android_translation_layer.git")
              (commit "e2f41610")))
        (modules '((guix build utils)))
-       (snippet #~(substitute* "meson.build"
-                    (("SkiaSharp")
-                     "skia")))
+       (snippet #~(begin
+                    (substitute* "meson.build"
+                      (("SkiaSharp")
+                       "skia"))
+                    (substitute* "src/main-executable/main.c"
+                      (("/\\.\\./java/dex")
+                       "/../lib/java/dex"))))
        (file-name (git-file-name name version))
        (sha256
         (base32 "04895vdfhlq75i3naycg3vczwk7w1sb704pxmrlkags9xzd7r4q6"))))
@@ -83,7 +87,8 @@
                   sqlite-next
                   ffmpeg
                   libgudev
-                  webkitgtk alsa-lib))
+                  webkitgtk
+                  alsa-lib))
     (home-page
      "https://gitlab.com/android_translation_layer/android_translation_layer.git")
     (synopsis
