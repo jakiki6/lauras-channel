@@ -27,7 +27,11 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages xdisorg)
-  #:use-module (gnu packages gcc))
+  #:use-module (gnu packages gcc)
+  #:use-module (gnu packages python-web)
+  #:use-module (gnu packages video)
+  #:use-module (gnu packages python-crypto)
+  #:use-module (gnu packages music))
 
 (define-public squirrel-3.2
   (package
@@ -55,6 +59,21 @@
     (version "12.0-1")
     (inputs (list zlib))))
 
+(define-public python-websockets-13.0
+  (package
+    (inherit python-websockets)
+    (name "python-websockets")
+    (version "13.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/aaugustin/websockets")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1brnaf1c4r9377p2npxpkik9ggqzmymvnnazdhw6s2wzfhlln8vv"))))))
+
 (define-public yosys-0.46
   (package
     (inherit yosys)
@@ -71,3 +90,30 @@
        (file-name (git-file-name name version))))
     (native-inputs (modify-inputs (package-native-inputs yosys)
                      (replace "iverilog" iverilog-fixed)))))
+
+(define-public yt-dlp-bumped
+  (package
+    (inherit yt-dlp)
+    (name "yt-dlp")
+    (version "2024.10.22")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/yt-dlp/yt-dlp/")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (modules '((guix build utils)))
+       (snippet '(substitute* "pyproject.toml"
+                   (("^.*Programming Language :: Python :: 3\\.13.*$")
+                    "")))
+       (sha256
+        (base32 "1gw19f4h71vlchljg08g5l8sd60gmflbdpxz2vsinxzkmqvrqnra"))))
+    (inputs (list ffmpeg
+                  python-brotli
+                  python-certifi
+                  python-mutagen
+                  python-pycryptodomex
+                  python-requests-next
+                  python-urllib3-next
+                  python-websockets-13.0))))
