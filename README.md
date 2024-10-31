@@ -39,6 +39,7 @@ Software that I've ported so far:
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))
 * [CADO-NFS](https://gitlab.inria.fr/cado-nfs/cado-nfs)
+* [android-translation-layer](https://gitlab.com/android_translation_layer/android_translation_layer.git)
 
 Services:
 * waydroid
