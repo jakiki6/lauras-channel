@@ -119,23 +119,3 @@
                   python-requests-next
                   python-urllib3-next
                   python-websockets-13.0))))
-
-(define-public shepherd-devel
-  (package
-    (inherit shepherd-0.10)
-    (version "0.11")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://git.savannah.gnu.org/git/shepherd.git")
-               (commit "60bac5b0a025ddba5428a4edf80d2be3396e4f7e")))
-        (sha256
-          (base32
-            "1xfhy71s6z5xxl2yxgiid088z2acpab8lc7f0xvlcbqfl9lkknyd"))))
-    (native-inputs (modify-inputs (package-native-inputs shepherd-0.10)
-                     (prepend autoconf)
-                     (prepend gettext-minimal)
-                     (prepend automake)
-                     (prepend help2man)
-                     (prepend texinfo-7)))))
