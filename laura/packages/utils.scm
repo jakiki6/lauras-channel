@@ -42,6 +42,9 @@
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages lua)
+  #:use-module (gnu packages sdl)
+  #:use-module (gnu packages readline)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -1179,3 +1182,29 @@ needs to be signed in the boot chain.")
     (description
      "YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples.")
     (license license:bsd-3)))
+
+(define-public CasioEmu
+  (package
+    (name "CasioEmu")
+    (version "0.1")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/jakiki6/CasioEmu")
+              (commit "2900270e6583486f14891c67b170b9cfa3bf2556")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1d150909dd6faagmj8v5f7j8pzmv0wkizby7hkdx1lkldx34869h"))))
+    (build-system meson-build-system)
+    (native-inputs (list pkg-config))
+    (inputs (list lua-5.4 sdl2 sdl2-image readline))
+    (arguments (list #:phases #~(modify-phases %standard-phases
+        (add-before 'configure 'chdir (lambda _ (chdir "emulator")))
+        (replace 'install (lambda* (#:key outputs #:allow-other-keys)
+          (begin
+            (install-file "emulator" (string-append (assoc-ref outputs "out") "/bin"))
+            (copy-recursively "../models" (string-append (assoc-ref outputs "out") "/models"))))))))
+    (home-page "https://github.com/jakiki6/CasioEmu")
+    (synopsis "An emulator for nX-U8 based Casio fx-es PLUS calculators.")
+    (description "An emulator and disassembler for the CASIO calculator series using the nX-U8/100 core.")
+    (license license:gpl3)))
