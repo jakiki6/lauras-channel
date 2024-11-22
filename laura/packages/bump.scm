@@ -33,7 +33,8 @@
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages music)
   #:use-module (gnu packages admin)
-  #:use-module (gnu packages texinfo))
+  #:use-module (gnu packages texinfo)
+  #:use-module (rosenthal packages wm))
 
 (define-public squirrel-3.2
   (package
@@ -55,67 +56,26 @@
        (sha256
         (base32 "1nw1ghr4nxsvpk5bm9q0arrx4zrjpq5bai5sc17vj90by19187r1"))))))
 
-(define-public iverilog-fixed
-  (package
-    (inherit iverilog)
-    (version "12.0-1")
-    (inputs (list zlib))))
 
-(define-public python-websockets-13.0
+(define-public hyprland-bumped
   (package
-    (inherit python-websockets)
-    (name "python-websockets")
-    (version "13.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/aaugustin/websockets")
-             (commit version)))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1brnaf1c4r9377p2npxpkik9ggqzmymvnnazdhw6s2wzfhlln8vv"))))))
-
-(define-public yosys-0.46
-  (package
-    (inherit yosys)
-    (name "yosys")
-    (version "0.46")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/YosysHQ/yosys")
-             (commit version)))
-       (sha256
-        (base32 "1zj7vbpy6v1wn4p5cjs4hdjd467a1j1aj2qhs148bl2s6mzq3p86"))
-       (file-name (git-file-name name version))))
-    (native-inputs (modify-inputs (package-native-inputs yosys)
-                     (replace "iverilog" iverilog-fixed)))))
-
-(define-public yt-dlp-bumped
-  (package
-    (inherit yt-dlp)
-    (name "yt-dlp")
-    (version "2024.10.22")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/yt-dlp/yt-dlp/")
-             (commit version)))
-       (file-name (git-file-name name version))
-       (modules '((guix build utils)))
-       (snippet '(substitute* "pyproject.toml"
-                   (("^.*Programming Language :: Python :: 3\\.13.*$")
-                    "")))
-       (sha256
-        (base32 "1gw19f4h71vlchljg08g5l8sd60gmflbdpxz2vsinxzkmqvrqnra"))))
-    (inputs (list ffmpeg
-                  python-brotli
-                  python-certifi
-                  python-mutagen
-                  python-pycryptodomex
-                  python-requests-next
-                  python-urllib3-next
-                  python-websockets-13.0))))
+    (inherit hyprland)
+    (name "hyprland")
+    (version "0.45.2")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://github.com/hyprwm/Hyprland"
+                                  "/releases/download/v" version
+                                  "/source-v" version ".tar.gz"))
+              (modules '((guix build utils)))
+              (snippet
+               '(begin
+                  ;; Remove bundled sources and hyprpm utility.
+                  (substitute* "CMakeLists.txt"
+                    (("^add_subdirectory\\(hyprpm\\).*") ""))
+                  (for-each delete-file-recursively
+                            '("hyprpm"
+                              "subprojects"))))
+              (sha256
+               (base32
+                "1jqnly8h72v20fsz1075ib7gl7272g5svqw7qpqhx6243w1320np"))))))
