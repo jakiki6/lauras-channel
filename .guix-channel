@@ -4,4 +4,7 @@
  (dependencies
   (channel
    (name nonguix)
-   (url "https://gitlab.com/nonguix/nonguix"))))
+   (url "https://gitlab.com/nonguix/nonguix"))
+  (channel
+    (name rosenthal)
+    (url "https://codeberg.org/hako/rosenthal.git"))))
