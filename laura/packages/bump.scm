@@ -33,8 +33,7 @@
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages music)
   #:use-module (gnu packages admin)
-  #:use-module (gnu packages texinfo)
-  #:use-module (rosenthal packages wm))
+  #:use-module (gnu packages texinfo))
 
 (define-public squirrel-3.2
   (package
@@ -55,27 +54,3 @@
        (patch-flags '("-p1" "--binary"))
        (sha256
         (base32 "1nw1ghr4nxsvpk5bm9q0arrx4zrjpq5bai5sc17vj90by19187r1"))))))
-
-
-(define-public hyprland-bumped
-  (package
-    (inherit hyprland)
-    (name "hyprland")
-    (version "0.45.2")
-    (source (origin
-              (method url-fetch)
-              (uri (string-append "https://github.com/hyprwm/Hyprland"
-                                  "/releases/download/v" version
-                                  "/source-v" version ".tar.gz"))
-              (modules '((guix build utils)))
-              (snippet
-               '(begin
-                  ;; Remove bundled sources and hyprpm utility.
-                  (substitute* "CMakeLists.txt"
-                    (("^add_subdirectory\\(hyprpm\\).*") ""))
-                  (for-each delete-file-recursively
-                            '("hyprpm"
-                              "subprojects"))))
-              (sha256
-               (base32
-                "1jqnly8h72v20fsz1075ib7gl7272g5svqw7qpqhx6243w1320np"))))))
