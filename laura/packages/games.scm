@@ -168,7 +168,7 @@
                              ,(string-append (assoc-ref inputs "nghttp2") "/lib")
                              ,(string-append (assoc-ref inputs "libxfce4util") "/lib")
                              ,(string-append (assoc-ref inputs "avahi") "/lib")
-                             ,(string-append (assoc-ref inputs "libelf") "/lib")
+                             ,(string-append (assoc-ref inputs "elfutils") "/lib")
                              ,(string-append (assoc-ref inputs "llvm") "/lib")
                              ,(string-append (assoc-ref inputs "libpciaccess") "/lib")
                              ,(string-append (assoc-ref inputs "xfconf") "/lib")
@@ -243,8 +243,8 @@
                     e2fsprogs
                     libxfce4util
                     avahi
-                    libelf
-                    llvm
+                    elfutils
+                    llvm-18
                     libpciaccess
                     xfconf
                     libxshmfence
