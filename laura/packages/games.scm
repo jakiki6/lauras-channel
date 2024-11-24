@@ -46,6 +46,16 @@
   #:use-module (gnu packages xiph)
   #:use-module (gnu packages video)
   #:use-module (gnu packages commencement)
+  #:use-module (gnu packages gnome)
+  #:use-module (gnu packages libffi)
+  #:use-module (gnu packages fontutils)
+  #:use-module (gnu packages fribidi)
+  #:use-module (gnu packages multiprecision)
+  #:use-module (gnu packages nettle)
+  #:use-module (gnu packages libidn)
+  #:use-module (gnu packages web)
+  #:use-module (gnu packages pcre)
+  #:use-module (gnu packages libunistring)
   #:use-module (nonguix licenses)
   #:use-module (nonguix build-system binary)
   #:use-module (laura packages rust-common))
@@ -114,6 +124,38 @@
                              ,(string-append (assoc-ref inputs "dbus") "/lib")
                              ,(string-append (assoc-ref inputs "pango") "/lib")
                              ,(string-append (assoc-ref inputs "cairo") "/lib")
+                             ,(string-append (assoc-ref inputs "bzip2") "/lib")
+                             ,(string-append (assoc-ref inputs "libcloudproviders-minimal") "/lib")
+                             ,(string-append (assoc-ref inputs "libdatrie") "/lib")
+                             ,(string-append (assoc-ref inputs "libepoxy") "/lib")
+                             ,(string-append (assoc-ref inputs "libffi") "/lib")
+                             ,(string-append (assoc-ref inputs "fontconfig-minimal") "/lib")
+                             ,(string-append (assoc-ref inputs "freetype") "/lib")
+                             ,(string-append (assoc-ref inputs "fribidi") "/lib")
+                             ,(string-append (assoc-ref inputs "gmp") "/lib")
+                             ,(string-append (assoc-ref inputs "gnutls") "/lib")
+                             ,(string-append (assoc-ref inputs "graphite2") "/lib")
+                             ,(string-append (assoc-ref inputs "harfbuzz") "/lib")
+                             ,(string-append (assoc-ref inputs "nettle") "/lib")
+                             ,(string-append (assoc-ref inputs "libidn2") "/lib")
+                             ,(string-append (assoc-ref inputs "libjpeg-turbo") "/lib")
+                             ,(string-append (assoc-ref inputs "nettle") "/lib")
+                             ,(string-append (assoc-ref inputs "nghttp2") "/lib")
+                             ,(string-append (assoc-ref inputs "p11-kit") "/lib")
+                             ,(string-append (assoc-ref inputs "pcre2") "/lib")
+                             ,(string-append (assoc-ref inputs "pixman") "/lib")
+                             ,(string-append (assoc-ref inputs "libpng") "/lib")
+                             ,(string-append (assoc-ref inputs "libpsl") "/lib")
+                             ,(string-append (assoc-ref inputs "libtasn1") "/lib")
+                             ,(string-append (assoc-ref inputs "libthai") "/lib")
+                             ,(string-append (assoc-ref inputs "libunistring") "/lib")
+                             ,(string-append (assoc-ref inputs "wayland") "/lib")
+                             ,(string-append (assoc-ref inputs "libxau") "/lib")
+                             ,(string-append (assoc-ref inputs "libxcursor") "/lib")
+                             ,(string-append (assoc-ref inputs "libxdmcp") "/lib")
+                             ,(string-append (assoc-ref inputs "libxinerama") "/lib")
+                             ,(string-append (assoc-ref inputs "libxi") "/lib")
+                             ,(string-append (assoc-ref inputs "libxrender") "/lib")
                              ,(string-append (assoc-ref inputs "alsa-lib")
                                              "/lib")))))))
          #:patchelf-plan `(("minecraft-launcher" ("glibc" "gcc" "gdk-pixbuf"
@@ -145,6 +187,38 @@
                     dbus
                     pango
                     cairo
+                    bzip2
+                    libcloudproviders-minimal
+                    libdatrie
+                    libepoxy
+                    libffi
+                    fontconfig
+                    freetype
+                    fribidi
+                    gmp
+                    gnutls
+                    graphite2
+                    harfbuzz
+                    nettle
+                    libidn2
+                    libjpeg-turbo
+                    nettle
+                    nghttp2
+                    p11-kit
+                    pcre2
+                    pixman
+                    libpng
+                    libpsl
+                    libtasn1
+                    libthai
+                    libunistring
+                    wayland
+                    libxau
+                    libxcursor
+                    libxdmcp
+                    libxinerama
+                    libxi
+                    libxrender
                     alsa-lib))
       (synopsis "Proprietary Minecraft launcher")
       (description "Minecraft launcher binary")
