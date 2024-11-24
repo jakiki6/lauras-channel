@@ -56,6 +56,8 @@
   #:use-module (gnu packages web)
   #:use-module (gnu packages pcre)
   #:use-module (gnu packages libunistring)
+  #:use-module (gnu packages gnupg)
+  #:use-module (gnu packages kerberos)
   #:use-module (nonguix licenses)
   #:use-module (nonguix build-system binary)
   #:use-module (laura packages rust-common))
@@ -140,7 +142,6 @@
                              ,(string-append (assoc-ref inputs "libidn2") "/lib")
                              ,(string-append (assoc-ref inputs "libjpeg-turbo") "/lib")
                              ,(string-append (assoc-ref inputs "nettle") "/lib")
-                             ,(string-append (assoc-ref inputs "nghttp2") "/lib")
                              ,(string-append (assoc-ref inputs "p11-kit") "/lib")
                              ,(string-append (assoc-ref inputs "pcre2") "/lib")
                              ,(string-append (assoc-ref inputs "pixman") "/lib")
@@ -156,6 +157,12 @@
                              ,(string-append (assoc-ref inputs "libxinerama") "/lib")
                              ,(string-append (assoc-ref inputs "libxi") "/lib")
                              ,(string-append (assoc-ref inputs "libxrender") "/lib")
+                             ,(string-append (assoc-ref inputs "libsecret") "/lib")
+                             ,(string-append (assoc-ref inputs "libgpg-error") "/lib")
+                             ,(string-append (assoc-ref inputs "libgcrypt") "/lib")
+                             ,(string-append (assoc-ref inputs "mit-krb5") "/lib")
+                             ,(string-append (assoc-ref inputs "e2fsprogs") "/lib")
+                             ,(string-append (assoc-ref inputs "nghttp2") "/lib")
                              ,(string-append (assoc-ref inputs "alsa-lib")
                                              "/lib")))))))
          #:patchelf-plan `(("minecraft-launcher" ("glibc" "gcc" "gdk-pixbuf"
@@ -163,6 +170,7 @@
          #:install-plan `(("minecraft-launcher" "bin/"))))
       (inputs (list (list gcc "lib")
                     (list util-linux "lib")
+                    (list nghttp2 "lib")
                     glibc
                     gdk-pixbuf
                     glib
@@ -203,7 +211,6 @@
                     libidn2
                     libjpeg-turbo
                     nettle
-                    nghttp2
                     p11-kit
                     pcre2
                     pixman
@@ -219,6 +226,11 @@
                     libxinerama
                     libxi
                     libxrender
+                    libsecret
+                    libgpg-error
+                    libgcrypt
+                    mit-krb5
+                    e2fsprogs
                     alsa-lib))
       (synopsis "Proprietary Minecraft launcher")
       (description "Minecraft launcher binary")
