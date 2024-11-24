@@ -58,6 +58,9 @@
   #:use-module (gnu packages libunistring)
   #:use-module (gnu packages gnupg)
   #:use-module (gnu packages kerberos)
+  #:use-module (gnu packages xfce)
+  #:use-module (gnu packages avahi)
+  #:use-module (gnu packages elf)
   #:use-module (nonguix licenses)
   #:use-module (nonguix build-system binary)
   #:use-module (laura packages rust-common))
@@ -163,6 +166,13 @@
                              ,(string-append (assoc-ref inputs "mit-krb5") "/lib")
                              ,(string-append (assoc-ref inputs "e2fsprogs") "/lib")
                              ,(string-append (assoc-ref inputs "nghttp2") "/lib")
+                             ,(string-append (assoc-ref inputs "libxfce4util") "/lib")
+                             ,(string-append (assoc-ref inputs "avahi") "/lib")
+                             ,(string-append (assoc-ref inputs "libelf") "/lib")
+                             ,(string-append (assoc-ref inputs "llvm") "/lib")
+                             ,(string-append (assoc-ref inputs "libpciaccess") "/lib")
+                             ,(string-append (assoc-ref inputs "xfconf") "/lib")
+                             ,(string-append (assoc-ref inputs "libxshmfence") "/lib")
                              ,(string-append (assoc-ref inputs "alsa-lib")
                                              "/lib")))))))
          #:patchelf-plan `(("minecraft-launcher" ("glibc" "gcc" "gdk-pixbuf"
@@ -231,6 +241,13 @@
                     libgcrypt
                     mit-krb5
                     e2fsprogs
+                    libxfce4util
+                    avahi
+                    libelf
+                    llvm
+                    libpciaccess
+                    xfconf
+                    libxshmfence
                     alsa-lib))
       (synopsis "Proprietary Minecraft launcher")
       (description "Minecraft launcher binary")
