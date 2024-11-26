@@ -45,12 +45,23 @@
   #:use-module (gnu packages lua)
   #:use-module (gnu packages sdl)
   #:use-module (gnu packages readline)
+  #:use-module (gnu packages gettext)
+  #:use-module (gnu packages package-management)
+  #:use-module (gnu packages curl)
+  #:use-module (gnu packages gnome)
+  #:use-module (gnu packages language)
+  #:use-module (gnu packages xml)
+  #:use-module (gnu packages serialization)
+  #:use-module (gnu packages databases)
+  #:use-module (gnu packages elf)
+  #:use-module (gnu packages docbook)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
   #:use-module (guix build-system python)
   #:use-module (guix build-system meson)
   #:use-module (guix gexp)
+  #:use-module (guix utils)
   #:use-module (laura packages go-common)
   #:use-module (laura packages rust-common))
 
@@ -1208,3 +1219,34 @@ needs to be signed in the boot chain.")
     (synopsis "An emulator for nX-U8 based Casio fx-es PLUS calculators.")
     (description "An emulator and disassembler for the CASIO calculator series using the nX-U8/100 core.")
     (license license:gpl3)))
+
+(define appsteam-for-flatpak-builder
+  (package/inherit appstream
+    (inputs (list curl libsoup-minimal-2 libstemmer libxmlb libxml2 libyaml lmdb cairo gdk-pixbuf pango librsvg))
+    (arguments (substitute-keyword-arguments (package-arguments appstream)
+      ((#:configure-flags flags)
+        '(list "-Dsystemd=false" "-Dcompose=true"))))))
+
+(define-public flatpak-builder
+  (package
+    (name "flatpak-builder")
+    (version "1.4.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/flatpak/flatpak-builder")
+              (commit "1.4.4")
+              (recursive? #t)))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "01v9197wl9nd0104w6933n1vrkm7blbmlrb4khvcbafr6pgcp23z"))))
+    (build-system gnu-build-system)
+    (native-inputs (list (@ (gnu packages base) which) autoconf gettext-minimal automake libtool pkg-config))
+    (inputs (list flatpak appsteam-for-flatpak-builder libostree json-glib libxml2 curl elfutils xz))
+    (arguments `(#:configure-flags (list "--enable-documentation=false") #:tests? #f))
+    (home-page "https://github.com/flatpak/flatpak-builder")
+    (synopsis "Tool to build flatpaks from source")
+    (description "flatpak-builder is a tool for building flatpaks from sources.
+
+It reads a JSON or YAML based manifest to automatically download, build, and install projects which eventually get exported into a flatpak.")
+    (license license:lgpl2.1)))
