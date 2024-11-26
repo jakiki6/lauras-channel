@@ -101,6 +101,44 @@
 (define-public gcc-cross-riscv64-linux-gnu-toolchain
   (cross-gcc-toolchain "riscv64-linux-gnu"))
 
+(define-public CasioEmu
+  (package
+    (name "CasioEmu")
+    (version "0.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/jakiki6/CasioEmu")
+             (commit "85f2e0e20194e4b9b793899b77a4c7aaa8e7d27a")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1pnhbrx4yfzy3limqblvpmcabzdb9z9mhwjqn5axzwr4hmhhvas0"))))
+    (build-system meson-build-system)
+    (native-inputs (list pkg-config))
+    (inputs (list lua-5.4 sdl2 sdl2-image readline))
+    (arguments
+     (list
+      #:phases #~(modify-phases %standard-phases
+                   (add-before 'configure 'chdir
+                     (lambda _
+                       (chdir "emulator")))
+                   (replace 'install
+                     (lambda* (#:key outputs #:allow-other-keys)
+                       (begin
+                         (install-file "emulator"
+                                       (string-append (assoc-ref outputs "out")
+                                                      "/bin"))
+                         (copy-recursively "../models"
+                                           (string-append (assoc-ref outputs
+                                                                     "out")
+                                                          "/models"))))))))
+    (home-page "https://github.com/jakiki6/CasioEmu")
+    (synopsis "An emulator for nX-U8 based Casio fx-es PLUS calculators.")
+    (description
+     "An emulator and disassembler for the CASIO calculator series using the nX-U8/100 core.")
+    (license license:gpl3)))
+
 (define-public activate-linux
   (package
     (name "activate-linux")
@@ -426,6 +464,71 @@ the application that copied exits.")
     (description
      "This program applies various tests to sequences of bytes stored in files and reports the results of those tests. The program is useful for those evaluating pseudorandom number generators for encryption and statistical sampling applications, compression algorithms, and other applications where the information density of a file is of interest.")
     (license license:public-domain)))
+
+(define appsteam-for-flatpak-builder
+  (package/inherit appstream
+    (inputs (list curl
+                  libsoup-minimal-2
+                  libstemmer
+                  libxmlb
+                  libxml2
+                  libyaml
+                  lmdb
+                  cairo
+                  gdk-pixbuf
+                  pango
+                  librsvg))
+    (arguments (substitute-keyword-arguments (package-arguments appstream)
+                 ((#:configure-flags flags)
+                  '(list "-Dsystemd=false" "-Dcompose=true"))))))
+
+(define-public flatpak-builder
+  (package
+    (name "flatpak-builder")
+    (version "1.4.4")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/flatpak/flatpak-builder")
+             (commit "1.4.4")
+             (recursive? #t)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "01v9197wl9nd0104w6933n1vrkm7blbmlrb4khvcbafr6pgcp23z"))))
+    (build-system gnu-build-system)
+    (native-inputs (list (@ (gnu packages base) which)
+                         autoconf
+                         gettext-minimal
+                         automake
+                         libtool
+                         pkg-config))
+    (inputs (list flatpak
+                  libostree
+                  json-glib
+                  libxml2
+                  curl
+                  elfutils
+                  xz))
+    (propagated-inputs (list appsteam-for-flatpak-builder))
+    (arguments
+     (list
+      #:configure-flags #~(list "--enable-documentation=false")
+      #:tests? #f
+      #:phases #~(modify-phases %standard-phases
+                   (add-after 'install 'wrap-program
+                     (lambda* (#:key outputs #:allow-other-keys)
+                       (wrap-program (string-append (assoc-ref outputs "out")
+                                                    "/bin/flatpak-builder")
+                         '("FLATPAK_VALIDATE_ICON" ":" =
+                           ("/usr/bin/true"))))))))
+    (home-page "https://github.com/flatpak/flatpak-builder")
+    (synopsis "Tool to build flatpaks from source")
+    (description
+     "flatpak-builder is a tool for building flatpaks from sources.
+
+It reads a JSON or YAML based manifest to automatically download, build, and install projects which eventually get exported into a flatpak.")
+    (license license:lgpl2.1)))
 
 (define-public go-github-com-iglou-eu-go-wildcard
   (package
@@ -1193,61 +1296,3 @@ needs to be signed in the boot chain.")
     (description
      "YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples.")
     (license license:bsd-3)))
-
-(define-public CasioEmu
-  (package
-    (name "CasioEmu")
-    (version "0.1")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/jakiki6/CasioEmu")
-              (commit "85f2e0e20194e4b9b793899b77a4c7aaa8e7d27a")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "1pnhbrx4yfzy3limqblvpmcabzdb9z9mhwjqn5axzwr4hmhhvas0"))))
-    (build-system meson-build-system)
-    (native-inputs (list pkg-config))
-    (inputs (list lua-5.4 sdl2 sdl2-image readline))
-    (arguments (list #:phases #~(modify-phases %standard-phases
-        (add-before 'configure 'chdir (lambda _ (chdir "emulator")))
-        (replace 'install (lambda* (#:key outputs #:allow-other-keys)
-          (begin
-            (install-file "emulator" (string-append (assoc-ref outputs "out") "/bin"))
-            (copy-recursively "../models" (string-append (assoc-ref outputs "out") "/models"))))))))
-    (home-page "https://github.com/jakiki6/CasioEmu")
-    (synopsis "An emulator for nX-U8 based Casio fx-es PLUS calculators.")
-    (description "An emulator and disassembler for the CASIO calculator series using the nX-U8/100 core.")
-    (license license:gpl3)))
-
-(define appsteam-for-flatpak-builder
-  (package/inherit appstream
-    (inputs (list curl libsoup-minimal-2 libstemmer libxmlb libxml2 libyaml lmdb cairo gdk-pixbuf pango librsvg))
-    (arguments (substitute-keyword-arguments (package-arguments appstream)
-      ((#:configure-flags flags)
-        '(list "-Dsystemd=false" "-Dcompose=true"))))))
-
-(define-public flatpak-builder
-  (package
-    (name "flatpak-builder")
-    (version "1.4.4")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/flatpak/flatpak-builder")
-              (commit "1.4.4")
-              (recursive? #t)))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "01v9197wl9nd0104w6933n1vrkm7blbmlrb4khvcbafr6pgcp23z"))))
-    (build-system gnu-build-system)
-    (native-inputs (list (@ (gnu packages base) which) autoconf gettext-minimal automake libtool pkg-config))
-    (inputs (list flatpak libostree json-glib libxml2 curl elfutils xz))
-    (propagated-inputs (list appsteam-for-flatpak-builder))
-    (arguments `(#:configure-flags (list "--enable-documentation=false") #:tests? #f))
-    (home-page "https://github.com/flatpak/flatpak-builder")
-    (synopsis "Tool to build flatpaks from source")
-    (description "flatpak-builder is a tool for building flatpaks from sources.
-
-It reads a JSON or YAML based manifest to automatically download, build, and install projects which eventually get exported into a flatpak.")
-    (license license:lgpl2.1)))
