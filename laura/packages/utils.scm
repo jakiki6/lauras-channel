@@ -170,6 +170,40 @@
      "The \"Activate Windows\" watermark ported to Linux with Gtk Layer Shell")
     (license license:expat)))
 
+(define-public bkcrack
+  (package
+    (name "bkcrack")
+    (version "1.7.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/kimci86/bkcrack")
+             (commit "v1.7.0")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1jy8jk8spsp80vc06grk9k35hpl8w83jvm4xibvm9f4qm6gfcq5j"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:build-type "Release"
+      #:phases #~(modify-phases %standard-phases
+                   (add-after 'install 'move
+                     (lambda* (#:key outputs #:allow-other-keys)
+                       (let ((d (assoc-ref outputs "out")))
+                         (begin
+                           (rename-file d "/tmp/bin")
+                           (mkdir d)
+                           (rename-file "/tmp/bin"
+                                        (string-append d "/bin")))))))))
+    (home-page "https://github.com/kimci86/bkcrack")
+    (synopsis
+     "Crack legacy zip encryption with Biham and Kocher's known plaintext attack.")
+    (description
+     "A ZIP archive may contain many entries whose content can be compressed and/or encrypted. In particular, entries can be encrypted with a password-based symmetric encryption algorithm referred to as traditional PKWARE encryption, legacy encryption or ZipCrypto. This algorithm generates a pseudo-random stream of bytes (keystream) which is XORed to the entry's content (plaintext) to produce encrypted data (ciphertext). The generator's state, made of three 32-bits integers, is initialized using the password and then continuously updated with plaintext as encryption goes on. This encryption algorithm is vulnerable to known plaintext attacks as shown by Eli Biham and Paul C. Kocher in the research paper A known plaintext attack on the PKZIP stream cipher. Given ciphertext and 12 or more bytes of the corresponding plaintext, the internal state of the keystream generator can be recovered. This internal state is enough to decipher ciphertext entirely as well as other entries which were encrypted with the same password. It can also be used to bruteforce the password with a complexity of nl-6 where n is the size of the character set and l is the length of the password.")
+    (license license:zlib)))
+
 (define-public bsdiff
   (package
     (name "bsdiff")
