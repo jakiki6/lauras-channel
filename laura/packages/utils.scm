@@ -55,6 +55,9 @@
   #:use-module (gnu packages databases)
   #:use-module (gnu packages elf)
   #:use-module (gnu packages docbook)
+  #:use-module (gnu packages commencement)
+  #:use-module (gnu packages fontutils)
+  #:use-module (gnu packages gl)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -1330,3 +1333,24 @@ needs to be signed in the boot chain.")
     (description
      "YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples.")
     (license license:bsd-3)))
+
+(define-public imhex
+  (package
+    (name "imhex")
+    (version "1.35.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/WerWolv/ImHex")
+              (recursive? #t)
+              (commit "v1.35.4")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0gi5772w0fzgr1w403ckq2mkwiyvcxv08frs2fjr2hlc8hb6c2p9"))))
+    (build-system cmake-build-system)
+    (native-inputs (list gcc-toolchain-14 pkg-config))
+    (inputs (list freetype mesa glfw-3.4 curl dbus))
+    (home-page "https://imhex.werwolv.net/")
+    (synopsis "A Hex Editor.")
+    (description "A Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM.")
+    (license license:gpl2)))

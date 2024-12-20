@@ -7,7 +7,8 @@
   #:use-module (guix build-system python)
   #:use-module (guix build-system pyproject)
   #:use-module (gnu packages python-xyz)
-  #:use-module (gnu packages python-crypto))
+  #:use-module (gnu packages python-crypto)
+  #:use-module (gnu packages python-build))
 
 (define-public nomadnet
   (package
@@ -23,6 +24,7 @@
         (base32 "0nzjflxqv1vy16gsbj79pj6ab81iw8x8qmnjc3cjdf327mwx3g7c"))))
     (build-system pyproject-build-system)
     (propagated-inputs (list python-lxmf python-qrcode python-rns python-urwid))
+    (native-inputs (list python-setuptools python-wheel))
     (arguments
      `(#:tests? #f
        #:phases (modify-phases %standard-phases
@@ -46,6 +48,7 @@
         (base32 "1bsk2c73lz9vf5q36mmkzdwjcmgl6igd97n8scign6ri70gddhki"))))
     (build-system pyproject-build-system)
     (propagated-inputs (list python-rns))
+    (native-inputs (list python-setuptools python-wheel))
     (arguments
      `(#:tests? #f
        #:phases (modify-phases %standard-phases
@@ -69,6 +72,7 @@
         (base32 "19szbapwic1qxms1aw0ynak72fx7xj35jfwgszrhwqviixzzd093"))))
     (build-system pyproject-build-system)
     (propagated-inputs (list python-cryptography python-pyserial))
+    (native-inputs (list python-setuptools python-wheel))
     (arguments
      `(#:tests? #f
        #:phases (modify-phases %standard-phases
