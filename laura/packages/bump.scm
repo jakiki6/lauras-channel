@@ -33,7 +33,8 @@
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages music)
   #:use-module (gnu packages admin)
-  #:use-module (gnu packages texinfo))
+  #:use-module (gnu packages texinfo)
+  #:use-module (gnu packages hardware))
 
 (define-public squirrel-3.2
   (package
@@ -54,3 +55,20 @@
        (patch-flags '("-p1" "--binary"))
        (sha256
         (base32 "1nw1ghr4nxsvpk5bm9q0arrx4zrjpq5bai5sc17vj90by19187r1"))))))
+
+(define-public memtest86+-7.20
+  (package
+    (inherit memtest86+)
+    (name "memtest86+")
+    (version "7.20")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/memtest86plus/memtest86plus")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0ifly0jbq4xy81mc6k621a8rr0ipjzn7783v2b535s1s55xrz7i5"))
+       (patches
+        (search-patches "memtest86+-build-reproducibly.patch"))))))
