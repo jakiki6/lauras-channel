@@ -1354,3 +1354,33 @@ needs to be signed in the boot chain.")
     (synopsis "A Hex Editor.")
     (description "A Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM.")
     (license license:gpl2)))
+
+(define-public lite
+  (package
+    (name "lite")
+    (version "1.11")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/rxi/lite")
+              (commit "v1.11")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0wxqfb4ly8g7w5qph76xys95b55ackkags8jgd1nasmiyi8gcd5a"))))
+    (build-system gnu-build-system)
+    (inputs (list sdl2))
+    (arguments (list #:phases
+      #~(modify-phases %standard-phases
+        (delete 'configure)
+        (replace 'build
+          (lambda* (#:key outputs #:allow-other-keys) (system "./build.sh")))
+        (delete 'check)
+        (replace 'install
+          (lambda* (#:key outputs #:allow-other-keys)
+            (begin
+              (install-file "lite" (string-append (assoc-ref outputs "out") "/bin"))
+              (copy-recursively "data" (string-append (assoc-ref outputs "out") "/bin/data"))))))))
+    (home-page "https://github.com/rxi/lite")
+    (synopsis "A lightweight text editor written in Lua")
+    (description "lite is a lightweight text editor written mostly in Lua — it aims to provide something practical, pretty, small and fast, implemented as simply as possible; easy to modify and extend, or to use without doing either.")
+    (license license:expat)))
