@@ -1,6 +1,7 @@
 (define-module (laura packages go-common)
   #:use-module (guix packages)
   #:use-module (guix download)
+  #:use-module (guix gexp)
   #:use-module (guix build-system go)
   #:use-module (guix build-system trivial)
   #:use-module ((guix licenses)
@@ -491,4 +492,145 @@ through it's psuedoterminal.")
     (synopsis "pkcs7")
     (description
      "Package pkcs7 implements parsing and generation of some PKCS#7 structures.")
+    (license license:expat)))
+
+(define-public go-github-com-inconshreveable-mousetrap
+  (package
+    (name "go-github-com-inconshreveable-mousetrap")
+    (version "1.1.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/inconshreveable/mousetrap")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "14gjpvwgx3hmbd92jlwafgibiak2jqp25rq4q50cq89w8wgmhsax"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/inconshreveable/mousetrap"))
+    (home-page "https://github.com/inconshreveable/mousetrap")
+    (synopsis "mousetrap")
+    (description "mousetrap is a tiny library that answers a single question.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-cpuguy83-go-md2man-v2
+  (package
+    (name "go-github-com-cpuguy83-go-md2man-v2")
+    (version "2.0.1")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+               (url "https://github.com/cpuguy83/go-md2man")
+               (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256
+         (base32 "051ljpzf1f5nh631lvn53ziclkzmx5lza8545mkk6wxdfnfdcx8f"))
+        (modules '((guix build utils)))
+        (snippet #~(delete-file-recursively "vendor"))))
+    (build-system go-build-system)
+    (arguments '(#:import-path "github.com/cpuguy83/go-md2man/v2"))
+    (propagated-inputs (list go-github-com-russross-blackfriday-v2))
+    (home-page "https://github.com/cpuguy83/go-md2man")
+    (synopsis "go-md2man")
+    (description "Converts markdown into roff (man pages).")
+    (license license:expat)))
+
+(define-public go-github-com-spf13-cobra
+  (package
+    (name "go-github-com-spf13-cobra")
+    (version "1.8.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/spf13/cobra")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0brbyy5mc6n2j6m6q1xyswh907vxd3wdzvgaci45swgj0747lcf8"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/spf13/cobra"))
+    (propagated-inputs (list go-gopkg-in-yaml-v3 go-github-com-spf13-pflag
+                             go-github-com-inconshreveable-mousetrap
+                             go-github-com-cpuguy83-go-md2man-v2))
+    (home-page "https://github.com/spf13/cobra")
+    (synopsis "Overview")
+    (description
+     "Package cobra is a commander providing a simple interface to create powerful
+modern CLI interfaces.  In addition to providing an interface, Cobra
+simultaneously provides a controller to organize your application code.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-evanw-esbuild-internal
+  (package
+    (name "go-github-com-evanw-esbuild-internal")
+    (version "0.24.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/evanw/esbuild")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0hx8amlkrazk0pxkca216qq1wgssjrc6ja3q31lpilr5ycf4smjx"))))
+    (build-system go-build-system)
+    (arguments
+      (list #:phases
+        #~(modify-phases %standard-phases
+            (delete 'build)
+            (delete 'check)
+            (replace 'install (lambda* (#:key outputs #:allow-other-keys)
+              (begin
+                (mkdir-p (string-append (assoc-ref outputs "out") "/src/github.com/evanw/esbuild/internal"))
+                (copy-recursively "src/internal" (string-append (assoc-ref outputs "out") "/src/github.com/evanw/esbuild/internal"))))))))
+    (propagated-inputs (list go-golang-org-x-sys))
+    (home-page "https://github.com/evanw/esbuild")
+    (synopsis "Why?")
+    (description
+     "@@url{https://esbuild.github.io/,Website} |
+@@url{https://esbuild.github.io/getting-started/,Getting started} |
+@@url{https://esbuild.github.io/api/,Documentation} |
+@@url{https://esbuild.github.io/plugins/,Plugins} |
+@@url{https://esbuild.github.io/faq/,FAQ}.")
+    (license license:expat)))
+
+(define-public go-github-com-evanw-esbuild-api
+  (package
+    (inherit go-github-com-evanw-esbuild-internal)
+    (name "go-github-com-evanw-esbuild-api")
+    (arguments
+     (list
+      #:import-path "github.com/evanw/esbuild/pkg/api"
+      #:unpack-path "github.com/evanw/esbuild"))
+    (propagated-inputs (list go-golang-org-x-sys))))
+
+(define-public go-github-com-titanous-json5
+  (package
+    (name "go-github-com-titanous-json5")
+    (version "1.0.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/titanous/json5")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "097a9fr95aw8kjkjykwx6db0khi358s2g3ap8kfgccycpzxfc0k9"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:import-path "github.com/titanous/json5"))
+    (propagated-inputs (list go-github-com-kylelemons-godebug))
+    (home-page "https://github.com/titanous/json5")
+    (synopsis "json5")
+    (description "Package json5 implements decoding of JSON5 values.")
     (license license:expat)))

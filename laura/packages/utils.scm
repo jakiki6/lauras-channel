@@ -58,6 +58,7 @@
   #:use-module (gnu packages commencement)
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages gl)
+  #:use-module (gnu packages web)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -1383,4 +1384,53 @@ needs to be signed in the boot chain.")
     (home-page "https://github.com/rxi/lite")
     (synopsis "A lightweight text editor written in Lua")
     (description "lite is a lightweight text editor written mostly in Lua — it aims to provide something practical, pretty, small and fast, implemented as simply as possible; easy to modify and extend, or to use without doing either.")
+    (license license:expat)))
+
+(define-public ags
+  (package
+    (name "ags")
+    (version "2.2.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Aylur/ags")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1py4ii6jpkjdxf00pb4lbpiwgrg6xfhh4nlib4111wh70w1f2wdj"))
+       (modules '((guix build utils)))
+       (snippet
+         #~(begin
+             (substitute* "go.mod" (("ags") "github.com/Aylur/ags"))
+             (map (lambda (x) (substitute* x (("\"ags/") "\"github.com/Aylur/ags/")))
+               (list "main.go" "cmd/bundle.go" "cmd/init.go" "cmd/inspect.go" "cmd/list.go" "cmd/quit.go" "cmd/request.go" "cmd/run.go" "cmd/toggle.go" "cmd/types.go"))))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/Aylur/ags"))
+    (propagated-inputs (list go-github-com-evanw-esbuild-internal go-github-com-evanw-esbuild-api go-github-com-spf13-cobra go-github-com-titanous-json5))
+    (home-page "https://github.com/spf13/cobra")
+    (synopsis "Scaffolding CLI for Astal+TypeScript")
+    (description
+     "CLI around Astal to scaffold and run projects")
+    (license license:gpl3)))
+
+(define-public hyprpanel
+  (package
+    (name "hyprpanel")
+    (version "0.0.0-a7b553725c1deb4a856ddd8582fa217451533ec3")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/Jas-SinghFSU/HyprPanel")
+              (commit "a7b553725c1deb4a856ddd8582fa217451533ec3")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0y25ns6nizszq0h5d31ihsjcaxpsp1cc5a5ixklcdq3x8r7gsrnq"))))
+    (build-system meson-build-system)
+    (native-inputs (list ags))
+    (home-page "https://www.gnu.org/software/hello/")
+    (synopsis "A Bar/Panel for Hyprland with extensive customizability.")
+    (description "A panel built for Hyprland with Astal")
     (license license:expat)))
