@@ -16589,3 +16589,1448 @@ works everywhere, even WASM!")
     (description
      "This package provides a fast, correct and safe jpeg decoder.")
     (license (list license:expat license:asl2.0 license:zlib))))
+
+(define-public rust-winsafe-0.0.19
+  (package
+    (name "rust-winsafe")
+    (version "0.0.19")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "winsafe" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0169xy9mjma8dys4m8v4x0xhw2gkbhv2v1wsbvcjl9bhnxxd2dfi"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/rodrigocfd/winsafe")
+    (synopsis "Windows API and GUI in safe, idiomatic Rust")
+    (description
+     "This package provides Windows API and GUI in safe, idiomatic Rust.")
+    (license license:expat)))
+
+(define-public rust-which-6
+  (package
+    (name "rust-which")
+    (version "6.0.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "which" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "07yg74dsq644hq5a35546c9mja6rsjdsg92rykr9hkflxf7r5vml"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-either" ,rust-either-1)
+                       ("rust-home" ,rust-home-0.5)
+                       ("rust-regex" ,rust-regex-1)
+                       ("rust-rustix" ,rust-rustix-0.38)
+                       ("rust-tracing" ,rust-tracing-0.1)
+                       ("rust-winsafe" ,rust-winsafe-0.0.19))))
+    (home-page "https://github.com/harryfei/which-rs.git")
+    (synopsis
+     "Rust equivalent of Unix command \"which\". Locate installed executable in cross platforms.")
+    (description
+     "This package provides a Rust equivalent of Unix command \"which\".  Locate
+installed executable in cross platforms.")
+    (license license:expat)))
+
+(define-public rust-webbrowser-1
+  (package
+    (name "rust-webbrowser")
+    (version "1.0.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "webbrowser" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0dgmn2fwxzyraq2pp5g4hwj852qmvw0i2b14apw0y4ann7my37za"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-block2" ,rust-block2-0.5)
+                       ("rust-core-foundation" ,rust-core-foundation-0.10)
+                       ("rust-home" ,rust-home-0.5)
+                       ("rust-jni" ,rust-jni-0.21)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-ndk-context" ,rust-ndk-context-0.1)
+                       ("rust-objc2" ,rust-objc2-0.5)
+                       ("rust-objc2-foundation" ,rust-objc2-foundation-0.2)
+                       ("rust-url" ,rust-url-2)
+                       ("rust-web-sys" ,rust-web-sys-0.3))))
+    (home-page "https://github.com/amodm/webbrowser-rs")
+    (synopsis "Open URLs in web browsers available on a platform")
+    (description
+     "This package provides Open URLs in web browsers available on a platform.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-derive-setters-0.1
+  (package
+    (name "rust-derive-setters")
+    (version "0.1.6")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "derive_setters" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "03890w7p6zslxl0cbwxddx1sjcsmiypsgyghp1li24sf0lrz13jf"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-darling" ,rust-darling-0.20)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://github.com/Lymia/derive_setters")
+    (synopsis
+     "Rust macro to automatically generates setter methods for a struct's fields")
+    (description
+     "This package provides Rust macro to automatically generates setter methods for a struct's fields.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-derive-getters-0.5
+  (package
+    (name "rust-derive-getters")
+    (version "0.5.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "derive-getters" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1zyah2rr8jdy8a0cnhnr48dxg8f6alkr59fkfynh273h7ra47vvl"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://sr.ht/~kvsari/derive-getters/")
+    (synopsis "Simple boilerplate getters generator")
+    (description "This package provides Simple boilerplate getters generator.")
+    (license license:expat)))
+
+(define-public rust-tui-popup-0.5
+  (package
+    (name "rust-tui-popup")
+    (version "0.5.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "tui-popup" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0rc53jrl41yghlk9dr9awz5s1z6lqk5arrim5f90phlc0ajsvxq8"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-derive-getters" ,rust-derive-getters-0.5)
+                       ("rust-derive-setters" ,rust-derive-setters-0.1)
+                       ("rust-document-features" ,rust-document-features-0.2)
+                       ("rust-ratatui" ,rust-ratatui-0.28))))
+    (home-page "https://github.com/joshka/tui-widgets")
+    (synopsis "simple popup for ratatui")
+    (description "This package provides a simple popup for ratatui.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-tui-input-0.10
+  (package
+    (name "rust-tui-input")
+    (version "0.10.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "tui-input" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0svwk8rsdxkpcric7qjgk8llp4bz919fjvz0j6ih7ha3sy07f4xx"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-ratatui" ,rust-ratatui-0.28)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-termion" ,rust-termion-4)
+                       ("rust-unicode-width" ,rust-unicode-width-0.1))))
+    (home-page "https://github.com/sayanarijit/tui-input")
+    (synopsis "TUI input library supporting multiple backends")
+    (description
+     "This package provides TUI input library supporting multiple backends.")
+    (license license:expat)))
+
+(define-public rust-derive-builder-core-0.20
+  (package
+    (name "rust-derive-builder-core")
+    (version "0.20.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "derive_builder_core" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1s640r6q46c2iiz25sgvxw3lk6b6v5y8hwylng7kas2d09xwynrd"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-darling" ,rust-darling-0.20)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://github.com/colin-kiegel/rust-derive-builder")
+    (synopsis "Internal helper library for the derive_builder crate")
+    (description
+     "This package provides Internal helper library for the derive_builder crate.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-derive-builder-macro-0.20
+  (package
+    (name "rust-derive-builder-macro")
+    (version "0.20.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "derive_builder_macro" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0g1zznpqrmvjlp2w7p0jzsjvpmw5rvdag0rfyypjhnadpzib0qxb"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-derive-builder-core" ,rust-derive-builder-core-0.20)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://github.com/colin-kiegel/rust-derive-builder")
+    (synopsis
+     "Rust macro to automatically implement the builder pattern for arbitrary structs")
+    (description
+     "This package provides Rust macro to automatically implement the builder pattern for arbitrary structs.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-derive-builder-0.20
+  (package
+    (name "rust-derive-builder")
+    (version "0.20.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "derive_builder" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0is9z7v3kznziqsxa5jqji3ja6ay9wzravppzhcaczwbx84znzah"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-derive-builder-macro" ,rust-derive-builder-macro-0.20))))
+    (home-page "https://github.com/colin-kiegel/rust-derive-builder")
+    (synopsis
+     "Rust macro to automatically implement the builder pattern for arbitrary structs")
+    (description
+     "This package provides Rust macro to automatically implement the builder pattern for arbitrary structs.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-tui-big-text-0.6
+  (package
+    (name "rust-tui-big-text")
+    (version "0.6.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "tui-big-text" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "03kcwwr895wgbwbf97pgx8irjkxmb50f6fvr8k3lww6dpma8jlxq"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-derive-builder" ,rust-derive-builder-0.20)
+                       ("rust-font8x8" ,rust-font8x8-0.3)
+                       ("rust-itertools" ,rust-itertools-0.13)
+                       ("rust-ratatui" ,rust-ratatui-0.28))))
+    (home-page "https://github.com/joshka/tui-widgets")
+    (synopsis "Ratatui widget for displaying big text in the terminal")
+    (description
+     "This package provides a Ratatui widget for displaying big text in the terminal.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-textwrap-0.16
+  (package
+    (name "rust-textwrap")
+    (version "0.16.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "textwrap" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1fgqn3mg9gdbjxwfxl76fg0qiq53w3mk4hdh1x40jylnz39k9m13"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-hyphenation" ,rust-hyphenation-0.8)
+                       ("rust-smawk" ,rust-smawk-0.3)
+                       ("rust-terminal-size" ,rust-terminal-size-0.2)
+                       ("rust-unicode-linebreak" ,rust-unicode-linebreak-0.1)
+                       ("rust-unicode-width" ,rust-unicode-width-0.1))))
+    (home-page "https://github.com/mgeisler/textwrap")
+    (synopsis
+     "Library for word wrapping, indenting, and dedenting strings. Has optional support for Unicode and emojis as well as machine hyphenation")
+    (description
+     "This package provides Library for word wrapping, indenting, and dedenting strings.  Has optional
+support for Unicode and emojis as well as machine hyphenation.")
+    (license license:expat)))
+
+(define-public rust-termbg-0.5
+  (package
+    (name "rust-termbg")
+    (version "0.5.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "termbg" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "06kinxr2a00s62zp8h0mqh1q6wpnaw8zmmryqrkzp78rvkwy78n5"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-async-std" ,rust-async-std-1)
+                       ("rust-crossterm" ,rust-crossterm-0.28)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-winapi" ,rust-winapi-0.3))))
+    (home-page "https://github.com/dalance/termbg")
+    (synopsis "Terminal background color detection")
+    (description "This package provides Terminal background color detection.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-libc-0.2
+  (package
+    (name "rust-libc")
+    (version "0.2.169")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "libc" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "02m253hs8gw0m1n8iyrsc4n15yzbqwhddi7w1l0ds7i92kdsiaxm"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-rustc-std-workspace-core" ,rust-rustc-std-workspace-core-1))))
+    (home-page "https://github.com/rust-lang/libc")
+    (synopsis "Raw FFI bindings to platform libraries like libc.")
+    (description
+     "This package provides Raw FFI bindings to platform libraries like libc.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-sysinfo-0.32
+  (package
+    (name "rust-sysinfo")
+    (version "0.32.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sysinfo" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1bzlj3afjz4ibdsfchjk1f4md6djffw668f3npiykwph38jcscsc"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-core-foundation-sys" ,rust-core-foundation-sys-0.8)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-memchr" ,rust-memchr-2)
+                       ("rust-ntapi" ,rust-ntapi-0.4)
+                       ("rust-rayon" ,rust-rayon-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-windows" ,rust-windows-0.57))))
+    (home-page "https://github.com/GuillaumeGomez/sysinfo")
+    (synopsis
+     "Library to get system information such as processes, CPUs, disks, components and networks")
+    (description
+     "This package provides Library to get system information such as processes, CPUs, disks, components and
+networks.")
+    (license license:expat)))
+
+(define-public rust-rust-strings-0.6
+  (package
+    (name "rust-rust-strings")
+    (version "0.6.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "rust-strings" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0xhlvbghbvvyxzmpipyw02lwwxrix9rj5y42jklsgc14xam5jxfi"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-clap" ,rust-clap-4)
+                       ("rust-pyo3" ,rust-pyo3-0.20))))
+    (home-page "https://github.com/iddohau/rust-strings")
+    (synopsis
+     "`rust-strings` is a library to extract ascii strings from binary data")
+    (description
+     "This package provides `rust-strings` is a library to extract ascii strings from binary data.")
+    (license license:expat)))
+
+(define-public rust-syscalls-0.6
+  (package
+    (name "rust-syscalls")
+    (version "0.6.18")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "syscalls" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1gkwzlb2432jrixwfkkpxv0a017qgqbpsvby7jjpcffpqxfy7l23"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-serde" ,rust-serde-1)
+                       ("rust-serde-repr" ,rust-serde-repr-0.1))))
+    (home-page "https://github.com/jasonwhite/syscalls")
+    (synopsis "list of Linux system calls.")
+    (description "This package provides a list of Linux system calls.")
+    (license license:bsd-2)))
+
+(define-public rust-linux-personality-2
+  (package
+    (name "rust-linux-personality")
+    (version "2.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "linux-personality" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0g4rhsgpvlix83l80g2l72rc94hzi96q8jz1x2nyl7yl2rpmmdq1"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-libc" ,rust-libc-0.2))))
+    (home-page "https://github.com/jeandudey/linux-personality")
+    (synopsis "Wrapper around Linux personality function")
+    (description
+     "This package provides Wrapper around Linux personality function.")
+    (license license:expat)))
+
+(define-public rust-lurk-cli-0.3
+  (package
+    (name "rust-lurk-cli")
+    (version "0.3.9")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "lurk-cli" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0phkq0gglv6wfsmqncz2cxrj5cjbsrjyc3sn9ralq0jsd08wrv8q"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-anyhow" ,rust-anyhow-1)
+                       ("rust-byteorder" ,rust-byteorder-1)
+                       ("rust-clap" ,rust-clap-4)
+                       ("rust-comfy-table" ,rust-comfy-table-7)
+                       ("rust-console" ,rust-console-0.15)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-linux-personality" ,rust-linux-personality-2)
+                       ("rust-nix" ,rust-nix-0.29)
+                       ("rust-regex" ,rust-regex-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-serde-json" ,rust-serde-json-1)
+                       ("rust-syscalls" ,rust-syscalls-0.6)
+                       ("rust-users" ,rust-users-0.11))))
+    (home-page "https://github.com/JakWai01/lurk")
+    (synopsis "lurk is a pretty (simple) alternative to strace")
+    (description
+     "This package provides lurk is a pretty (simple) alternative to strace.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-goblin-0.9
+  (package
+    (name "rust-goblin")
+    (version "0.9.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "goblin" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "08yrnjj5j4nddh6y1r8kf35ys7p3iwg6npga3nc4cwfps4r3zask"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-log" ,rust-log-0.4)
+                       ("rust-plain" ,rust-plain-0.2)
+                       ("rust-scroll" ,rust-scroll-0.12))))
+    (home-page "https://github.com/m4b/goblin")
+    (synopsis
+     "An impish, cross-platform, ELF, Mach-o, and PE binary parsing and loading crate")
+    (description
+     "This package provides An impish, cross-platform, ELF, Mach-o, and PE binary parsing and loading crate.")
+    (license license:expat)))
+
+(define-public rust-fs-err-3
+  (package
+    (name "rust-fs-err")
+    (version "3.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "fs-err" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0zw01xqj302la1c7gnbfwi7b4pcgxv2xkjavk1czjkpk15s0xdlb"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-autocfg" ,rust-autocfg-1)
+                       ("rust-tokio" ,rust-tokio-1))))
+    (home-page "https://github.com/andrewhickman/fs-err")
+    (synopsis
+     "drop-in replacement for std::fs with more helpful error messages.")
+    (description
+     "This package provides a drop-in replacement for std::fs with more helpful error
+messages.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-lddtree-0.3
+  (package
+    (name "rust-lddtree")
+    (version "0.3.7")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "lddtree" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "13mh4y1bwlqpa8jpsgj3zb0mxi4syzdqh8x13xwapdnp9g4rlxz0"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-fs-err" ,rust-fs-err-3)
+                       ("rust-glob" ,rust-glob-0.3)
+                       ("rust-goblin" ,rust-goblin-0.9))))
+    (home-page "https://github.com/messense/lddtree-rs")
+    (synopsis "Read the ELF dependency tree")
+    (description "This package provides Read the ELF dependency tree.")
+    (license license:expat)))
+
+(define-public rust-heh-0.6
+  (package
+    (name "rust-heh")
+    (version "0.6.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "heh" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0wsv34q8xnb1z4d8vr8s4rcyizf4xc5x44bhh1h4jhpbbwc1hwxa"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arboard" ,rust-arboard-3.4)
+                       ("rust-clap" ,rust-clap-4)
+                       ("rust-crossbeam" ,rust-crossbeam-0.8)
+                       ("rust-hex" ,rust-hex-0.4)
+                       ("rust-memmap2" ,rust-memmap2-0.9)
+                       ("rust-ratatui" ,rust-ratatui-0.28))))
+    (home-page "https://github.com/ndd7xv/heh")
+    (synopsis
+     "cross-platform terminal UI used for modifying file data in hex or ASCII.")
+    (description
+     "This package provides a cross-platform terminal UI used for modifying file data
+in hex or ASCII.")
+    (license license:expat)))
+
+(define-public rust-elf-0.7
+  (package
+    (name "rust-elf")
+    (version "0.7.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "elf" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0yyij25ps8mln1s1xzwggjr88gb2b35c8jf8az25dmfvfaar0ia4"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/cole14/rust-elf/")
+    (synopsis "pure-rust library for parsing ELF files")
+    (description
+     "This package provides a pure-rust library for parsing ELF files.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-encode-unicode-1
+  (package
+    (name "rust-encode-unicode")
+    (version "1.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "encode_unicode" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1h5j7j7byi289by63s3w4a8b3g6l5ccdrws7a67nn07vdxj77ail"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-ascii" ,rust-ascii-1))))
+    (home-page "https://github.com/tormol/encode_unicode")
+    (synopsis
+     "UTF-8 and UTF-16 character types, iterators and related methods for char, u8 and u16.")
+    (description
+     "This package provides UTF-8 and UTF-16 character types, iterators and related methods for char, u8 and
+u16.")
+    (license (list license:asl2.0 license:expat))))
+
+(define-public rust-console-0.15
+  (package
+    (name "rust-console")
+    (version "0.15.10")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "console" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "06q4ag46machxp5w381x1v9l2g7d801q6sawvxcpidarh36nwg7a"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-encode-unicode" ,rust-encode-unicode-1)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-unicode-width" ,rust-unicode-width-0.2)
+                       ("rust-windows-sys" ,rust-windows-sys-0.59))))
+    (home-page "https://github.com/console-rs/console")
+    (synopsis "terminal and console abstraction for Rust")
+    (description
+     "This package provides a terminal and console abstraction for Rust.")
+    (license license:expat)))
+
+(define-public rust-unicode-truncate-1
+  (package
+    (name "rust-unicode-truncate")
+    (version "1.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "unicode-truncate" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1gr7arjjhrhy8dww7hj8qqlws97xf9d276svr4hs6pxgllklcr5k"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-itertools" ,rust-itertools-0.13)
+                       ("rust-unicode-segmentation" ,rust-unicode-segmentation-1)
+                       ("rust-unicode-width" ,rust-unicode-width-0.1))))
+    (home-page "https://github.com/Aetf/unicode-truncate")
+    (synopsis
+     "Unicode-aware algorithm to pad or truncate `str` in terms of displayed width.")
+    (description
+     "This package provides Unicode-aware algorithm to pad or truncate `str` in terms of displayed width.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-termion-4
+  (package
+    (name "rust-termion")
+    (version "4.0.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "termion" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "19r3r56cfhl2qvlphw1vrwga37la16rdi15q1d7wz8ji1rb9iaky"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-libc" ,rust-libc-0.2)
+                       ("rust-libredox" ,rust-libredox-0.1)
+                       ("rust-numtoa" ,rust-numtoa-0.2)
+                       ("rust-redox-termios" ,rust-redox-termios-0.1)
+                       ("rust-serde" ,rust-serde-1))))
+    (home-page "https://gitlab.redox-os.org/redox-os/termion")
+    (synopsis "bindless library for manipulating terminals.")
+    (description
+     "This package provides a bindless library for manipulating terminals.")
+    (license license:expat)))
+
+(define-public rust-strum-macros-0.26
+  (package
+    (name "rust-strum-macros")
+    (version "0.26.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "strum_macros" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1gl1wmq24b8md527cpyd5bw9rkbqldd7k1h38kf5ajd2ln2ywssc"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-heck" ,rust-heck-0.5)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-rustversion" ,rust-rustversion-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://github.com/Peternator7/strum")
+    (synopsis "Helpful macros for working with enums and strings")
+    (description
+     "This package provides Helpful macros for working with enums and strings.")
+    (license license:expat)))
+
+(define-public rust-syn-2
+  (package
+    (name "rust-syn")
+    (version "2.0.94")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "syn" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1wvigzkkcbxhvwyzvyk86iabjh3x835f41mx2q1b3a6y3jzc0ywq"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-unicode-ident" ,rust-unicode-ident-1))))
+    (home-page "https://github.com/dtolnay/syn")
+    (synopsis "Parser for Rust source code")
+    (description "This package provides Parser for Rust source code.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-proc-macro2-1
+  (package
+    (name "rust-proc-macro2")
+    (version "1.0.92")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "proc-macro2" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1c1vjy5wg8iy7kxsxda564qf4ljp0asysmbn2i7caj177x5m9lrp"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-unicode-ident" ,rust-unicode-ident-1))))
+    (home-page "https://github.com/dtolnay/proc-macro2")
+    (synopsis
+     "substitute implementation of the compiler's `proc_macro` API to decouple token-based libraries from the procedural macro use case.")
+    (description
+     "This package provides a substitute implementation of the compiler's `proc_macro`
+API to decouple token-based libraries from the procedural macro use case.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-pretty-assertions-1
+  (package
+    (name "rust-pretty-assertions")
+    (version "1.4.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "pretty_assertions" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0v8iq35ca4rw3rza5is3wjxwsf88303ivys07anc5yviybi31q9s"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-diff" ,rust-diff-0.1)
+                       ("rust-yansi" ,rust-yansi-1))))
+    (home-page
+     "https://github.com/rust-pretty-assertions/rust-pretty-assertions")
+    (synopsis
+     "Overwrite `assert_eq!` and `assert_ne!` with drop-in replacements, adding colorful diffs")
+    (description
+     "This package provides Overwrite `assert_eq!` and `assert_ne!` with drop-in replacements, adding
+colorful diffs.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-darling-macro-0.20
+  (package
+    (name "rust-darling-macro")
+    (version "0.20.10")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "darling_macro" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "01kq3ibbn47czijj39h3vxyw0c2ksd0jvc097smcrk7n2jjs4dnk"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-darling-core" ,rust-darling-core-0.20)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://github.com/TedDriggs/darling")
+    (synopsis
+     "Internal support for a proc-macro library for reading attributes into structs when
+implementing custom derives. Use https://crates.io/crates/darling in your code.")
+    (description
+     "This package provides Internal support for a proc-macro library for reading attributes into structs
+when implementing custom derives.  Use https://crates.io/crates/darling in your
+code.")
+    (license license:expat)))
+
+(define-public rust-darling-core-0.20
+  (package
+    (name "rust-darling-core")
+    (version "0.20.10")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "darling_core" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1rgr9nci61ahnim93yh3xy6fkfayh7sk4447hahawah3m1hkh4wm"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-fnv" ,rust-fnv-1)
+                       ("rust-ident-case" ,rust-ident-case-1)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-strsim" ,rust-strsim-0.11)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://github.com/TedDriggs/darling")
+    (synopsis
+     "Helper crate for proc-macro library for reading attributes into structs when
+implementing custom derives. Use https://crates.io/crates/darling in your code.")
+    (description
+     "This package provides Helper crate for proc-macro library for reading attributes into structs when
+implementing custom derives.  Use https://crates.io/crates/darling in your code.")
+    (license license:expat)))
+
+(define-public rust-darling-0.20
+  (package
+    (name "rust-darling")
+    (version "0.20.10")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "darling" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1299h2z88qn71mizhh05j26yr3ik0wnqmw11ijds89l8i9nbhqvg"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-darling-core" ,rust-darling-core-0.20)
+                       ("rust-darling-macro" ,rust-darling-macro-0.20))))
+    (home-page "https://github.com/TedDriggs/darling")
+    (synopsis "proc-macro library for reading attributes into structs when
+implementing custom derives.")
+    (description
+     "This package provides a proc-macro library for reading attributes into structs
+when implementing custom derives.")
+    (license license:expat)))
+
+(define-public rust-instability-0.3
+  (package
+    (name "rust-instability")
+    (version "0.3.5")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "instability" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0xfgw4afzbhr0v87xilscyc5dxmmcznghr6cr585jczpa5j113l9"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-darling" ,rust-darling-0.20)
+                       ("rust-indoc" ,rust-indoc-2)
+                       ("rust-pretty-assertions" ,rust-pretty-assertions-1)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://github.com/ratatui-org/instability")
+    (synopsis
+     "Rust API stability attributes for the rest of us. A fork of the `stability` crate")
+    (description
+     "This package provides Rust API stability attributes for the rest of us.  A fork of the `stability`
+crate.")
+    (license license:expat)))
+
+(define-public rust-signal-hook-mio-0.2
+  (package
+    (name "rust-signal-hook-mio")
+    (version "0.2.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "signal-hook-mio" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1k8pl9aafiadr4czsg8zal9b4jdk6kq5985p90i19jc5sh31mnrl"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-libc" ,rust-libc-0.2)
+                       ("rust-mio" ,rust-mio-0.8)
+                       ("rust-mio" ,rust-mio-1)
+                       ("rust-mio" ,rust-mio-0.7)
+                       ("rust-mio" ,rust-mio-0.6)
+                       ("rust-mio-uds" ,rust-mio-uds-0.6)
+                       ("rust-signal-hook" ,rust-signal-hook-0.3))))
+    (home-page "https://github.com/vorner/signal-hook")
+    (synopsis "MIO support for signal-hook")
+    (description "This package provides MIO support for signal-hook.")
+    (license (list license:asl2.0 license:expat))))
+
+(define-public rust-crossterm-0.28
+  (package
+    (name "rust-crossterm")
+    (version "0.28.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "crossterm" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1im9vs6fvkql0sr378dfr4wdm1rrkrvr22v4i8byz05k1dd9b7c2"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-crossterm-winapi" ,rust-crossterm-winapi-0.9)
+                       ("rust-filedescriptor" ,rust-filedescriptor-0.8)
+                       ("rust-futures-core" ,rust-futures-core-0.3)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-mio" ,rust-mio-1)
+                       ("rust-parking-lot" ,rust-parking-lot-0.12)
+                       ("rust-rustix" ,rust-rustix-0.38)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-signal-hook" ,rust-signal-hook-0.3)
+                       ("rust-signal-hook-mio" ,rust-signal-hook-mio-0.2)
+                       ("rust-winapi" ,rust-winapi-0.3))))
+    (home-page "https://github.com/crossterm-rs/crossterm")
+    (synopsis "crossplatform terminal library for manipulating terminals.")
+    (description
+     "This package provides a crossplatform terminal library for manipulating
+terminals.")
+    (license license:expat)))
+
+(define-public rust-sqlx-sqlite-0.7
+  (package
+    (name "rust-sqlx-sqlite")
+    (version "0.7.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sqlx-sqlite" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1ap0bb2hazbrdgd7mhnckdg9xcchx0k094di9gnhpnhlhh5fyi5j"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-atoi" ,rust-atoi-2)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-flume" ,rust-flume-0.11)
+                       ("rust-futures-channel" ,rust-futures-channel-0.3)
+                       ("rust-futures-core" ,rust-futures-core-0.3)
+                       ("rust-futures-executor" ,rust-futures-executor-0.3)
+                       ("rust-futures-intrusive" ,rust-futures-intrusive-0.5)
+                       ("rust-futures-util" ,rust-futures-util-0.3)
+                       ("rust-libsqlite3-sys" ,rust-libsqlite3-sys-0.27)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-percent-encoding" ,rust-percent-encoding-2)
+                       ("rust-regex" ,rust-regex-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-sqlx-core" ,rust-sqlx-core-0.7)
+                       ("rust-time" ,rust-time-0.3)
+                       ("rust-tracing" ,rust-tracing-0.1)
+                       ("rust-url" ,rust-url-2)
+                       ("rust-urlencoding" ,rust-urlencoding-2)
+                       ("rust-uuid" ,rust-uuid-1))))
+    (home-page "https://github.com/launchbadge/sqlx")
+    (synopsis
+     "SQLite driver implementation for SQLx. Not for direct use; see the `sqlx` crate for details")
+    (description
+     "This package provides SQLite driver implementation for SQLx.  Not for direct use; see the `sqlx` crate
+for details.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-sqlx-postgres-0.7
+  (package
+    (name "rust-sqlx-postgres")
+    (version "0.7.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sqlx-postgres" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0zjp30wj4n2f25dnb32vsg6jfpa3gw6dmfd0i5pr4kw91fw4x0kw"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-atoi" ,rust-atoi-2)
+                       ("rust-base64" ,rust-base64-0.21)
+                       ("rust-bigdecimal" ,rust-bigdecimal-0.3)
+                       ("rust-bit-vec" ,rust-bit-vec-0.6)
+                       ("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-byteorder" ,rust-byteorder-1)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-crc" ,rust-crc-3)
+                       ("rust-dotenvy" ,rust-dotenvy-0.15)
+                       ("rust-etcetera" ,rust-etcetera-0.8)
+                       ("rust-futures-channel" ,rust-futures-channel-0.3)
+                       ("rust-futures-core" ,rust-futures-core-0.3)
+                       ("rust-futures-io" ,rust-futures-io-0.3)
+                       ("rust-futures-util" ,rust-futures-util-0.3)
+                       ("rust-hex" ,rust-hex-0.4)
+                       ("rust-hkdf" ,rust-hkdf-0.12)
+                       ("rust-hmac" ,rust-hmac-0.12)
+                       ("rust-home" ,rust-home-0.5)
+                       ("rust-ipnetwork" ,rust-ipnetwork-0.20)
+                       ("rust-itoa" ,rust-itoa-1)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-mac-address" ,rust-mac-address-1)
+                       ("rust-md-5" ,rust-md-5-0.10)
+                       ("rust-memchr" ,rust-memchr-2)
+                       ("rust-num-bigint" ,rust-num-bigint-0.4)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-rand" ,rust-rand-0.8)
+                       ("rust-rust-decimal" ,rust-rust-decimal-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-serde-json" ,rust-serde-json-1)
+                       ("rust-sha2" ,rust-sha2-0.10)
+                       ("rust-smallvec" ,rust-smallvec-1)
+                       ("rust-sqlx-core" ,rust-sqlx-core-0.7)
+                       ("rust-stringprep" ,rust-stringprep-0.1)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-time" ,rust-time-0.3)
+                       ("rust-tracing" ,rust-tracing-0.1)
+                       ("rust-uuid" ,rust-uuid-1)
+                       ("rust-whoami" ,rust-whoami-1))))
+    (home-page "https://github.com/launchbadge/sqlx")
+    (synopsis
+     "PostgreSQL driver implementation for SQLx. Not for direct use; see the `sqlx` crate for details")
+    (description
+     "This package provides @code{PostgreSQL} driver implementation for SQLx.  Not for direct use; see the
+`sqlx` crate for details.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-sqlx-mysql-0.7
+  (package
+    (name "rust-sqlx-mysql")
+    (version "0.7.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sqlx-mysql" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "066lxhb80xgb8r5m2yy3a7ydjvp0b6wsk9s7whwfa83d46817lqy"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-atoi" ,rust-atoi-2)
+                       ("rust-base64" ,rust-base64-0.21)
+                       ("rust-bigdecimal" ,rust-bigdecimal-0.3)
+                       ("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-byteorder" ,rust-byteorder-1)
+                       ("rust-bytes" ,rust-bytes-1)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-crc" ,rust-crc-3)
+                       ("rust-digest" ,rust-digest-0.10)
+                       ("rust-dotenvy" ,rust-dotenvy-0.15)
+                       ("rust-either" ,rust-either-1)
+                       ("rust-futures-channel" ,rust-futures-channel-0.3)
+                       ("rust-futures-core" ,rust-futures-core-0.3)
+                       ("rust-futures-io" ,rust-futures-io-0.3)
+                       ("rust-futures-util" ,rust-futures-util-0.3)
+                       ("rust-generic-array" ,rust-generic-array-0.14)
+                       ("rust-hex" ,rust-hex-0.4)
+                       ("rust-hkdf" ,rust-hkdf-0.12)
+                       ("rust-hmac" ,rust-hmac-0.12)
+                       ("rust-itoa" ,rust-itoa-1)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-md-5" ,rust-md-5-0.10)
+                       ("rust-memchr" ,rust-memchr-2)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-percent-encoding" ,rust-percent-encoding-2)
+                       ("rust-rand" ,rust-rand-0.8)
+                       ("rust-rsa" ,rust-rsa-0.9)
+                       ("rust-rust-decimal" ,rust-rust-decimal-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-sha1" ,rust-sha1-0.10)
+                       ("rust-sha2" ,rust-sha2-0.10)
+                       ("rust-smallvec" ,rust-smallvec-1)
+                       ("rust-sqlx-core" ,rust-sqlx-core-0.7)
+                       ("rust-stringprep" ,rust-stringprep-0.1)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-time" ,rust-time-0.3)
+                       ("rust-tracing" ,rust-tracing-0.1)
+                       ("rust-uuid" ,rust-uuid-1)
+                       ("rust-whoami" ,rust-whoami-1))))
+    (home-page "https://github.com/launchbadge/sqlx")
+    (synopsis
+     "MySQL driver implementation for SQLx. Not for direct use; see the `sqlx` crate for details")
+    (description
+     "This package provides @code{MySQL} driver implementation for SQLx.  Not for direct use; see the `sqlx`
+crate for details.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-sqlx-macros-core-0.7
+  (package
+    (name "rust-sqlx-macros-core")
+    (version "0.7.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sqlx-macros-core" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1j7k0fw7n6pgabqnj6cbp8s3rmd3yvqr4chjj878cvd1m99yycsq"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-async-std" ,rust-async-std-1)
+                       ("rust-dotenvy" ,rust-dotenvy-0.15)
+                       ("rust-either" ,rust-either-1)
+                       ("rust-heck" ,rust-heck-0.4)
+                       ("rust-hex" ,rust-hex-0.4)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-serde-json" ,rust-serde-json-1)
+                       ("rust-sha2" ,rust-sha2-0.10)
+                       ("rust-sqlx-core" ,rust-sqlx-core-0.7)
+                       ("rust-sqlx-mysql" ,rust-sqlx-mysql-0.7)
+                       ("rust-sqlx-postgres" ,rust-sqlx-postgres-0.7)
+                       ("rust-sqlx-sqlite" ,rust-sqlx-sqlite-0.7)
+                       ("rust-syn" ,rust-syn-1)
+                       ("rust-tempfile" ,rust-tempfile-3)
+                       ("rust-tokio" ,rust-tokio-1)
+                       ("rust-url" ,rust-url-2))))
+    (home-page "https://github.com/launchbadge/sqlx")
+    (synopsis
+     "Macro support core for SQLx, the Rust SQL toolkit. Not intended to be used directly")
+    (description
+     "This package provides Macro support core for SQLx, the Rust SQL toolkit.  Not intended to be used
+directly.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-sqlx-macros-0.7
+  (package
+    (name "rust-sqlx-macros")
+    (version "0.7.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sqlx-macros" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "09rih250868nfkax022y5dyk24a7qfw6scjy3sgalbzb8lihx92f"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-sqlx-core" ,rust-sqlx-core-0.7)
+                       ("rust-sqlx-macros-core" ,rust-sqlx-macros-core-0.7)
+                       ("rust-syn" ,rust-syn-1))))
+    (home-page "https://github.com/launchbadge/sqlx")
+    (synopsis
+     "Macros for SQLx, the rust SQL toolkit. Not intended to be used directly")
+    (description
+     "This package provides Macros for SQLx, the rust SQL toolkit.  Not intended to be used directly.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-sqlformat-0.2
+  (package
+    (name "rust-sqlformat")
+    (version "0.2.6")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sqlformat" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "14470h40gn0f6jw9xxzbpwh5qy1fgvkhkfz8xjyzgi0cvf9kmfkv"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-nom" ,rust-nom-7)
+                       ("rust-unicode-categories" ,rust-unicode-categories-0.1))))
+    (home-page "https://github.com/shssoichiro/sqlformat-rs")
+    (synopsis "Formats whitespace in a SQL string to make it easier to read")
+    (description
+     "This package provides Formats whitespace in a SQL string to make it easier to read.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-futures-intrusive-0.5
+  (package
+    (name "rust-futures-intrusive")
+    (version "0.5.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "futures-intrusive" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0vwm08d1pli6bdaj0i7xhk3476qlx4pll6i0w03gzdnh7lh0r4qx"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-futures-core" ,rust-futures-core-0.3)
+                       ("rust-lock-api" ,rust-lock-api-0.4)
+                       ("rust-parking-lot" ,rust-parking-lot-0.12))))
+    (home-page "https://github.com/Matthias247/futures-intrusive")
+    (synopsis
+     "Futures based on intrusive data structures - for std and no-std environments.")
+    (description
+     "This package provides Futures based on intrusive data structures - for std and no-std environments.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-sqlx-core-0.7
+  (package
+    (name "rust-sqlx-core")
+    (version "0.7.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sqlx-core" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1xiyr35dq10sf7lq00291svcj9wbaaz1ihandjmrng9a6jlmkfi4"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-ahash" ,rust-ahash-0.8)
+                       ("rust-async-io" ,rust-async-io-1)
+                       ("rust-async-std" ,rust-async-std-1)
+                       ("rust-atoi" ,rust-atoi-2)
+                       ("rust-bigdecimal" ,rust-bigdecimal-0.3)
+                       ("rust-bit-vec" ,rust-bit-vec-0.6)
+                       ("rust-bstr" ,rust-bstr-1)
+                       ("rust-byteorder" ,rust-byteorder-1)
+                       ("rust-bytes" ,rust-bytes-1)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-crc" ,rust-crc-3)
+                       ("rust-crossbeam-queue" ,rust-crossbeam-queue-0.3)
+                       ("rust-digest" ,rust-digest-0.10)
+                       ("rust-either" ,rust-either-1)
+                       ("rust-encoding-rs" ,rust-encoding-rs-0.8)
+                       ("rust-event-listener" ,rust-event-listener-2)
+                       ("rust-futures-channel" ,rust-futures-channel-0.3)
+                       ("rust-futures-core" ,rust-futures-core-0.3)
+                       ("rust-futures-intrusive" ,rust-futures-intrusive-0.5)
+                       ("rust-futures-io" ,rust-futures-io-0.3)
+                       ("rust-futures-util" ,rust-futures-util-0.3)
+                       ("rust-hashlink" ,rust-hashlink-0.8)
+                       ("rust-hex" ,rust-hex-0.4)
+                       ("rust-indexmap" ,rust-indexmap-2)
+                       ("rust-ipnetwork" ,rust-ipnetwork-0.20)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-mac-address" ,rust-mac-address-1)
+                       ("rust-memchr" ,rust-memchr-2)
+                       ("rust-native-tls" ,rust-native-tls-0.2)
+                       ("rust-num-bigint" ,rust-num-bigint-0.4)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-paste" ,rust-paste-1)
+                       ("rust-percent-encoding" ,rust-percent-encoding-2)
+                       ("rust-regex" ,rust-regex-1)
+                       ("rust-rust-decimal" ,rust-rust-decimal-1)
+                       ("rust-rustls" ,rust-rustls-0.21)
+                       ("rust-rustls-pemfile" ,rust-rustls-pemfile-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-serde-json" ,rust-serde-json-1)
+                       ("rust-sha1" ,rust-sha1-0.10)
+                       ("rust-sha2" ,rust-sha2-0.10)
+                       ("rust-smallvec" ,rust-smallvec-1)
+                       ("rust-sqlformat" ,rust-sqlformat-0.2)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-time" ,rust-time-0.3)
+                       ("rust-tokio" ,rust-tokio-1)
+                       ("rust-tokio-stream" ,rust-tokio-stream-0.1)
+                       ("rust-tracing" ,rust-tracing-0.1)
+                       ("rust-url" ,rust-url-2)
+                       ("rust-uuid" ,rust-uuid-1)
+                       ("rust-webpki-roots" ,rust-webpki-roots-0.25))))
+    (home-page "https://github.com/launchbadge/sqlx")
+    (synopsis
+     "Core of SQLx, the rust SQL toolkit. Not intended to be used directly")
+    (description
+     "This package provides Core of SQLx, the rust SQL toolkit.  Not intended to be used directly.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-sqlx-0.7
+  (package
+    (name "rust-sqlx")
+    (version "0.7.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "sqlx" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1ahadprvyhjraq0c5712x3kdkp1gkwfm9nikrmcml2h03bzwr8n9"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-sqlx-core" ,rust-sqlx-core-0.7)
+                       ("rust-sqlx-macros" ,rust-sqlx-macros-0.7)
+                       ("rust-sqlx-mysql" ,rust-sqlx-mysql-0.7)
+                       ("rust-sqlx-postgres" ,rust-sqlx-postgres-0.7)
+                       ("rust-sqlx-sqlite" ,rust-sqlx-sqlite-0.7))))
+    (home-page "https://github.com/launchbadge/sqlx")
+    (synopsis
+     "ð§° The Rust SQL Toolkit. An async, pure Rust SQL crate featuring compile-time checked queries without a DSL. Supports PostgreSQL, MySQL, and SQLite")
+    (description
+     "This package provides ð§° The Rust SQL Toolkit.  An async, pure Rust SQL crate featuring compile-time
+checked queries without a DSL. Supports @code{PostgreSQL}, @code{MySQL}, and
+SQLite.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-castaway-0.2
+  (package
+    (name "rust-castaway")
+    (version "0.2.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "castaway" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1mf0wypwnkpa1hi0058vp8g7bjh2qraip2qv7dmak7mg1azfkfha"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-rustversion" ,rust-rustversion-1))))
+    (home-page "https://github.com/sagebind/castaway")
+    (synopsis
+     "Safe, zero-cost downcasting for limited compile-time specialization")
+    (description
+     "This package provides Safe, zero-cost downcasting for limited compile-time specialization.")
+    (license license:expat)))
+
+(define-public rust-compact-str-0.8
+  (package
+    (name "rust-compact-str")
+    (version "0.8.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "compact_str" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0cmgp61hw4fwaakhilwznfgncw2p4wkbvz6dw3i7ibbckh3c8y9v"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arbitrary" ,rust-arbitrary-1)
+                       ("rust-borsh" ,rust-borsh-1)
+                       ("rust-bytes" ,rust-bytes-1)
+                       ("rust-castaway" ,rust-castaway-0.2)
+                       ("rust-cfg-if" ,rust-cfg-if-1)
+                       ("rust-diesel" ,rust-diesel-2)
+                       ("rust-itoa" ,rust-itoa-1)
+                       ("rust-markup" ,rust-markup-0.13)
+                       ("rust-proptest" ,rust-proptest-1)
+                       ("rust-quickcheck" ,rust-quickcheck-1)
+                       ("rust-rkyv" ,rust-rkyv-0.7)
+                       ("rust-rustversion" ,rust-rustversion-1)
+                       ("rust-ryu" ,rust-ryu-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-smallvec" ,rust-smallvec-1)
+                       ("rust-sqlx" ,rust-sqlx-0.7)
+                       ("rust-static-assertions" ,rust-static-assertions-1))))
+    (home-page "https://github.com/ParkMyCar/compact_str")
+    (synopsis
+     "memory efficient string type that transparently stores strings on the stack, when possible")
+    (description
+     "This package provides a memory efficient string type that transparently stores
+strings on the stack, when possible.")
+    (license license:expat)))
+
+(define-public rust-ratatui-0.28
+  (package
+    (name "rust-ratatui")
+    (version "0.28.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "ratatui" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0zd5pgx1x2bda83mjw0z2skad6rlckcz9gaq1n4jy4n0wndpzvzx"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-cassowary" ,rust-cassowary-0.3)
+                       ("rust-compact-str" ,rust-compact-str-0.8)
+                       ("rust-crossterm" ,rust-crossterm-0.28)
+                       ("rust-document-features" ,rust-document-features-0.2)
+                       ("rust-instability" ,rust-instability-0.3)
+                       ("rust-itertools" ,rust-itertools-0.13)
+                       ("rust-lru" ,rust-lru-0.12)
+                       ("rust-palette" ,rust-palette-0.7)
+                       ("rust-paste" ,rust-paste-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-strum" ,rust-strum-0.26)
+                       ("rust-strum-macros" ,rust-strum-macros-0.26)
+                       ("rust-termion" ,rust-termion-4)
+                       ("rust-termwiz" ,rust-termwiz-0.22)
+                       ("rust-time" ,rust-time-0.3)
+                       ("rust-unicode-segmentation" ,rust-unicode-segmentation-1)
+                       ("rust-unicode-truncate" ,rust-unicode-truncate-1)
+                       ("rust-unicode-width" ,rust-unicode-width-0.1))))
+    (home-page "https://ratatui.rs")
+    (synopsis "library that's all about cooking up terminal user interfaces")
+    (description
+     "This package provides a library that's all about cooking up terminal user
+interfaces.")
+    (license license:expat)))
+
+(define-public rust-ansi-to-tui-6
+  (package
+    (name "rust-ansi-to-tui")
+    (version "6.0.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "ansi-to-tui" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0ixs2j9mdgnxa9f20ziak69m9s3gxs6g0nkhd35rx33hvxqfw0fd"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-nom" ,rust-nom-7)
+                       ("rust-ratatui" ,rust-ratatui-0.28)
+                       ("rust-simdutf8" ,rust-simdutf8-0.1)
+                       ("rust-smallvec" ,rust-smallvec-1)
+                       ("rust-thiserror" ,rust-thiserror-1))))
+    (home-page "https://github.com/uttarayan21/ansi-to-tui")
+    (synopsis
+     "library to convert ansi color coded text into ratatui::text::Text type from ratatui library")
+    (description
+     "This package provides a library to convert ansi color coded text into
+ratatui::text::Text type from ratatui library.")
+    (license license:expat)))
