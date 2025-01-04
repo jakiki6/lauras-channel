@@ -539,34 +539,6 @@ through it's psuedoterminal.")
     (description "Converts markdown into roff (man pages).")
     (license license:expat)))
 
-(define-public go-github-com-spf13-cobra
-  (package
-    (name "go-github-com-spf13-cobra")
-    (version "1.8.1")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/spf13/cobra")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0brbyy5mc6n2j6m6q1xyswh907vxd3wdzvgaci45swgj0747lcf8"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:import-path "github.com/spf13/cobra"))
-    (propagated-inputs (list go-gopkg-in-yaml-v3 go-github-com-spf13-pflag
-                             go-github-com-inconshreveable-mousetrap
-                             go-github-com-cpuguy83-go-md2man-v2))
-    (home-page "https://github.com/spf13/cobra")
-    (synopsis "Overview")
-    (description
-     "Package cobra is a commander providing a simple interface to create powerful
-modern CLI interfaces.  In addition to providing an interface, Cobra
-simultaneously provides a controller to organize your application code.")
-    (license license:asl2.0)))
-
 (define-public go-github-com-evanw-esbuild-internal
   (package
     (name "go-github-com-evanw-esbuild-internal")

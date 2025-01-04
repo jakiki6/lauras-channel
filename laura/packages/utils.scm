@@ -1416,6 +1416,50 @@ needs to be signed in the boot chain.")
      "CLI around Astal to scaffold and run projects")
     (license license:gpl3)))
 
+(define-public astral-io
+  (package
+    (name "astral-io")
+    (version "0.0.0-a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/Aylur/astal")
+              (commit "a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1m78w5llnbg6cdcd8yabknn7sz7527rn8h6lgm1wfz3c896y6qz0"))))
+    (build-system meson-build-system)
+    (inputs (list glib))
+    (native-inputs (list vala pkg-config gobject-introspection))
+    (arguments (list #:phases #~(modify-phases %standard-phases
+      (add-before 'configure 'chdir (lambda _ (chdir "lib/astal/io"))))))
+    (home-page "https://aylur.github.io/astal/")
+    (synopsis "Building blocks for creating custom desktop shells")
+    (description "Building blocks for creating custom desktop shells")
+    (license license:lgpl2.1)))
+
+(define-public astral-gtk3
+  (package
+    (name "astral-gtk3")
+    (version "0.0.0-a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/Aylur/astal")
+              (commit "a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1m78w5llnbg6cdcd8yabknn7sz7527rn8h6lgm1wfz3c896y6qz0"))))
+    (build-system meson-build-system)
+    (inputs (list astral-io gtk+ gtk-layer-shell))
+    (native-inputs (list vala pkg-config gobject-introspection))
+    (arguments (list #:phases #~(modify-phases %standard-phases
+      (add-before 'configure 'chdir (lambda _ (chdir "lib/astal/gtk3"))))))
+    (home-page "https://aylur.github.io/astal/")
+    (synopsis "Building blocks for creating custom desktop shells")
+    (description "Building blocks for creating custom desktop shells")
+    (license license:lgpl2.1)))
+
 (define-public hyprpanel
   (package
     (name "hyprpanel")
@@ -1429,7 +1473,8 @@ needs to be signed in the boot chain.")
         (file-name (git-file-name name version))
         (sha256 (base32 "0y25ns6nizszq0h5d31ihsjcaxpsp1cc5a5ixklcdq3x8r7gsrnq"))))
     (build-system meson-build-system)
-    (native-inputs (list ags))
+    (inputs (list astral-gtk3 astral-io))
+    (native-inputs (list ags gjs))
     (home-page "https://www.gnu.org/software/hello/")
     (synopsis "A Bar/Panel for Hyprland with extensive customizability.")
     (description "A panel built for Hyprland with Astal")
