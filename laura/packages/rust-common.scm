@@ -9217,37 +9217,6 @@ code more explicit, and allows using turbofish syntax.")
      "This package provides Bindings to the @code{QuartzCore/CoreAnimation} framework.")
     (license license:expat)))
 
-(define-public rust-object-0.36
-  (package
-    (name "rust-object")
-    (version "0.36.4")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "object" version))
-       (file-name (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32 "02h7k38dwi8rndc3y81n6yjxijbss99p2jm9c0b6ak5c45c1lkq8"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build? #t
-       #:cargo-inputs (("rust-compiler-builtins" ,rust-compiler-builtins-0.1)
-                       ("rust-crc32fast" ,rust-crc32fast-1)
-                       ("rust-flate2" ,rust-flate2-1)
-                       ("rust-hashbrown" ,rust-hashbrown-0.14)
-                       ("rust-indexmap" ,rust-indexmap-2)
-                       ("rust-memchr" ,rust-memchr-2)
-                       ("rust-rustc-std-workspace-alloc" ,rust-rustc-std-workspace-alloc-1)
-                       ("rust-rustc-std-workspace-core" ,rust-rustc-std-workspace-core-1)
-                       ("rust-ruzstd" ,rust-ruzstd-0.7)
-                       ("rust-wasmparser" ,rust-wasmparser-0.216))))
-    (home-page "https://github.com/gimli-rs/object")
-    (synopsis "unified interface for reading and writing object file formats.")
-    (description
-     "This package provides a unified interface for reading and writing object file
-formats.")
-    (license (list license:asl2.0 license:expat))))
-
 (define-public rust-object-0.35
   (package
     (name "rust-object")
@@ -16905,27 +16874,6 @@ support for Unicode and emojis as well as machine hyphenation.")
     (description "This package provides Terminal background color detection.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-libc-0.2
-  (package
-    (name "rust-libc")
-    (version "0.2.169")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "libc" version))
-       (file-name (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32 "02m253hs8gw0m1n8iyrsc4n15yzbqwhddi7w1l0ds7i92kdsiaxm"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build? #t
-       #:cargo-inputs (("rust-rustc-std-workspace-core" ,rust-rustc-std-workspace-core-1))))
-    (home-page "https://github.com/rust-lang/libc")
-    (synopsis "Raw FFI bindings to platform libraries like libc.")
-    (description
-     "This package provides Raw FFI bindings to platform libraries like libc.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-sysinfo-0.32
   (package
     (name "rust-sysinfo")
@@ -17337,31 +17285,6 @@ u16.")
     (description
      "This package provides a substitute implementation of the compiler's `proc_macro`
 API to decouple token-based libraries from the procedural macro use case.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-pretty-assertions-1
-  (package
-    (name "rust-pretty-assertions")
-    (version "1.4.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "pretty_assertions" version))
-       (file-name (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32 "0v8iq35ca4rw3rza5is3wjxwsf88303ivys07anc5yviybi31q9s"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build? #t
-       #:cargo-inputs (("rust-diff" ,rust-diff-0.1)
-                       ("rust-yansi" ,rust-yansi-1))))
-    (home-page
-     "https://github.com/rust-pretty-assertions/rust-pretty-assertions")
-    (synopsis
-     "Overwrite `assert_eq!` and `assert_ne!` with drop-in replacements, adding colorful diffs")
-    (description
-     "This package provides Overwrite `assert_eq!` and `assert_ne!` with drop-in replacements, adding
-colorful diffs.")
     (license (list license:expat license:asl2.0))))
 
 (define-public rust-darling-macro-0.20
