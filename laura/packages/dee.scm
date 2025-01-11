@@ -6,6 +6,7 @@
                 #:prefix license:)
   #:use-module (gnu packages crypto)
   #:use-module (gnu packages crates-io)
+  #:use-module (gnu packages crates-compression)
   #:use-module (laura packages rust-common))
 
 (define-public drand-rs

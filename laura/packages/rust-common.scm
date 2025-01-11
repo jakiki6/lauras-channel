@@ -13,6 +13,9 @@
   #:use-module (gnu packages crates-crypto)
   #:use-module (gnu packages crates-tls)
   #:use-module (gnu packages crates-io)
+  #:use-module (gnu packages crates-compression)
+  #:use-module (gnu packages crates-check)
+  #:use-module (gnu packages crates-database)
   #:use-module (gnu packages crypto))
 
 (define-public rust-accesskit-0.12
@@ -9598,7 +9601,7 @@ Learning Inferencing.")
                        ("rust-log" ,rust-log-0.4.21)
                        ("rust-ncurses" ,rust-ncurses-5)
                        ("rust-pdcurses-sys" ,rust-pdcurses-sys-0.7)
-                       ("rust-winreg" ,rust-winreg-0.5))))
+                       ("rust-winreg" ,rust-winreg-0.52))))
     (home-page "https://github.com/ihalila/pancurses")
     (synopsis
      "pancurses is a curses libary for Rust that supports both Unix and Windows
@@ -17957,3 +17960,253 @@ interfaces.")
      "This package provides a library to convert ansi color coded text into
 ratatui::text::Text type from ratatui library.")
     (license license:expat)))
+
+(define-public rust-pdcurses-sys-0.7
+  (package
+    (name "rust-pdcurses-sys")
+    (version "0.7.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "pdcurses-sys" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0sqn552nz33bmd0d8lcx862lrbxg6fgk5djfblig2q7zjqkx4k88"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-cc" ,rust-cc-1)
+                       ("rust-libc" ,rust-libc-0.2))))
+    (home-page "https://github.com/ihalila/pdcurses-sys")
+    (synopsis
+     "FFI bindings for PDCurses, specifically the win32a implementation")
+    (description
+     "This package provides FFI bindings for PDCurses, specifically the win32a implementation.")
+    (license license:expat)))
+
+(define-public rust-data-url-0.2
+  (package
+    (name "rust-data-url")
+    (version "0.2.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "data-url" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "19828d6jby17ghi7vr0zia9sy3hlvvjbngrcsllmfh2zfg1kjx4d"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-development-inputs (("rust-serde" ,rust-serde-1)
+                                   ("rust-serde-json" ,rust-serde-json-1)
+                                   ("rust-tester" ,rust-tester-0.9))))
+    (home-page "https://github.com/servo/rust-url")
+    (synopsis "Processing of data: URL according to WHATWGâs Fetch Standard")
+    (description
+     "This package provides Processing of data: URL according to WHATWGâs Fetch Standard.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-rctree-0.5
+  (package
+    (name "rust-rctree")
+    (version "0.5.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "rctree" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0kvzahkwriawhjjb08ai7rfi77px7rpx5h83hjcx6dccyxzf4hiv"))))
+    (build-system cargo-build-system)
+    (home-page "https://github.com/RazrFalcon/rctree")
+    (synopsis "'DOM-like' tree implemented using reference counting")
+    (description
+     "This package provides a DOM-like tree implemented using reference counting.")
+    (license license:expat)))
+
+(define-public rust-pq-src-0.3
+  (package
+    (name "rust-pq-src")
+    (version "0.3.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "pq-src" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1is8344ffcpv7raym9h4n0dz06sxyr9n4vhcrb850ghxpx7z9yr8"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-cc" ,rust-cc-1)
+                       ("rust-openssl-sys" ,rust-openssl-sys-0.9))))
+    (home-page "https://github.com/sgrif/pq-sys")
+    (synopsis "Bundled version of libpq")
+    (description "This package provides Bundled version of libpq.")
+    (license license:expat)))
+
+(define-public rust-openssl-src-300
+  (package
+    (name "rust-openssl-src")
+    (version "300.4.1+3.4.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "openssl-src" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1337svym5imvq9ww04xh0ss38krhbhfb7l92ar5l2qlc2g2fm97s"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-cc" ,rust-cc-1))))
+    (home-page "https://github.com/alexcrichton/openssl-src-rs")
+    (synopsis "Source of OpenSSL and logic to build it.")
+    (description
+     "This package provides Source of @code{OpenSSL} and logic to build it.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-mysqlclient-src-0.1
+  (package
+    (name "rust-mysqlclient-src")
+    (version "0.1.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "mysqlclient-src" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "15f64s43af0z6608mja7q7wzxiakbsxgad2f4ffpw89g8ppfxjac"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-cmake" ,rust-cmake-0.1)
+                       ("rust-link-cplusplus" ,rust-link-cplusplus-1)
+                       ("rust-openssl-src" ,rust-openssl-src-300)
+                       ("rust-openssl-sys" ,rust-openssl-sys-0.9))))
+    (home-page "https://github.com/sgrif/mysqlclient-sys")
+    (synopsis "Bundled version of libmysqlclient")
+    (description "This package provides Bundled version of libmysqlclient.")
+    (license license:gpl2)))
+
+(define-public rust-dsl-auto-type-0.1
+  (package
+    (name "rust-dsl-auto-type")
+    (version "0.1.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "dsl_auto_type" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "01xng43pn2dlc5k422is20dapq14w9x1p46qq968c0s167kapnf5"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-darling" ,rust-darling-0.20)
+                       ("rust-either" ,rust-either-1)
+                       ("rust-heck" ,rust-heck-0.5)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://diesel.rs")
+    (synopsis
+     "Automatically expand query fragment types for factoring as functions")
+    (description
+     "This package provides Automatically expand query fragment types for factoring as functions.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-diesel-table-macro-syntax-0.2
+  (package
+    (name "rust-diesel-table-macro-syntax")
+    (version "0.2.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "diesel_table_macro_syntax" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "09gvkyljhchbxfkxlkkrdcqcmcxwsim9sfljqilbq4x485b77710"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-syn" ,rust-syn-2))))
+    (home-page "https://diesel.rs")
+    (synopsis "Internal diesel crate")
+    (description "This package provides Internal diesel crate.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-diesel-derives-2
+  (package
+    (name "rust-diesel-derives")
+    (version "2.2.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "diesel_derives" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "191iw5ja7s1gjy9ymjvv91ghzbvs2fb5ca28lvr6pfp2a7gc7wp7"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-diesel-table-macro-syntax" ,rust-diesel-table-macro-syntax-0.2)
+                       ("rust-dsl-auto-type" ,rust-dsl-auto-type-0.1)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://diesel.rs")
+    (synopsis
+     "You should not use this crate directly, it is internal to Diesel")
+    (description
+     "This package provides You should not use this crate directly, it is internal to Diesel.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-diesel-2
+  (package
+    (name "rust-diesel")
+    (version "2.2.6")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "diesel" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "04kxz9gss7wzis30bcgplxx8xkm635dx2vd30hr69ffdckgvxwfc"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-bigdecimal" ,rust-bigdecimal-0.1)
+                       ("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-byteorder" ,rust-byteorder-1)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-diesel-derives" ,rust-diesel-derives-2)
+                       ("rust-ipnet" ,rust-ipnet-2)
+                       ("rust-ipnetwork" ,rust-ipnetwork-0.17)
+                       ("rust-itoa" ,rust-itoa-1)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-libsqlite3-sys" ,rust-libsqlite3-sys-0.20)
+                       ("rust-mysqlclient-src" ,rust-mysqlclient-src-0.1)
+                       ("rust-mysqlclient-sys" ,rust-mysqlclient-sys-0.2)
+                       ("rust-num-bigint" ,rust-num-bigint-0.2)
+                       ("rust-num-integer" ,rust-num-integer-0.1)
+                       ("rust-num-traits" ,rust-num-traits-0.2)
+                       ("rust-percent-encoding" ,rust-percent-encoding-2)
+                       ("rust-pq-src" ,rust-pq-src-0.3)
+                       ("rust-pq-sys" ,rust-pq-sys-0.4)
+                       ("rust-quickcheck" ,rust-quickcheck-1)
+                       ("rust-r2d2" ,rust-r2d2-0.8)
+                       ("rust-serde-json" ,rust-serde-json-0.9)
+                       ("rust-time" ,rust-time-0.3)
+                       ("rust-url" ,rust-url-2)
+                       ("rust-uuid" ,rust-uuid-0.7))
+       #:cargo-development-inputs (("rust-cfg-if" ,rust-cfg-if-1)
+                                   ("rust-dotenvy" ,rust-dotenvy-0.15)
+                                   ("rust-ipnetwork" ,rust-ipnetwork-0.17)
+                                   ("rust-quickcheck" ,rust-quickcheck-1)
+                                   ("rust-tempfile" ,rust-tempfile-3))))
+    (home-page "https://diesel.rs")
+    (synopsis
+     "safe, extensible ORM and Query Builder for PostgreSQL, SQLite, and MySQL")
+    (description
+     "This package provides a safe, extensible ORM and Query Builder for
+@code{PostgreSQL}, SQLite, and @code{MySQL}.")
+    (license (list license:expat license:asl2.0))))

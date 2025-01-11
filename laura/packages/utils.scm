@@ -13,6 +13,7 @@
   #:use-module (gnu packages crates-graphics)
   #:use-module (gnu packages crates-web)
   #:use-module (gnu packages crates-windows)
+  #:use-module (gnu packages crates-check)
   #:use-module (gnu packages protobuf)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls)
