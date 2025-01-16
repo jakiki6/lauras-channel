@@ -1523,3 +1523,24 @@ needs to be signed in the boot chain.")
     (synopsis "Analyze ELF binaries like a boss")
     (description "This package provides Analyze ELF binaries like a boss.")
     (license (list license:expat license:asl2.0))))
+
+(define-public mbw
+  (package
+    (name "mbw")
+    (version "2.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "http://github.com/raas/mbw")
+              (commit "v2.0")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0p3lpa9bmix1za53q0n77swp4bx4myasz53wqspf62q52hwsxx50"))))
+    (build-system cmake-build-system)
+    (arguments (list 
+                     #:tests? #f
+                     #:build-type "Release"))
+    (home-page " http://github.com/raas/mbw")
+    (synopsis "Memory Bandwidth Benchmark")
+    (description "MBW determines the \"copy\" memory bandwidth available to userspace programs. Its simplistic approach models that of real applications. It is not tuned to extremes and it is not aware of hardware architecture, just like your average software package.")
+    (license license:gpl3)))
