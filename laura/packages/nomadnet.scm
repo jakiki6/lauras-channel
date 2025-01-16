@@ -13,7 +13,7 @@
 (define-public nomadnet
   (package
     (name "nomadnet")
-    (version "0.5.3")
+    (version "0.5.6")
     (source
      (origin
        (method git-fetch)
@@ -21,7 +21,7 @@
              (url "https://github.com/markqvist/NomadNet")
              (commit version)))
        (sha256
-        (base32 "0nzjflxqv1vy16gsbj79pj6ab81iw8x8qmnjc3cjdf327mwx3g7c"))))
+        (base32 "0as00kl4zcf3czqhjxq4gdzmkyahl28f71dp3dnfa38cicjac33p"))))
     (build-system pyproject-build-system)
     (propagated-inputs (list python-lxmf python-qrcode python-rns python-urwid))
     (native-inputs (list python-setuptools python-wheel))
@@ -37,7 +37,7 @@
 (define-public python-lxmf
   (package
     (name "python-lxmf")
-    (version "0.5.3")
+    (version "0.5.8")
     (source
      (origin
        (method git-fetch)
@@ -45,7 +45,7 @@
              (url "https://github.com/markqvist/LXMF")
              (commit version)))
        (sha256
-        (base32 "1bsk2c73lz9vf5q36mmkzdwjcmgl6igd97n8scign6ri70gddhki"))))
+        (base32 "1zhxb3qcrgk78fah4ppcz1pg0mfzb9mg7dk8c0x3nxpfnlm3iizb"))))
     (build-system pyproject-build-system)
     (propagated-inputs (list python-rns))
     (native-inputs (list python-setuptools python-wheel))
@@ -61,7 +61,7 @@
 (define-public python-rns
   (package
     (name "python-rns")
-    (version "0.8.0")
+    (version "0.8.9")
     (source
      (origin
        (method git-fetch)
@@ -69,7 +69,7 @@
              (url "https://github.com/markqvist/Reticulum")
              (commit version)))
        (sha256
-        (base32 "19szbapwic1qxms1aw0ynak72fx7xj35jfwgszrhwqviixzzd093"))))
+        (base32 "17mkdslz6lfc7g72xmv9gh46yf8jlz27c34h2ick5q1f62sgnjf9"))))
     (build-system pyproject-build-system)
     (propagated-inputs (list python-cryptography python-pyserial))
     (native-inputs (list python-setuptools python-wheel))
