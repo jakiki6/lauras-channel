@@ -18210,3 +18210,288 @@ ratatui::text::Text type from ratatui library.")
      "This package provides a safe, extensible ORM and Query Builder for
 @code{PostgreSQL}, SQLite, and @code{MySQL}.")
     (license (list license:expat license:asl2.0))))
+
+(define-public rust-termsize-0.1
+  (package
+    (name "rust-termsize")
+    (version "0.1.9")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "termsize" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1zb80dcqngbvw1mgkdsagwx6hvcsxr1zpql5bf6n0wn14mfgy4bg"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-libc" ,rust-libc-0.2)
+                       ("rust-winapi" ,rust-winapi-0.3))))
+    (home-page "https://github.com/softprops/termsize")
+    (synopsis "Retrieves terminal size")
+    (description "This package provides Retrieves terminal size.")
+    (license license:expat)))
+
+(define-public rust-ttf-parser-0.20
+  (package
+    (name "rust-ttf-parser")
+    (version "0.20.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "ttf-parser" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1d4n3p9ccjvy4mj72700i0c2q6d49dxjpwflw47q79rpv1v7vxqp"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/harfbuzz/ttf-parser")
+    (synopsis
+     "high-level, safe, zero-allocation font parser for TrueType, OpenType, and AAT.")
+    (description
+     "This package provides a high-level, safe, zero-allocation font parser for
+@code{TrueType}, @code{OpenType}, and AAT.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-plotters-svg-0.3
+  (package
+    (name "rust-plotters-svg")
+    (version "0.3.7")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "plotters-svg" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0w56sxaa2crpasa1zj0bhxzihlapqfkncggavyngg0w86anf5fji"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-image" ,rust-image-0.24)
+                       ("rust-plotters-backend" ,rust-plotters-backend-0.3))))
+    (home-page "https://plotters-rs.github.io")
+    (synopsis "Plotters SVG backend")
+    (description "This package provides Plotters SVG backend.")
+    (license license:expat)))
+
+(define-public rust-plotters-bitmap-0.3
+  (package
+    (name "rust-plotters-bitmap")
+    (version "0.3.7")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "plotters-bitmap" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "01blgzmy7czvrpkdf0xsc169dgdilwy10sf53mn2vy3b7wg1ikkj"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-gif" ,rust-gif-0.12)
+                       ("rust-image" ,rust-image-0.24)
+                       ("rust-plotters-backend" ,rust-plotters-backend-0.3))))
+    (home-page "https://plotters-rs.github.io")
+    (synopsis "Plotters Bitmap Backend")
+    (description "This package provides Plotters Bitmap Backend.")
+    (license license:expat)))
+
+(define-public rust-plotters-backend-0.3
+  (package
+    (name "rust-plotters-backend")
+    (version "0.3.7")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "plotters-backend" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0ahpliim4hrrf7d4ispc2hwr7rzkn6d6nf7lyyrid2lm28yf2hnz"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://plotters-rs.github.io")
+    (synopsis "Plotters Backend API")
+    (description "This package provides Plotters Backend API.")
+    (license license:expat)))
+
+(define-public rust-yeslogic-fontconfig-sys-6
+  (package
+    (name "rust-yeslogic-fontconfig-sys")
+    (version "6.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "yeslogic-fontconfig-sys" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1gcx4brx8xvdpvryixk32b3xn9v80ilvi5frd40l8z039imhcfjh"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-dlib" ,rust-dlib-0.5)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-pkg-config" ,rust-pkg-config-0.3))))
+    (home-page "https://github.com/yeslogic/fontconfig-rs")
+    (synopsis "Raw bindings to Fontconfig without a vendored C library")
+    (description
+     "This package provides Raw bindings to Fontconfig without a vendored C library.")
+    (license license:expat)))
+
+(define-public rust-pathfinder-simd-0.5
+  (package
+    (name "rust-pathfinder-simd")
+    (version "0.5.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "pathfinder_simd" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1wmlqn06qrhin3rblb2gdfxis0s0bbfvp9q47gm9myjch3s7xw2w"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-rustc-version" ,rust-rustc-version-0.4))))
+    (home-page "https://github.com/servo/pathfinder")
+    (synopsis "simple SIMD library")
+    (description "This package provides a simple SIMD library.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-font-kit-0.14
+  (package
+    (name "rust-font-kit")
+    (version "0.14.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "font-kit" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "08252pfhb64pdnp5631cb42kg1ira0cbr49djl2zj5fmxzs38jxn"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-byteorder" ,rust-byteorder-1)
+                       ("rust-core-foundation" ,rust-core-foundation-0.9)
+                       ("rust-core-graphics" ,rust-core-graphics-0.23)
+                       ("rust-core-text" ,rust-core-text-20)
+                       ("rust-dirs" ,rust-dirs-5)
+                       ("rust-dwrote" ,rust-dwrote-0.11)
+                       ("rust-float-ord" ,rust-float-ord-0.3)
+                       ("rust-freetype" ,rust-freetype-0.7)
+                       ("rust-freetype-sys" ,rust-freetype-sys-0.20)
+                       ("rust-lazy-static" ,rust-lazy-static-1)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-pathfinder-geometry" ,rust-pathfinder-geometry-0.5)
+                       ("rust-pathfinder-simd" ,rust-pathfinder-simd-0.5)
+                       ("rust-walkdir" ,rust-walkdir-2)
+                       ("rust-winapi" ,rust-winapi-0.3)
+                       ("rust-yeslogic-fontconfig-sys" ,rust-yeslogic-fontconfig-sys-6))))
+    (home-page "https://github.com/servo/font-kit")
+    (synopsis "cross-platform font loading library")
+    (description
+     "This package provides a cross-platform font loading library.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-plotters-0.3
+  (package
+    (name "rust-plotters")
+    (version "0.3.7")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "plotters" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0ixpy9svpmr2rkzkxvvdpysjjky4gw104d73n7pi2jbs7m06zsss"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-ab-glyph" ,rust-ab-glyph-0.2)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-font-kit" ,rust-font-kit-0.14)
+                       ("rust-image" ,rust-image-0.24)
+                       ("rust-lazy-static" ,rust-lazy-static-1)
+                       ("rust-num-traits" ,rust-num-traits-0.2)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-pathfinder-geometry" ,rust-pathfinder-geometry-0.5)
+                       ("rust-plotters-backend" ,rust-plotters-backend-0.3)
+                       ("rust-plotters-bitmap" ,rust-plotters-bitmap-0.3)
+                       ("rust-plotters-svg" ,rust-plotters-svg-0.3)
+                       ("rust-ttf-parser" ,rust-ttf-parser-0.20)
+                       ("rust-wasm-bindgen" ,rust-wasm-bindgen-0.2)
+                       ("rust-web-sys" ,rust-web-sys-0.3))))
+    (home-page "https://plotters-rs.github.io/")
+    (synopsis
+     "Rust drawing library focus on data plotting for both WASM and native applications")
+    (description
+     "This package provides a Rust drawing library focus on data plotting for both
+WASM and native applications.")
+    (license license:expat)))
+
+(define-public rust-entropy-0.4
+  (package
+    (name "rust-entropy")
+    (version "0.4.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "entropy" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1hjcsxrmsbh36iagfbws52s44lpkpfkr7bbgpr8z6wpmbvj1d1yn"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/smackysnacks/entropy")
+    (synopsis "Calculates the Shannon entropy of arrays of bytes and strings")
+    (description
+     "This package provides Calculates the Shannon entropy of arrays of bytes and strings.")
+    (license license:expat)))
+
+(define-public rust-crc32c-0.6
+  (package
+    (name "rust-crc32c")
+    (version "0.6.8")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "crc32c" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0iwyr3jivcnhylczqgk1rkpp9b46r25vi5dj1y7il29dc8hsyirs"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-rustc-version" ,rust-rustc-version-0.4))))
+    (home-page "https://github.com/zowens/crc32c")
+    (synopsis
+     "Safe implementation for hardware accelerated CRC32C instructions with software fallback")
+    (description
+     "This package provides Safe implementation for hardware accelerated CRC32C instructions with software
+fallback.")
+    (license (list license:asl2.0 license:expat))))
+
+(define-public rust-crc32-v2-0.0.4
+  (package
+    (name "rust-crc32-v2")
+    (version "0.0.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "crc32-v2" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0lfs9ic0z8bkhmrsg990qaxpk0i0964hs1za7dn6k41lrk76ym3z"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/wiseaidev/crc32-v2")
+    (synopsis "port of the CRC-32 algorithm to Rust")
+    (description
+     "This package provides a port of the CRC-32 algorithm to Rust.")
+    (license license:expat)))
