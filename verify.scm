@@ -79,12 +79,14 @@
 (define len (length to-test))
 (define executed 0)
 (define succeeded 0)
+(define failures (list))
 
 (map (lambda (pkg)
   (with-exception-handler
     (lambda (exn)
       (begin
-        (format #t "\x1b[32mfailure\x1b[0m\n\n")
+        (set! failures (append (list (package-name pkg)) failures))
+        (format #t "\x1b[31mfailure\x1b[0m\n\n")
         #f))
     (lambda _
       (begin
@@ -100,3 +102,9 @@ to-test)
 
 (let ((color (if (= executed succeeded) "32" "31")))
   (format #t "summary: \x1b[~am~a/~a\x1b[0m\n" color succeeded len))
+
+(if (not (= executed succeeded))
+  (begin
+    (format #t "failed packages:")
+    (map (lambda (pkg) (format #t " ~a" pkg)) failures)
+    (format #t "\n")))
