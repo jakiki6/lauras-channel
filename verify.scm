@@ -3,7 +3,6 @@
 (use-modules
   (laura packages gradle)
   (laura packages gpu)
-  (laura packages ada)
   (laura packages package-managers)
   (laura packages wayland)
   (laura packages atl)
@@ -20,7 +19,53 @@
 
 (define to-test
   (list
-
+    android_translation_layer
+    squirrel-3.2
+    drand-rs
+    minecraft-launcher
+    ScuffedMinecraft
+    fceux
+    rpcs3
+    tpt
+    uesave
+    amdgpu-top
+    nomadnet
+    pacman
+    Amogus-File-Encoder
+    gcc-cross-riscv64-linux-gnu-toolchain
+    CasioEmu
+    activate-linux
+    bkcrack
+    bsdiff
+    cado-nfs
+    cerca
+    clipmon
+    coremark
+    csvlens
+    duf
+    encpipe
+    ent
+    flatpak-builder
+    leopard
+    libgfshare
+    liboqs
+    paper-age
+    payload-dumper-go
+    pesign
+    ricochet-refresh
+    sbctl
+    vbmeta-disable-verification
+    wasmtime
+    waydroid
+    wshowkeys
+    yara
+    imhex
+    lite
+    binsider
+    mbw
+    binwalk-3
+    wl-screenrec
+    xwaylandvideobridge
 ))
 
 (use-modules

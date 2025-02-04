@@ -851,27 +851,6 @@ install(FILES leopard.h DESTINATION include)
      "C library for prototyping and experimenting with quantum-resistant cryptography")
     (license license:expat)))
 
-(define-public libsixel
-  (package
-    (name "libsixel")
-    (version "1.8.6")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/saitoha/libsixel")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1saxdj6sldv01g6w6yk8vr7px4bl31xca3a82j6v1j3fw5rbfphy"))))
-    (build-system gnu-build-system)
-    (inputs '())
-    (synopsis "A SIXEL encoder/decoder implementation.")
-    (description
-     "This package provides encoder/decoder implementation for DEC SIXEL graphics, and some converter programs.")
-    (home-page "https://github.com/saitoha/libsixel")
-    (license license:expat)))
-
 (define-public paper-age
   (package
     (name "paper-age")
