@@ -1,3 +1,6 @@
+#!/usr/bin/env -S bash -c "guix repl \$0 2> /tmp/verify.log"
+!#
+
 (add-to-load-path (dirname (current-filename)))
 
 (use-modules
@@ -86,7 +89,7 @@
     (lambda (exn)
       (begin
         (set! failures (append (list (package-name pkg)) failures))
-        (format #t "\x1b[31mfailure\x1b[0m\n\n")
+        (format #t "\x1b[31mfailure\x1b[0m\n")
         #f))
     (lambda _
       (begin
