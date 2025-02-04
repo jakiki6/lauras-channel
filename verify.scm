@@ -74,24 +74,29 @@
   (guix monads)
   (guix packages))
 
-(define (build pkg)
-  (run-with-store (open-connection)
-    (build-derivations (package->derivation pkg) %store)))
+(define (build pkg) (run-with-store (open-connection) (package->derivation pkg)))
 
+(define len (length to-test))
 (define executed 0)
 (define succeeded 0)
 
 (map (lambda (pkg)
   (with-exception-handler
     (lambda (exn)
-      (format (current-error-port) "\x1b[32mfailure\x1b[0m\n\n"))
-    (begin
-      (set! executed (+ executed 1))
-      (format (current-error-port) "~a ... " (package-name pkg)))
-      (build pkg)
-      (format (current-error-port) "\x1b[32msuccess\x1b[0m\n")
-      (set! succeeded (+ succeeded 1))))
+      (begin
+        (format #t "\x1b[32mfailure\x1b[0m\n\n")
+        #f))
+    (lambda _
+      (begin
+        (set! executed (+ executed 1))
+        (format #t "~a [~a/~a]... " (package-name pkg) executed len))
+        (flush-all-ports)
+        (build pkg)
+        (format #t "\x1b[32msuccess\x1b[0m\n")
+        (flush-all-ports)
+        (set! succeeded (+ succeeded 1)))
+    #:unwind? #t))
 to-test)
 
 (let ((color (if (= executed succeeded) "32" "31")))
-  (format (current-error-port) "summary: \x1b[~am~a/~a\x1b[0m\n" color succeeded executed))
+  (format #t "summary: \x1b[~am~a/~a\x1b[0m\n" color succeeded len))
