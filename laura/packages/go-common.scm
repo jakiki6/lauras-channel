@@ -15,7 +15,8 @@
   #:use-module (gnu packages golang-crypto)
   #:use-module (gnu packages prometheus)
   #:use-module (gnu packages golang-web)
-  #:use-module (gnu packages golang-xyz))
+  #:use-module (gnu packages golang-xyz)
+  #:use-module (gnu packages tls))
 
 (define-public go-github-com-acarl005-stripansi
   (package
@@ -143,6 +144,7 @@ easier to build requests and custom transports.")
      (list
       #:unpack-path "github.com/foxboron/go-uefi"
       #:import-path "github.com/foxboron/go-uefi/authenticode"))
+    (native-inputs (list openssl-3.0))
     (propagated-inputs (list go-github-com-spf13-afero
                              go-github-com-netflix-go-expect
                              go-golang-org-x-text
@@ -283,6 +285,7 @@ library is able of deal with future UEFI revisions.")
      (list
       #:unpack-path "github.com/foxboron/go-uefi"
       #:import-path "github.com/foxboron/go-uefi/pkcs7"))
+    (native-inputs (list openssl-3.0))
     (propagated-inputs (list go-github-com-spf13-afero
                              go-github-com-netflix-go-expect
                              go-golang-org-x-text

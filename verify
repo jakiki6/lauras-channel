@@ -89,12 +89,12 @@
     (lambda (exn)
       (begin
         (set! failures (append (list (package-name pkg)) failures))
-        (format #t "\x1b[31mfailure\x1b[0m\n")
+        (format #t "\x1b[31mfailure\x1b[0m: ~a\n" (if (store-protocol-error? exn) (store-protocol-error-message exn) exn))
         #f))
     (lambda _
       (begin
         (set! executed (+ executed 1))
-        (format #t "~a [~a/~a]... " (package-name pkg) executed len))
+        (format #t "~a [~a/~a] ... " (package-name pkg) executed len))
         (flush-all-ports)
         (build pkg)
         (format #t "\x1b[32msuccess\x1b[0m\n")
