@@ -48,23 +48,36 @@
         (base32 "1j9wdznsp772q15w1kl5ip0gf0bh8wkanq2sdj12b7mzkk39pcx7"))))
     (build-system gnu-build-system)
     (native-inputs (list gnat))
-    (inputs (list gmp mpfr mpc isl glibc))
+    (inputs (list gcc-14 gmp mpfr mpc isl glibc))
     (arguments
      (list
+      #:parallel-build? #false
       #:phases #~(modify-phases %standard-phases
-        (add-before 'configure 'install-ld
-          (lambda* (#:key inputs #:allow-other-keys)
-            (begin
-              (use-modules (ice-9 string-fun))
-              (system (string-append "gcc -dumpspecs | sed -e 's/\\/lib64\\/ld-linux-x86-64.so.2/" (string-replace-substring (assoc-ref inputs "glibc") "/" "\\/") "\\/lib\\/ld-linux-x86-64.so.2/g' > /tmp/specs"))
-              (mkdir "/tmp/bin")
-              (system "printf \"#!/bin/sh\\nexport PATH=\\$_PATH\\ngcc -specs /tmp/specs \\$@\\n\" > /tmp/bin/x86_64-pc-linux-gnu-gcc")
-              (chmod "/tmp/bin/x86_64-pc-linux-gnu-gcc" #o755)
-              (system "printf \"#!/bin/sh\\nexport PATH=\\$_PATH\\ng++ -specs /tmp/specs \\$@\\n\" > /tmp/bin/x86_64-pc-linux-gnu-g++")
-              (chmod "/tmp/bin/x86_64-pc-linux-gnu-g++" #o755)
-              (setenv "_PATH" (getenv "PATH"))
-              (setenv "PATH" (string-append "/tmp/bin:" (getenv "PATH")))
-              ))))
+                   (add-before 'configure 'install-ld
+                     (lambda* (#:key inputs #:allow-other-keys)
+                       (begin
+                         (use-modules (ice-9 string-fun))
+                         (system (string-append
+                                  "gcc -dumpspecs | sed -e 's/\\/lib64\\/ld-linux-x86-64.so.2/"
+                                  (string-replace-substring #$glibc "/" "\\/")
+                                  "\\/lib\\/ld-linux-x86-64.so.2/g' > /tmp/specs"))
+                         (mkdir "/tmp/bin")
+                         (system (string-append "printf \"#!"
+                                  #$bash
+                                  "/bin/sh\\nexport PATH=\\$_PATH\\ngcc -specs /tmp/specs \\\"\\$@\\\"\\n\" > /tmp/bin/gcc"))
+                         (chmod "/tmp/bin/gcc" #o755)
+                         (system (string-append "printf \"#!"
+                                  #$bash
+                                  "/bin/sh\\nexport PATH=\\$_PATH\\ng++ -specs /tmp/specs \\\"\\$@\\\"\\n\" > /tmp/bin/g++"))
+                         (chmod "/tmp/bin/g++" #o755)
+                         (system (string-append "ln -s " #$gnat "/bin/ar /tmp/bin/x86_64-linux-gnu-ar"))
+                         (setenv "_PATH"
+                                 (getenv "PATH"))
+                         (setenv "PATH"
+                                 (string-append "/tmp/bin:"
+                                                (getenv "PATH")))
+                         (setenv "CPLUS_INCLUDE_PATH" (string-append #$gcc "/include/c++/x86_64-unknown-linux-gnu:" (getenv "CPLUS_INCLUDE_PATH")))
+))))
       #:configure-flags #~(list "--enable-languages=c,ada,c++"
                                 "--enable-libstdcxx"
                                 "--enable-libstdcxx-threads"
