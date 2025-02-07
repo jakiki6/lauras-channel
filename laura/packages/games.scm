@@ -61,6 +61,7 @@
   #:use-module (gnu packages xfce)
   #:use-module (gnu packages avahi)
   #:use-module (gnu packages elf)
+  #:use-module (gnu packages python)
   #:use-module (nonguix licenses)
   #:use-module (nonguix build-system binary)
   #:use-module (laura packages rust-common))
@@ -335,13 +336,13 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
 (define-public rpcs3
   (package
     (name "rpcs3")
-    (version "0.0.33")
+    (version "0.0.34")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://github.com/rpcs3/rpcs3/")
-             (commit "v0.0.33")
+             (commit "v0.0.34")
              (recursive? #t)))
        (file-name (git-file-name name version))
        (sha256
@@ -417,18 +418,18 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
 (define-public tpt
   (package
     (name "tpt")
-    (version "98.2.365")
+    (version "99.2.382")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://github.com/The-Powder-Toy/The-Powder-Toy")
-             (commit "v98.2.365")))
+             (commit "v99.2.382")))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "06l39w3ggrzn8799dqll606by4f88kjr60r879w8j26csx1py76g"))))
+        (base32 "1mag6ch6sfday1sdb2v660ygqcs31cir2hf3zdm8n5z7k3rkiaha"))))
     (build-system meson-build-system)
-    (native-inputs (list pkg-config cmake))
+    (native-inputs (list pkg-config cmake python-3))
     (inputs (list luajit
                   curl
                   fftwf
