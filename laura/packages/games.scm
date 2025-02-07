@@ -346,7 +346,7 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
              (recursive? #t)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0annwam8k2jhl9qiwqmvkaydk75wzsql2ba141vakvz2kc9rwpmj"))))
+        (base32 "0slp83yi9g5by04m58gw3dv907y445d5k0vga73zds4a96jpkrnj"))))
     (build-system cmake-build-system)
     (arguments
      (list
@@ -446,7 +446,7 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
     (arguments
      (list
       #:tests? #f
-      #:configure-flags #~(list "-Dworkaround_elusive_bzip2=false")))
+      #:configure-flags #~(list "-Dworkaround_elusive_bzip2=false" "-Doptimization=3")))
     (home-page "https://powdertoy.co.uk")
     (synopsis "The Powder Toy")
     (description
