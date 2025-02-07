@@ -1321,20 +1321,22 @@ needs to be signed in the boot chain.")
     (name "imhex")
     (version "1.35.4")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/WerWolv/ImHex")
-              (recursive? #t)
-              (commit "v1.35.4")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "0gi5772w0fzgr1w403ckq2mkwiyvcxv08frs2fjr2hlc8hb6c2p9"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/WerWolv/ImHex")
+             (recursive? #t)
+             (commit "v1.35.4")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0gi5772w0fzgr1w403ckq2mkwiyvcxv08frs2fjr2hlc8hb6c2p9"))))
     (build-system cmake-build-system)
     (native-inputs (list gcc-toolchain-14 pkg-config))
     (inputs (list freetype mesa glfw-3.4 curl dbus))
     (home-page "https://imhex.werwolv.net/")
     (synopsis "A Hex Editor.")
-    (description "A Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM.")
+    (description
+     "A Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM.")
     (license license:gpl2)))
 
 (define-public lite
@@ -1342,29 +1344,38 @@ needs to be signed in the boot chain.")
     (name "lite")
     (version "1.11")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/rxi/lite")
-              (commit "v1.11")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "0wxqfb4ly8g7w5qph76xys95b55ackkags8jgd1nasmiyi8gcd5a"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/rxi/lite")
+             (commit "v1.11")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0wxqfb4ly8g7w5qph76xys95b55ackkags8jgd1nasmiyi8gcd5a"))))
     (build-system gnu-build-system)
     (inputs (list sdl2))
-    (arguments (list #:phases
-      #~(modify-phases %standard-phases
-        (delete 'configure)
-        (replace 'build
-          (lambda* (#:key outputs #:allow-other-keys) (system "./build.sh")))
-        (delete 'check)
-        (replace 'install
-          (lambda* (#:key outputs #:allow-other-keys)
-            (begin
-              (install-file "lite" (string-append (assoc-ref outputs "out") "/bin"))
-              (copy-recursively "data" (string-append (assoc-ref outputs "out") "/bin/data"))))))))
+    (arguments
+     (list
+      #:phases #~(modify-phases %standard-phases
+                   (delete 'configure)
+                   (replace 'build
+                     (lambda* (#:key outputs #:allow-other-keys)
+                       (system "./build.sh")))
+                   (delete 'check)
+                   (replace 'install
+                     (lambda* (#:key outputs #:allow-other-keys)
+                       (begin
+                         (install-file "lite"
+                                       (string-append (assoc-ref outputs "out")
+                                                      "/bin"))
+                         (copy-recursively "data"
+                                           (string-append (assoc-ref outputs
+                                                                     "out")
+                                                          "/bin/data"))))))))
     (home-page "https://github.com/rxi/lite")
     (synopsis "A lightweight text editor written in Lua")
-    (description "lite is a lightweight text editor written mostly in Lua — it aims to provide something practical, pretty, small and fast, implemented as simply as possible; easy to modify and extend, or to use without doing either.")
+    (description
+     "lite is a lightweight text editor written mostly in Lua — it aims to provide something practical, pretty, small and fast, implemented as simply as possible; easy to modify and extend, or to use without doing either.")
     (license license:expat)))
 
 (define-public ags
@@ -1381,20 +1392,35 @@ needs to be signed in the boot chain.")
        (sha256
         (base32 "1py4ii6jpkjdxf00pb4lbpiwgrg6xfhh4nlib4111wh70w1f2wdj"))
        (modules '((guix build utils)))
-       (snippet
-         #~(begin
-             (substitute* "go.mod" (("ags") "github.com/Aylur/ags"))
-             (map (lambda (x) (substitute* x (("\"ags/") "\"github.com/Aylur/ags/")))
-               (list "main.go" "cmd/bundle.go" "cmd/init.go" "cmd/inspect.go" "cmd/list.go" "cmd/quit.go" "cmd/request.go" "cmd/run.go" "cmd/toggle.go" "cmd/types.go"))))))
+       (snippet #~(begin
+                    (substitute* "go.mod"
+                      (("ags")
+                       "github.com/Aylur/ags"))
+                    (map (lambda (x)
+                           (substitute* x
+                             (("\"ags/")
+                              "\"github.com/Aylur/ags/")))
+                         (list "main.go"
+                               "cmd/bundle.go"
+                               "cmd/init.go"
+                               "cmd/inspect.go"
+                               "cmd/list.go"
+                               "cmd/quit.go"
+                               "cmd/request.go"
+                               "cmd/run.go"
+                               "cmd/toggle.go"
+                               "cmd/types.go"))))))
     (build-system go-build-system)
     (arguments
      (list
       #:import-path "github.com/Aylur/ags"))
-    (propagated-inputs (list go-github-com-evanw-esbuild-internal go-github-com-evanw-esbuild-api go-github-com-spf13-cobra go-github-com-titanous-json5))
+    (propagated-inputs (list go-github-com-evanw-esbuild-internal
+                             go-github-com-evanw-esbuild-api
+                             go-github-com-spf13-cobra
+                             go-github-com-titanous-json5))
     (home-page "https://github.com/spf13/cobra")
     (synopsis "Scaffolding CLI for Astal+TypeScript")
-    (description
-     "CLI around Astal to scaffold and run projects")
+    (description "CLI around Astal to scaffold and run projects")
     (license license:gpl3)))
 
 (define-public astral-io
@@ -1402,18 +1428,23 @@ needs to be signed in the boot chain.")
     (name "astral-io")
     (version "0.0.0-a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/Aylur/astal")
-              (commit "a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "1m78w5llnbg6cdcd8yabknn7sz7527rn8h6lgm1wfz3c896y6qz0"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Aylur/astal")
+             (commit "a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1m78w5llnbg6cdcd8yabknn7sz7527rn8h6lgm1wfz3c896y6qz0"))))
     (build-system meson-build-system)
     (inputs (list glib))
     (native-inputs (list vala pkg-config gobject-introspection))
-    (arguments (list #:phases #~(modify-phases %standard-phases
-      (add-before 'configure 'chdir (lambda _ (chdir "lib/astal/io"))))))
+    (arguments
+     (list
+      #:phases #~(modify-phases %standard-phases
+                   (add-before 'configure 'chdir
+                     (lambda _
+                       (chdir "lib/astal/io"))))))
     (home-page "https://aylur.github.io/astal/")
     (synopsis "Building blocks for creating custom desktop shells")
     (description "Building blocks for creating custom desktop shells")
@@ -1424,18 +1455,23 @@ needs to be signed in the boot chain.")
     (name "astral-gtk3")
     (version "0.0.0-a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/Aylur/astal")
-              (commit "a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "1m78w5llnbg6cdcd8yabknn7sz7527rn8h6lgm1wfz3c896y6qz0"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Aylur/astal")
+             (commit "a3bb83a22b7d237c2c2fc6bd531f30d6265135cf")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1m78w5llnbg6cdcd8yabknn7sz7527rn8h6lgm1wfz3c896y6qz0"))))
     (build-system meson-build-system)
     (inputs (list astral-io gtk+ gtk-layer-shell))
     (native-inputs (list vala pkg-config gobject-introspection))
-    (arguments (list #:phases #~(modify-phases %standard-phases
-      (add-before 'configure 'chdir (lambda _ (chdir "lib/astal/gtk3"))))))
+    (arguments
+     (list
+      #:phases #~(modify-phases %standard-phases
+                   (add-before 'configure 'chdir
+                     (lambda _
+                       (chdir "lib/astal/gtk3"))))))
     (home-page "https://aylur.github.io/astal/")
     (synopsis "Building blocks for creating custom desktop shells")
     (description "Building blocks for creating custom desktop shells")
@@ -1446,13 +1482,14 @@ needs to be signed in the boot chain.")
     (name "hyprpanel")
     (version "0.0.0-a7b553725c1deb4a856ddd8582fa217451533ec3")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/Jas-SinghFSU/HyprPanel")
-              (commit "a7b553725c1deb4a856ddd8582fa217451533ec3")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "0y25ns6nizszq0h5d31ihsjcaxpsp1cc5a5ixklcdq3x8r7gsrnq"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Jas-SinghFSU/HyprPanel")
+             (commit "a7b553725c1deb4a856ddd8582fa217451533ec3")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0y25ns6nizszq0h5d31ihsjcaxpsp1cc5a5ixklcdq3x8r7gsrnq"))))
     (build-system meson-build-system)
     (inputs (list astral-gtk3 astral-io))
     (native-inputs (list ags gjs))
@@ -1509,20 +1546,23 @@ needs to be signed in the boot chain.")
     (name "mbw")
     (version "2.0")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "http://github.com/raas/mbw")
-              (commit "v2.0")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "0p3lpa9bmix1za53q0n77swp4bx4myasz53wqspf62q52hwsxx50"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "http://github.com/raas/mbw")
+             (commit "v2.0")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0p3lpa9bmix1za53q0n77swp4bx4myasz53wqspf62q52hwsxx50"))))
     (build-system cmake-build-system)
-    (arguments (list 
-                     #:tests? #f
-                     #:build-type "Release"))
+    (arguments
+     (list
+      #:tests? #f
+      #:build-type "Release"))
     (home-page " http://github.com/raas/mbw")
     (synopsis "Memory Bandwidth Benchmark")
-    (description "MBW determines the \"copy\" memory bandwidth available to userspace programs. Its simplistic approach models that of real applications. It is not tuned to extremes and it is not aware of hardware architecture, just like your average software package.")
+    (description
+     "MBW determines the \"copy\" memory bandwidth available to userspace programs. Its simplistic approach models that of real applications. It is not tuned to extremes and it is not aware of hardware architecture, just like your average software package.")
     (license license:gpl3)))
 
 (define-public binwalk-3
@@ -1566,4 +1606,31 @@ needs to be signed in the boot chain.")
     (synopsis "Analyzes data for embedded file types")
     (description
      "This package provides Analyzes data for embedded file types.")
+    (license license:expat)))
+
+(define-public mpack
+  (package
+    (name "mpack")
+    (version "1.6")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/league/mpack")
+             (commit "8f00e80ad8dc220ee7417145b054ca6fe6e839f5")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "10xb50jhysvhfc3s2n98zxf8hc2751xliiyjsk7lzlhkswacnyci"))))
+    (build-system gnu-build-system)
+    (native-inputs (list autoconf automake))
+    (arguments
+     (list
+      #:phases #~(modify-phases %standard-phases
+                   (add-before 'configure 'reconf
+                     (lambda _
+                       (system "aclocal -I cmulocal"))))))
+    (home-page "https://github.com/league/mpack")
+    (synopsis "Tools for encoding/decoding MIME messages")
+    (description
+     "When the attachment's suggested filename has spaces or other undesirable characters, munpack replaces them with 'X'. ThisXisXugly, and I'd prefer to let the user specify a replacement character. Here is a patch that adds an option [-r character] so that munpack -r- would produce This-is-better. The default is still 'X', so as not to disrupt any expectations. The manual page and usage string have been updated accordingly.")
     (license license:expat)))

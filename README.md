@@ -41,6 +41,7 @@ Software that I've ported so far:
 * [payload-dumper-go](https://github.com/ssut/payload-dumper-go)
 * [wl-screenrec](https://github.com/russelltg/wl-screenrec)
 * [rpcs3](https://rpcs3.net)
+* [mpack](https://github.com/league/mpack)
 
 Things that are still in progress:
 * gradle (see [this discussion](https://discuss.gradle.org/t/building-gradle-from-pure-source-without-any-bootstrap-binaries/19398))
