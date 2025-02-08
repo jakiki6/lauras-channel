@@ -73,9 +73,32 @@
                           "bin/x86_64-pc-linux-gnu-gcc-14.2.0"
                           "lib/gcc/x86_64-pc-linux-gnu/14.2.0/plugin/include/config/i386/linux64.h")))))))
 
-(define-public gnat-i686
+(define gcc-toolchain-patched
   (package
-    (name "gnat-i686")
+    (inherit gcc-toolchain)
+    (source
+     #f)
+    (build-system trivial-build-system)
+    (inputs (list gcc-toolchain))
+    (outputs '("out"))
+    (arguments
+     (list
+      #:modules '((guix build utils))
+      #:builder #~(begin
+                    (use-modules (guix build utils))
+                    (copy-recursively #$gcc-toolchain
+                                      (assoc-ref %outputs "out")
+                                      #:keep-permissions? #t)
+                    (chdir (assoc-ref %outputs "out"))
+                    (make-file-writable "include")
+                    (delete-file-recursively "include/c++")
+                    (copy-recursively (string-append #$gcc-toolchain "/include/c++") "include/c++" #:keep-permissions? #t #:follow-symlinks? #t)
+                    (make-file-writable "include/c++/bits")
+                    (copy-recursively "include/c++/x86_64-unknown-linux-gnu/bits" "include/c++/bits" #:keep-permissions? #t))))))
+
+(define-public coreboot-toolchain
+  (package
+    (name "coreboot-toolchain")
     (version "14.2.0")
     (source
      (origin
@@ -84,16 +107,19 @@
        (sha256
         (base32 "1j9wdznsp772q15w1kl5ip0gf0bh8wkanq2sdj12b7mzkk39pcx7"))))
     (build-system gnu-build-system)
-    (native-inputs (list gnat-patched))
+    (native-inputs (list gnat-patched gcc-toolchain-patched))
     (inputs (list gmp mpfr mpc isl))
+    (supported-systems '("x86_64-linux"))
     (arguments
      (list
       #:phases #~(modify-phases %standard-phases
                    (add-before 'configure 'install-ld
                      (lambda _
-                       (symlink (string-append #$glibc
-                                               "/lib/ld-linux-x86-64.so.2")
-                                "/tmp/64ld-linux-x86-64.so.2"))))
+                       (begin
+                         (symlink (string-append #$glibc
+                                                 "/lib/ld-linux-x86-64.so.2")
+                                "/tmp/64ld-linux-x86-64.so.2")
+                        (setenv "LD_LIBRARY_PATH" (string-append #$isl "/lib:" #$mpc "/lib:" #$mpfr "/lib:" #$gmp "/lib"))))))
       #:configure-flags #~(list "--enable-languages=c,ada,c++"
                                 "--enable-libstdcxx"
                                 "--enable-libstdcxx-threads"
@@ -106,8 +132,8 @@
                                 "--enable-threads=posix"
                                 "--with-gnu-ld"
                                 "--with-gnu-as"
-                                "--target=i686-linux-gnu")))
+                                "--target=i686-elf")))
     (home-page "https://www.gnu.org/software/gnat/")
-    (synopsis "GNU GNAT for i686")
-    (description "GNU GNAT for i686")
+    (synopsis "GNU GNAT for i686 for coreboot")
+    (description "GNU GNAT for i686 for coreboot")
     (license license:gpl3+)))
