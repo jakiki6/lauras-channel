@@ -36,14 +36,14 @@
 (define-public android_translation_layer
   (package
     (name "android_translation_layer")
-    (version "0.0.0-e2f41610")
+    (version "0.0.0-37af37b7")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url
               "https://gitlab.com/android_translation_layer/android_translation_layer.git")
-             (commit "e2f41610")))
+             (commit "37af37b7")))
        (modules '((guix build utils)))
        (snippet #~(begin
                     (substitute* "meson.build"
@@ -54,7 +54,7 @@
                        "/../lib/java/dex"))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "04895vdfhlq75i3naycg3vczwk7w1sb704pxmrlkags9xzd7r4q6"))))
+        (base32 "0qm0dri263khficiykfp7w35k6xbh8gjfwndx69b1z2wh6k7frqq"))))
     (build-system meson-build-system)
     (arguments
      (list
@@ -66,13 +66,13 @@
                                               (assoc-ref inputs
                                                          "art_standalone")
                                               "/lib/art"))))
-                   (add-before 'configure 'patch-paths
+                    (add-before 'configure 'patch-paths
                      (lambda* (#:key inputs #:allow-other-keys)
                        (substitute* "../source/meson.build"
                          (("error.*$")
                           (string-append "bootclasspath = '"
                                          (assoc-ref inputs "art_standalone")
-                                         "/lib/java/core-all_classes.jar'\n"))))))))
+                                         "/lib/java/core-all_classes.jar'\n")) (("^bootclasspath = bootclasspath_dir.*$") "")))))))
     (native-inputs (list pkg-config openjdk gcc-toolchain-14
                          (list openjdk "jdk")
                          (list glib "bin")))
@@ -117,17 +117,17 @@
 (define-public art_standalone
   (package
     (name "art_standalone")
-    (version "0.0.0-57f9bbd9")
+    (version "0.0.0-aa709f68")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url
               "https://gitlab.com/android_translation_layer/art_standalone.git")
-             (commit "57f9bbd9")))
+             (commit "aa709f68")))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1wd5nz8db4wi0pi68g737vzfkcmf7rb16xs1z2h8g44bhbyr9z2m"))))
+        (base32 "142rchwl798ynxx03by79p0w1qby0l2zpjgn2jd7ar0ssxp1gl30"))))
     (build-system gnu-build-system)
     (arguments
      (list
@@ -170,17 +170,17 @@
 (define-public bionic_translation
   (package
     (name "bionic_translation")
-    (version "0.0.0-e502e927")
+    (version "0.0.0-38cbae66")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url
               "https://gitlab.com/android_translation_layer/bionic_translation.git")
-             (commit "e502e927")))
+             (commit "38cbae66")))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "09w794r3xgigdi3n240ln1rpjqv485syjdj6fcq430n97qnc4pz9"))))
+        (base32 "0lh130drm1wwk7b6mb8p0hmq2wwhh8j0hw866yl26ph0nvpmyw08"))))
     (build-system meson-build-system)
     (native-inputs (list pkg-config gcc-toolchain-14))
     (inputs (list mesa libbsd libunwind libelf))

@@ -96,6 +96,29 @@
                     (make-file-writable "include/c++/bits")
                     (copy-recursively "include/c++/x86_64-unknown-linux-gnu/bits" "include/c++/bits" #:keep-permissions? #t))))))
 
+(define binutils-patched
+  (package
+    (inherit binutils)
+    (arguments
+    (list #:out-of-source? #t
+          #:configure-flags #~'( "--target=i686-elf"
+                                "LDFLAGS=-static-libgcc"
+
+                                "--enable-new-dtags"
+
+                                "--with-lib-path=/no-ld-lib-path"
+
+                                "--enable-install-libbfd"
+
+                                "--enable-deterministic-archives"
+
+                                "--enable-64-bit-bfd"
+                                "--enable-compressed-debug-sections=all"
+                                "--enable-lto"
+                                "--enable-separate-code"
+                                "--enable-threads")
+          #:make-flags #~'("MAKEINFO=true")))))
+
 (define-public coreboot-toolchain
   (package
     (name "coreboot-toolchain")
@@ -108,7 +131,7 @@
         (base32 "1j9wdznsp772q15w1kl5ip0gf0bh8wkanq2sdj12b7mzkk39pcx7"))))
     (build-system gnu-build-system)
     (native-inputs (list gnat-patched gcc-toolchain-patched))
-    (inputs (list gmp mpfr mpc isl))
+    (inputs (list gmp mpfr mpc isl binutils-patched))
     (supported-systems '("x86_64-linux"))
     (arguments
      (list
@@ -119,6 +142,9 @@
                          (symlink (string-append #$glibc
                                                  "/lib/ld-linux-x86-64.so.2")
                                 "/tmp/64ld-linux-x86-64.so.2")
+                        (mkdir-p "/tmp/include/gnu")
+                        (symlink (string-append #$glibc "/include/gnu/stubs-64.h") "/tmp/include/gnu/stubs-32.h")
+                        (setenv "C_INCLUDE_PATH" (string-append (getenv "C_INCLUDE_PATH") ":/tmp/include"))
                         (setenv "LD_LIBRARY_PATH" (string-append #$isl "/lib:" #$mpc "/lib:" #$mpfr "/lib:" #$gmp "/lib"))))))
       #:configure-flags #~(list "--enable-languages=c,ada,c++"
                                 "--enable-libstdcxx"
