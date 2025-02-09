@@ -33,9 +33,9 @@
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages webkit))
 
-(define-public android_translation_layer
+(define-public android-translation-layer
   (package
-    (name "android_translation_layer")
+    (name "android-translation-layer")
     (version "0.0.0-37af37b7")
     (source
      (origin
@@ -64,20 +64,22 @@
                        (setenv "LIBRARY_PATH"
                                (string-append (getenv "LIBRARY_PATH") ":"
                                               (assoc-ref inputs
-                                                         "art_standalone")
+                                                         "art-standalone")
                                               "/lib/art"))))
-                    (add-before 'configure 'patch-paths
+                   (add-before 'configure 'patch-paths
                      (lambda* (#:key inputs #:allow-other-keys)
                        (substitute* "../source/meson.build"
                          (("error.*$")
                           (string-append "bootclasspath = '"
-                                         (assoc-ref inputs "art_standalone")
-                                         "/lib/java/core-all_classes.jar'\n")) (("^bootclasspath = bootclasspath_dir.*$") "")))))))
+                                         (assoc-ref inputs "art-standalone")
+                                         "/lib/java/core-all_classes.jar'\n"))
+                         (("^bootclasspath = bootclasspath_dir.*$")
+                          "")))))))
     (native-inputs (list pkg-config openjdk gcc-toolchain-14
                          (list openjdk "jdk")
                          (list glib "bin")))
-    (inputs (list art_standalone
-                  bionic_translation
+    (inputs (list art-standalone
+                  bionic-translation
                   skia
                   wayland
                   wayland-protocols
@@ -114,9 +116,9 @@
                            "--enable-crl"
                            "--enable-jni")))))
 
-(define-public art_standalone
+(define-public art-standalone
   (package
-    (name "art_standalone")
+    (name "art-standalone")
     (version "0.0.0-aa709f68")
     (source
      (origin
@@ -135,6 +137,15 @@
                    (delete 'configure)
                    (delete 'check)
                    (delete 'validate-runpath)
+                   (add-before 'build 'fix-paths
+                     (lambda _
+                       (begin
+                         (substitute* "art/runtime/native_stack_dump.cc" (("/usr/bin/addr2line")
+                                       (string-append #$binutils
+                                                      "/bin/addr2line")))
+                         (substitute* "art/tools/timeout_dumper/timeout_dumper.cc" (("/usr/bin/addr2line")
+                                       (string-append #$binutils
+                                                      "/bin/addr2line"))))))
                    (add-before 'build 'fix-env
                      (lambda* (#:key inputs #:allow-other-keys)
                        (setenv "ANDROID_BUILD_SHELL"
@@ -161,15 +172,16 @@
                   expat
                   wolfssl-for-art
                   openssl
-                  bionic_translation))
+                  binutils
+                  bionic-translation))
     (home-page "https://gitlab.com/android_translation_layer/art_standalone")
     (synopsis "art + dependencies (pulled from AOSP)")
     (description "")
     (license license:asl2.0)))
 
-(define-public bionic_translation
+(define-public bionic-translation
   (package
-    (name "bionic_translation")
+    (name "bionic-translation")
     (version "0.0.0-38cbae66")
     (source
      (origin

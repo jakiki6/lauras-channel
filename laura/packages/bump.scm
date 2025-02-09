@@ -51,7 +51,9 @@
                            "_stable.tar.gz"))
        (file-name (string-append "squirrel-" version ".tar.gz"))
        (patches (list (search-patch
-                       "laura/packages/patches/squirrel-no-cmake-files.patch")))
+                       "laura/packages/patches/squirrel-no-cmake-files.patch")
+                      (search-patch
+                       "laura/packages/patches/squirrel-cve-2022-30292.patch")))
        (patch-flags '("-p1" "--binary"))
        (sha256
         (base32 "1nw1ghr4nxsvpk5bm9q0arrx4zrjpq5bai5sc17vj90by19187r1"))))))

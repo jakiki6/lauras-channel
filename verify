@@ -20,7 +20,7 @@
              (laura home services audio))
 
 (define to-test
-  (list android_translation_layer
+  (list android-translation-layer
         squirrel-3.2
         drand-rs
         minecraft-launcher
