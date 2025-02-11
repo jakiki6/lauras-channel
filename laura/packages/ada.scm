@@ -54,7 +54,8 @@
                                       #:keep-permissions? #t)
                     (chdir (assoc-ref %outputs "out"))
                     (make-file-writable "bin")
-                    (make-file-writable "lib/gcc/x86_64-pc-linux-gnu/14.2.0/plugin/include/config/i386")
+                    (make-file-writable
+                     "lib/gcc/x86_64-pc-linux-gnu/14.2.0/plugin/include/config/i386")
                     (map (lambda (x)
                            (begin
                              (format #t "Patching ~a\n" x)
@@ -92,32 +93,39 @@
                     (chdir (assoc-ref %outputs "out"))
                     (make-file-writable "include")
                     (delete-file-recursively "include/c++")
-                    (copy-recursively (string-append #$gcc-toolchain "/include/c++") "include/c++" #:keep-permissions? #t #:follow-symlinks? #t)
+                    (copy-recursively (string-append #$gcc-toolchain
+                                                     "/include/c++")
+                                      "include/c++"
+                                      #:keep-permissions? #t
+                                      #:follow-symlinks? #t)
                     (make-file-writable "include/c++/bits")
-                    (copy-recursively "include/c++/x86_64-unknown-linux-gnu/bits" "include/c++/bits" #:keep-permissions? #t))))))
+                    (copy-recursively
+                     "include/c++/x86_64-unknown-linux-gnu/bits"
+                     "include/c++/bits"
+                     #:keep-permissions? #t))))))
 
 (define binutils-patched
   (package
     (inherit binutils)
     (arguments
-    (list #:out-of-source? #t
-          #:configure-flags #~'( "--target=i686-elf"
-                                "LDFLAGS=-static-libgcc"
+     (list
+      #:out-of-source? #t
+      #:configure-flags #~'("--target=i686-elf" "LDFLAGS=-static-libgcc"
 
-                                "--enable-new-dtags"
+                            "--enable-new-dtags"
 
-                                "--with-lib-path=/no-ld-lib-path"
+                            "--with-lib-path=/no-ld-lib-path"
 
-                                "--enable-install-libbfd"
+                            "--enable-install-libbfd"
 
-                                "--enable-deterministic-archives"
+                            "--enable-deterministic-archives"
 
-                                "--enable-64-bit-bfd"
-                                "--enable-compressed-debug-sections=all"
-                                "--enable-lto"
-                                "--enable-separate-code"
-                                "--enable-threads")
-          #:make-flags #~'("MAKEINFO=true")))))
+                            "--enable-64-bit-bfd"
+                            "--enable-compressed-debug-sections=all"
+                            "--enable-lto"
+                            "--enable-separate-code"
+                            "--enable-threads")
+      #:make-flags #~'("MAKEINFO=true")))))
 
 (define-public coreboot-toolchain
   (package
@@ -130,34 +138,81 @@
        (sha256
         (base32 "1j9wdznsp772q15w1kl5ip0gf0bh8wkanq2sdj12b7mzkk39pcx7"))))
     (build-system gnu-build-system)
-    (native-inputs (list gnat-patched gcc-toolchain-patched))
+    (native-inputs (list gnat-patched gcc-toolchain-patched patchelf))
     (inputs (list gmp mpfr mpc isl binutils-patched))
     (supported-systems '("x86_64-linux"))
     (arguments
      (list
+      #:out-of-source? #t
+      #:tests? #f
       #:phases #~(modify-phases %standard-phases
                    (add-before 'configure 'install-ld
                      (lambda _
                        (begin
                          (symlink (string-append #$glibc
                                                  "/lib/ld-linux-x86-64.so.2")
-                                "/tmp/64ld-linux-x86-64.so.2")
-                        (mkdir-p "/tmp/include/gnu")
-                        (symlink (string-append #$glibc "/include/gnu/stubs-64.h") "/tmp/include/gnu/stubs-32.h")
-                        (setenv "C_INCLUDE_PATH" (string-append (getenv "C_INCLUDE_PATH") ":/tmp/include"))
-                        (setenv "LD_LIBRARY_PATH" (string-append #$isl "/lib:" #$mpc "/lib:" #$mpfr "/lib:" #$gmp "/lib"))))))
-      #:configure-flags #~(list "--enable-languages=c,ada,c++"
-                                "--enable-libstdcxx"
-                                "--enable-libstdcxx-threads"
+                                  "/tmp/64ld-linux-x86-64.so.2")
+                         (mkdir-p "/tmp/include/gnu")
+                         (symlink (string-append #$glibc
+                                                 "/include/gnu/stubs-64.h")
+                                  "/tmp/include/gnu/stubs-32.h")
+                         (setenv "C_INCLUDE_PATH"
+                                 (string-append (getenv "C_INCLUDE_PATH")
+                                                ":/tmp/include"))
+                         (setenv "LD_LIBRARY_PATH"
+                                 (string-append #$isl
+                                                "/lib:"
+                                                #$mpc
+                                                "/lib:"
+                                                #$mpfr
+                                                "/lib:"
+                                                #$gmp
+                                                "/lib")))))
+                   (replace 'build
+                     (lambda _
+                       (begin
+                         (system "make all-gcc -j6")
+                         (system "make all-target-libgcc -j6"))))
+                   (replace 'install
+                     (lambda _
+                       (begin
+                         (system "make install-gcc")
+                         (system "make install-target-libgcc"))))
+                   (add-after 'install 'fix-interpreter
+                     (lambda* (#:key outputs #:allow-other-keys)
+                       (begin
+                         (chdir (assoc-ref outputs "out"))
+                         (map (lambda (x)
+                                (invoke (string-append #$patchelf
+                                                       "/bin/patchelf")
+                                        "--set-interpreter"
+                                        (string-append #$glibc
+                                         "/lib/ld-linux-x86-64.so.2") x))
+                              (list "bin/i686-elf-cpp"
+                               "bin/i686-elf-gcc"
+                               "bin/i686-elf-gcc-ar"
+                               "bin/i686-elf-gcc-nm"
+                               "bin/i686-elf-gcc-ranlib"
+                               "bin/i686-elf-gnatbind"
+                               "bin/i686-elf-lto-dump"
+                               "bin/i686-elf-gcc-14.2.0"
+                               "bin/i686-elf-gcov"
+                               "bin/i686-elf-gcov-dump"
+                               "bin/i686-elf-gcov-tool"
+                               "libexec/gcc/i686-elf/14.2.0/cc1"
+                               "libexec/gcc/i686-elf/14.2.0/gnat1"
+                               "libexec/gcc/i686-elf/14.2.0/install-tools/fixincl"
+                               "libexec/gcc/i686-elf/14.2.0/lto1"
+                               "libexec/gcc/i686-elf/14.2.0/plugin/gengtype"
+                               "libexec/gcc/i686-elf/14.2.0/collect2"
+                               "libexec/gcc/i686-elf/14.2.0/lto-wrapper")))))
+                   (delete 'validate-runpath))
+      #:configure-flags #~(list "--enable-languages=c,ada"
                                 "--enable-libada"
                                 "--disable-nls"
                                 "--without-libiconv-prefix"
-                                "--disable-libstdcxx-pch"
-                                "--enable-lto"
                                 "--disable-multilib"
                                 "--enable-threads=posix"
-                                "--with-gnu-ld"
-                                "--with-gnu-as"
                                 "--target=i686-elf")))
     (home-page "https://www.gnu.org/software/gnat/")
     (synopsis "GNU GNAT for i686 for coreboot")
