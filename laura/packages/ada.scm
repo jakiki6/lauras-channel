@@ -139,7 +139,8 @@
         (base32 "1j9wdznsp772q15w1kl5ip0gf0bh8wkanq2sdj12b7mzkk39pcx7"))))
     (build-system gnu-build-system)
     (native-inputs (list gnat-patched gcc-toolchain-patched patchelf))
-    (inputs (list gmp mpfr mpc isl binutils-patched))
+    (inputs (list gmp mpfr mpc isl))
+    (propagated-inputs (list binutils-patched))
     (supported-systems '("x86_64-linux"))
     (arguments
      (list
@@ -207,13 +208,19 @@
                                "libexec/gcc/i386-elf/14.2.0/collect2"
                                "libexec/gcc/i386-elf/14.2.0/lto-wrapper")))))
                    (delete 'validate-runpath))
-      #:configure-flags #~(list "--enable-languages=c,ada"
+      #:configure-flags #~(list "--enable-languages=c,ada,lto"
                                 "--enable-libada"
                                 "--disable-nls"
                                 "--without-libiconv-prefix"
                                 "--disable-multilib"
                                 "--enable-threads=posix"
-                                "--target=i386-elf")))
+                                "--target=i386-elf"
+                                (string-append "--with-ld="
+                                               #$binutils-patched
+                                               "/bin/i386-elf-ld")
+                                (string-append "--with-as="
+                                               #$binutils-patched
+                                               "/bin/i386-elf-as"))))
     (home-page "https://www.gnu.org/software/gnat/")
     (synopsis "GNU GNAT for i386 for coreboot")
     (description "GNU GNAT for i386 for coreboot")
