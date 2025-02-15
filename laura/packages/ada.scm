@@ -110,7 +110,7 @@
     (arguments
      (list
       #:out-of-source? #t
-      #:configure-flags #~'("--target=i686-elf" "LDFLAGS=-static-libgcc"
+      #:configure-flags #~'("--target=i386-elf" "LDFLAGS=-static-libgcc"
 
                             "--enable-new-dtags"
 
@@ -188,24 +188,24 @@
                                         "--set-interpreter"
                                         (string-append #$glibc
                                          "/lib/ld-linux-x86-64.so.2") x))
-                              (list "bin/i686-elf-cpp"
-                               "bin/i686-elf-gcc"
-                               "bin/i686-elf-gcc-ar"
-                               "bin/i686-elf-gcc-nm"
-                               "bin/i686-elf-gcc-ranlib"
-                               "bin/i686-elf-gnatbind"
-                               "bin/i686-elf-lto-dump"
-                               "bin/i686-elf-gcc-14.2.0"
-                               "bin/i686-elf-gcov"
-                               "bin/i686-elf-gcov-dump"
-                               "bin/i686-elf-gcov-tool"
-                               "libexec/gcc/i686-elf/14.2.0/cc1"
-                               "libexec/gcc/i686-elf/14.2.0/gnat1"
-                               "libexec/gcc/i686-elf/14.2.0/install-tools/fixincl"
-                               "libexec/gcc/i686-elf/14.2.0/lto1"
-                               "libexec/gcc/i686-elf/14.2.0/plugin/gengtype"
-                               "libexec/gcc/i686-elf/14.2.0/collect2"
-                               "libexec/gcc/i686-elf/14.2.0/lto-wrapper")))))
+                              (list "bin/i386-elf-cpp"
+                               "bin/i386-elf-gcc"
+                               "bin/i386-elf-gcc-ar"
+                               "bin/i386-elf-gcc-nm"
+                               "bin/i386-elf-gcc-ranlib"
+                               "bin/i386-elf-gnatbind"
+                               "bin/i386-elf-lto-dump"
+                               "bin/i386-elf-gcc-14.2.0"
+                               "bin/i386-elf-gcov"
+                               "bin/i386-elf-gcov-dump"
+                               "bin/i386-elf-gcov-tool"
+                               "libexec/gcc/i386-elf/14.2.0/cc1"
+                               "libexec/gcc/i386-elf/14.2.0/gnat1"
+                               "libexec/gcc/i386-elf/14.2.0/install-tools/fixincl"
+                               "libexec/gcc/i386-elf/14.2.0/lto1"
+                               "libexec/gcc/i386-elf/14.2.0/plugin/gengtype"
+                               "libexec/gcc/i386-elf/14.2.0/collect2"
+                               "libexec/gcc/i386-elf/14.2.0/lto-wrapper")))))
                    (delete 'validate-runpath))
       #:configure-flags #~(list "--enable-languages=c,ada"
                                 "--enable-libada"
@@ -213,8 +213,8 @@
                                 "--without-libiconv-prefix"
                                 "--disable-multilib"
                                 "--enable-threads=posix"
-                                "--target=i686-elf")))
+                                "--target=i386-elf")))
     (home-page "https://www.gnu.org/software/gnat/")
-    (synopsis "GNU GNAT for i686 for coreboot")
-    (description "GNU GNAT for i686 for coreboot")
+    (synopsis "GNU GNAT for i386 for coreboot")
+    (description "GNU GNAT for i386 for coreboot")
     (license license:gpl3+)))
