@@ -7,7 +7,7 @@
              (laura packages gpu)
              (laura packages package-managers)
              (laura packages wayland)
-             (laura packages atl)
+             (laura packages android)
              (laura packages games)
              (laura packages bump)
              (laura packages go-common)
@@ -21,6 +21,7 @@
 
 (define to-test
   (list android-translation-layer
+        axmldec
         squirrel-3.2
         drand-rs
         minecraft-launcher

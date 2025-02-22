@@ -1,8 +1,9 @@
-(define-module (laura packages atl)
+(define-module (laura packages android)
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix gexp)
+  #:use-module (guix build-system cmake)
   #:use-module (guix build-system meson)
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages cmake)
@@ -31,7 +32,8 @@
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages video)
   #:use-module (gnu packages gnome)
-  #:use-module (gnu packages webkit))
+  #:use-module (gnu packages webkit)
+  #:use-module (gnu packages boost))
 
 (define-public android-translation-layer
   (package
@@ -202,3 +204,29 @@
      "a set of libraries for loading bionic-linked .so files on musl/glibc")
     (description "")
     (license license:asl2.0)))
+
+(define-public axmldec
+  (package
+    (name "axmldec")
+    (version "1.2.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ytsutano/axmldec")
+             (recursive? #t)
+             (commit "v1.2.0")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0k5xc3bllnsqhfm6nry986krgspwq204nq09ka8cjss3nijxjl1c"))))
+    (build-system cmake-build-system)
+    (inputs (list boost zlib))
+    (arguments
+     (list
+      #:tests? #f
+      #:build-type "Release"))
+    (home-page "https://github.com/ytsutano/axmldec")
+    (synopsis "Stand-alone binary AndroidManifest.xml decoder")
+    (description
+     "AndroidManifest.xml in an APK file is binary encoded. This tool accepts either a binary or a text XML file and prints the decoded XML to the standard output or a file. It also allows you to extract the decoded AndroidManifest.xml directly from an APK file.")
+    (license license:isc)))
