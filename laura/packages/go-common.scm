@@ -18,6 +18,106 @@
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages tls))
 
+(define-public go-github-com-rogpeppe-clock
+  (package
+    (name "go-github-com-rogpeppe-clock")
+    (version "0.0.0-20190514195947-2896927a307a")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/rogpeppe/clock")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "14lniymm87b6ar8ikyacv0805vx6kk72fqnq95rpq6pfxys544cg"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/rogpeppe/clock"))
+    (propagated-inputs (list go-github-com-frankban-quicktest))
+    (home-page "https://github.com/rogpeppe/clock")
+    (synopsis "clock")
+    (description "An interface definition for a fully defined clock.")
+    (license license:lgpl3)))
+
+(define-public go-github-com-go-retry-retry
+  (package
+    (name "go-github-com-go-retry-retry")
+    (version "1.0.3")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/go-retry/retry")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0wnif9y19zca1ijl4d5ss2zyrchvr7rf0421xkmyqf1wl1qqizch"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "gopkg.in/retry.v1"))
+    (propagated-inputs (list go-github-com-rogpeppe-clock
+                             go-github-com-frankban-quicktest))
+    (home-page "https://github.com/go-retry/retry")
+    (synopsis "retry")
+    (description
+     "Package retry provides a framework for retrying actions.  It does not itself
+invoke the action to be retried, but is intended to be used in a retry loop.")
+    (license license:lgpl3)))
+
+(define-public go-github-com-go-errgo-errgo
+  (package
+    (name "go-github-com-go-errgo-errgo")
+    (version "1.0.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/go-errgo/errgo")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "17g3lmbkg0c2axlak482cp0qqssf6vrfnhcfmrw5hzg1y13cbz9k"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "gopkg.in/errgo.v1"))
+    (propagated-inputs (list go-github-com-frankban-quicktest))
+    (home-page "https://github.com/go-errgo/errgo")
+    (synopsis "errgo")
+    (description
+     "The errgo package provides a way to create and diagnose errors.  It is
+compatible with the usual Go error idioms but adds a way to wrap errors so that
+they record source location information while retaining a consistent way for
+code to inspect errors to find out particular problems.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-juju-go4
+  (package
+    (name "go-github-com-juju-go4")
+    (version "0.0.0-20160222163258-40d72ab9641a")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/juju/go4")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0sjxa2lnk244si525034fxks593fngnmdjq707g6g7x0c00q1ybg"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:unpack-path "github.com/juju/go4"
+      #:import-path "github.com/juju/go4/lock"))
+    (home-page "https://github.com/juju/go4")
+    (synopsis "go4")
+    (description
+     "@@url{http://go4.org,go4.org} is a collection of packages for Go programmers.")
+    (license license:asl2.0)))
+
 (define-public go-github-com-acarl005-stripansi
   (package
     (name "go-github-com-acarl005-stripansi")
@@ -524,18 +624,19 @@ through it's psuedoterminal.")
     (name "go-github-com-cpuguy83-go-md2man-v2")
     (version "2.0.1")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-               (url "https://github.com/cpuguy83/go-md2man")
-               (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32 "051ljpzf1f5nh631lvn53ziclkzmx5lza8545mkk6wxdfnfdcx8f"))
-        (modules '((guix build utils)))
-        (snippet #~(delete-file-recursively "vendor"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/cpuguy83/go-md2man")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "051ljpzf1f5nh631lvn53ziclkzmx5lza8545mkk6wxdfnfdcx8f"))
+       (modules '((guix build utils)))
+       (snippet #~(delete-file-recursively "vendor"))))
     (build-system go-build-system)
-    (arguments '(#:import-path "github.com/cpuguy83/go-md2man/v2"))
+    (arguments
+     '(#:import-path "github.com/cpuguy83/go-md2man/v2"))
     (propagated-inputs (list go-github-com-russross-blackfriday-v2))
     (home-page "https://github.com/cpuguy83/go-md2man")
     (synopsis "go-md2man")
@@ -557,14 +658,19 @@ through it's psuedoterminal.")
         (base32 "0hx8amlkrazk0pxkca216qq1wgssjrc6ja3q31lpilr5ycf4smjx"))))
     (build-system go-build-system)
     (arguments
-      (list #:phases
-        #~(modify-phases %standard-phases
-            (delete 'build)
-            (delete 'check)
-            (replace 'install (lambda* (#:key outputs #:allow-other-keys)
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'build)
+          (delete 'check)
+          (replace 'install
+            (lambda* (#:key outputs #:allow-other-keys)
               (begin
-                (mkdir-p (string-append (assoc-ref outputs "out") "/src/github.com/evanw/esbuild/internal"))
-                (copy-recursively "src/internal" (string-append (assoc-ref outputs "out") "/src/github.com/evanw/esbuild/internal"))))))))
+                (mkdir-p (string-append (assoc-ref outputs "out")
+                          "/src/github.com/evanw/esbuild/internal"))
+                (copy-recursively "src/internal"
+                                  (string-append (assoc-ref outputs "out")
+                                   "/src/github.com/evanw/esbuild/internal"))))))))
     (propagated-inputs (list go-golang-org-x-sys))
     (home-page "https://github.com/evanw/esbuild")
     (synopsis "Why?")
@@ -609,3 +715,100 @@ through it's psuedoterminal.")
     (synopsis "json5")
     (description "Package json5 implements decoding of JSON5 values.")
     (license license:expat)))
+
+(define-public go-github-com-juju-persistent-cookiejar
+  (package
+    (name "go-github-com-juju-persistent-cookiejar")
+    (version "1.0.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/juju/persistent-cookiejar")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "059k97xilmlwqhr98f3mhw0zqswsfs1y6x9lv72lba62g66hcxpa"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/juju/persistent-cookiejar"
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'build 'deref-symlinks
+            (lambda* (#:key inputs #:allow-other-keys)
+              (begin
+                (delete-file-recursively
+                 "src/golang.org/x/net/publicsuffix/data")
+                (copy-recursively (string-append (assoc-ref inputs
+                                                  "go-golang-org-x-net")
+                                   "/src/golang.org/x/net/publicsuffix/data")
+                                  "src/golang.org/x/net/publicsuffix/data")))))))
+    (propagated-inputs (list go-github-com-juju-go4 go-golang-org-x-net
+                             go-github-com-go-errgo-errgo
+                             go-github-com-go-retry-retry))
+    (home-page "https://github.com/juju/persistent-cookiejar")
+    (synopsis "cookiejar")
+    (description
+     "Package cookiejar implements an in-memory
+@@url{https://rfc-editor.org/rfc/rfc6265.html,RFC 6265}-compliant
+http.@code{CookieJar}.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-thediveo-success
+  (package
+    (name "go-github-com-thediveo-success")
+    (version "1.0.3")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/thediveo/success")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "17xrga93znyynhabkjwcwckji37viiaflrv2cy6zrlp3gj7ajwn4"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/thediveo/success"))
+    (propagated-inputs (list go-github-com-onsi-gomega
+                             go-github-com-onsi-ginkgo-v2))
+    (home-page "https://github.com/thediveo/success")
+    (synopsis #f)
+    (description
+     "Package success improves your testing feng shui tremendiously by shimming in
+Gomega error detection whenever trying to be @code{Successful()}.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-thediveo-enumflag
+  (package
+    (name "go-github-com-thediveo-enumflag")
+    (version "2.0.7")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/thediveo/enumflag")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0zy8ciir6z9036866789x9i4cj45z9ffciyvjah4ifkfy2hbcxn8"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:import-path "github.com/thediveo/enumflag/v2"
+      #:unpack-path "github.com/thediveo/enumflag/v2"))
+    (propagated-inputs (list go-golang-org-x-exp
+                             go-github-com-thediveo-success
+                             go-github-com-spf13-cobra
+                             go-github-com-sirupsen-logrus
+                             go-github-com-onsi-gomega
+                             go-github-com-onsi-ginkgo-v2))
+    (home-page "https://github.com/thediveo/enumflag")
+    (synopsis "CLI Enumeration Flags")
+    (description
+     "Package enumflag supplements the Golang CLI flag handling packages spf13/cobra
+and spf13/pflag with enumeration flags.")
+    (license license:asl2.0)))

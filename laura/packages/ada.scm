@@ -47,32 +47,33 @@
     (arguments
      (list
       #:modules '((guix build utils))
-      #:builder #~(begin
-                    (use-modules (guix build utils))
-                    (copy-recursively #$gnat
-                                      (assoc-ref %outputs "out")
-                                      #:keep-permissions? #t)
-                    (chdir (assoc-ref %outputs "out"))
-                    (make-file-writable "bin")
-                    (make-file-writable
-                     "lib/gcc/x86_64-pc-linux-gnu/14.2.0/plugin/include/config/i386")
-                    (map (lambda (x)
-                           (begin
-                             (format #t "Patching ~a\n" x)
-                             (make-file-writable x)
-                             (system (string-append #$sed
-                                      "/bin/sed -i -e 's|/lib64/ld-linux-x86-64.so.2|/tmp/64ld-linux-x86-64.so.2|g' "
-                                      x))))
-                         (list "bin/c++"
-                          "bin/cpp"
-                          "bin/gcc"
-                          "bin/g++"
-                          "bin/gp-display-html"
-                          "bin/x86_64-pc-linux-gnu-c++"
-                          "bin/x86_64-pc-linux-gnu-g++"
-                          "bin/x86_64-pc-linux-gnu-gcc"
-                          "bin/x86_64-pc-linux-gnu-gcc-14.2.0"
-                          "lib/gcc/x86_64-pc-linux-gnu/14.2.0/plugin/include/config/i386/linux64.h")))))))
+      #:builder
+      #~(begin
+          (use-modules (guix build utils))
+          (copy-recursively #$gnat
+                            (assoc-ref %outputs "out")
+                            #:keep-permissions? #t)
+          (chdir (assoc-ref %outputs "out"))
+          (make-file-writable "bin")
+          (make-file-writable
+           "lib/gcc/x86_64-pc-linux-gnu/14.2.0/plugin/include/config/i386")
+          (map (lambda (x)
+                 (begin
+                   (format #t "Patching ~a\n" x)
+                   (make-file-writable x)
+                   (system (string-append #$sed
+                            "/bin/sed -i -e 's|/lib64/ld-linux-x86-64.so.2|/tmp/64ld-linux-x86-64.so.2|g' "
+                            x))))
+               (list "bin/c++"
+                "bin/cpp"
+                "bin/gcc"
+                "bin/g++"
+                "bin/gp-display-html"
+                "bin/x86_64-pc-linux-gnu-c++"
+                "bin/x86_64-pc-linux-gnu-g++"
+                "bin/x86_64-pc-linux-gnu-gcc"
+                "bin/x86_64-pc-linux-gnu-gcc-14.2.0"
+                "lib/gcc/x86_64-pc-linux-gnu/14.2.0/plugin/include/config/i386/linux64.h")))))))
 
 (define gcc-toolchain-patched
   (package
@@ -85,24 +86,23 @@
     (arguments
      (list
       #:modules '((guix build utils))
-      #:builder #~(begin
-                    (use-modules (guix build utils))
-                    (copy-recursively #$gcc-toolchain
-                                      (assoc-ref %outputs "out")
-                                      #:keep-permissions? #t)
-                    (chdir (assoc-ref %outputs "out"))
-                    (make-file-writable "include")
-                    (delete-file-recursively "include/c++")
-                    (copy-recursively (string-append #$gcc-toolchain
-                                                     "/include/c++")
-                                      "include/c++"
-                                      #:keep-permissions? #t
-                                      #:follow-symlinks? #t)
-                    (make-file-writable "include/c++/bits")
-                    (copy-recursively
-                     "include/c++/x86_64-unknown-linux-gnu/bits"
-                     "include/c++/bits"
-                     #:keep-permissions? #t))))))
+      #:builder
+      #~(begin
+          (use-modules (guix build utils))
+          (copy-recursively #$gcc-toolchain
+                            (assoc-ref %outputs "out")
+                            #:keep-permissions? #t)
+          (chdir (assoc-ref %outputs "out"))
+          (make-file-writable "include")
+          (delete-file-recursively "include/c++")
+          (copy-recursively (string-append #$gcc-toolchain "/include/c++")
+                            "include/c++"
+                            #:keep-permissions? #t
+                            #:follow-symlinks? #t)
+          (make-file-writable "include/c++/bits")
+          (copy-recursively "include/c++/x86_64-unknown-linux-gnu/bits"
+                            "include/c++/bits"
+                            #:keep-permissions? #t))))))
 
 (define binutils-patched
   (package
@@ -110,22 +110,24 @@
     (arguments
      (list
       #:out-of-source? #t
-      #:configure-flags #~'("--target=i386-elf" "LDFLAGS=-static-libgcc"
+      #:configure-flags
+      #~'("--target=i386-elf" "LDFLAGS=-static-libgcc"
 
-                            "--enable-new-dtags"
+          "--enable-new-dtags"
 
-                            "--with-lib-path=/no-ld-lib-path"
+          "--with-lib-path=/no-ld-lib-path"
 
-                            "--enable-install-libbfd"
+          "--enable-install-libbfd"
 
-                            "--enable-deterministic-archives"
+          "--enable-deterministic-archives"
 
-                            "--enable-64-bit-bfd"
-                            "--enable-compressed-debug-sections=all"
-                            "--enable-lto"
-                            "--enable-separate-code"
-                            "--enable-threads")
-      #:make-flags #~'("MAKEINFO=true")))))
+          "--enable-64-bit-bfd"
+          "--enable-compressed-debug-sections=all"
+          "--enable-lto"
+          "--enable-separate-code"
+          "--enable-threads")
+      #:make-flags
+      #~'("MAKEINFO=true")))))
 
 (define-public coreboot-toolchain
   (package
@@ -146,81 +148,78 @@
      (list
       #:out-of-source? #t
       #:tests? #f
-      #:phases #~(modify-phases %standard-phases
-                   (add-before 'configure 'install-ld
-                     (lambda _
-                       (begin
-                         (symlink (string-append #$glibc
-                                                 "/lib/ld-linux-x86-64.so.2")
-                                  "/tmp/64ld-linux-x86-64.so.2")
-                         (mkdir-p "/tmp/include/gnu")
-                         (symlink (string-append #$glibc
-                                                 "/include/gnu/stubs-64.h")
-                                  "/tmp/include/gnu/stubs-32.h")
-                         (setenv "C_INCLUDE_PATH"
-                                 (string-append (getenv "C_INCLUDE_PATH")
-                                                ":/tmp/include"))
-                         (setenv "LD_LIBRARY_PATH"
-                                 (string-append #$isl
-                                                "/lib:"
-                                                #$mpc
-                                                "/lib:"
-                                                #$mpfr
-                                                "/lib:"
-                                                #$gmp
-                                                "/lib")))))
-                   (replace 'build
-                     (lambda _
-                       (begin
-                         (system "make all-gcc -j6")
-                         (system "make all-target-libgcc -j6"))))
-                   (replace 'install
-                     (lambda _
-                       (begin
-                         (system "make install-gcc")
-                         (system "make install-target-libgcc"))))
-                   (add-after 'install 'fix-interpreter
-                     (lambda* (#:key outputs #:allow-other-keys)
-                       (begin
-                         (chdir (assoc-ref outputs "out"))
-                         (map (lambda (x)
-                                (invoke (string-append #$patchelf
-                                                       "/bin/patchelf")
-                                        "--set-interpreter"
-                                        (string-append #$glibc
-                                         "/lib/ld-linux-x86-64.so.2") x))
-                              (list "bin/i386-elf-cpp"
-                               "bin/i386-elf-gcc"
-                               "bin/i386-elf-gcc-ar"
-                               "bin/i386-elf-gcc-nm"
-                               "bin/i386-elf-gcc-ranlib"
-                               "bin/i386-elf-gnatbind"
-                               "bin/i386-elf-lto-dump"
-                               "bin/i386-elf-gcc-14.2.0"
-                               "bin/i386-elf-gcov"
-                               "bin/i386-elf-gcov-dump"
-                               "bin/i386-elf-gcov-tool"
-                               "libexec/gcc/i386-elf/14.2.0/cc1"
-                               "libexec/gcc/i386-elf/14.2.0/gnat1"
-                               "libexec/gcc/i386-elf/14.2.0/install-tools/fixincl"
-                               "libexec/gcc/i386-elf/14.2.0/lto1"
-                               "libexec/gcc/i386-elf/14.2.0/plugin/gengtype"
-                               "libexec/gcc/i386-elf/14.2.0/collect2"
-                               "libexec/gcc/i386-elf/14.2.0/lto-wrapper")))))
-                   (delete 'validate-runpath))
-      #:configure-flags #~(list "--enable-languages=c,ada,lto"
-                                "--enable-libada"
-                                "--disable-nls"
-                                "--without-libiconv-prefix"
-                                "--disable-multilib"
-                                "--enable-threads=posix"
-                                "--target=i386-elf"
-                                (string-append "--with-ld="
-                                               #$binutils-patched
-                                               "/bin/i386-elf-ld")
-                                (string-append "--with-as="
-                                               #$binutils-patched
-                                               "/bin/i386-elf-as"))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'configure 'install-ld
+            (lambda _
+              (begin
+                (symlink (string-append #$glibc "/lib/ld-linux-x86-64.so.2")
+                         "/tmp/64ld-linux-x86-64.so.2")
+                (mkdir-p "/tmp/include/gnu")
+                (symlink (string-append #$glibc "/include/gnu/stubs-64.h")
+                         "/tmp/include/gnu/stubs-32.h")
+                (setenv "C_INCLUDE_PATH"
+                        (string-append (getenv "C_INCLUDE_PATH")
+                                       ":/tmp/include"))
+                (setenv "LD_LIBRARY_PATH"
+                        (string-append #$isl
+                                       "/lib:"
+                                       #$mpc
+                                       "/lib:"
+                                       #$mpfr
+                                       "/lib:"
+                                       #$gmp
+                                       "/lib")))))
+          (replace 'build
+            (lambda _
+              (begin
+                (system "make all-gcc -j6")
+                (system "make all-target-libgcc -j6"))))
+          (replace 'install
+            (lambda _
+              (begin
+                (system "make install-gcc")
+                (system "make install-target-libgcc"))))
+          (add-after 'install 'fix-interpreter
+            (lambda* (#:key outputs #:allow-other-keys)
+              (begin
+                (chdir (assoc-ref outputs "out"))
+                (map (lambda (x)
+                       (invoke (string-append #$patchelf "/bin/patchelf")
+                               "--set-interpreter"
+                               (string-append #$glibc
+                                              "/lib/ld-linux-x86-64.so.2") x))
+                     (list "bin/i386-elf-cpp"
+                      "bin/i386-elf-gcc"
+                      "bin/i386-elf-gcc-ar"
+                      "bin/i386-elf-gcc-nm"
+                      "bin/i386-elf-gcc-ranlib"
+                      "bin/i386-elf-gnatbind"
+                      "bin/i386-elf-lto-dump"
+                      "bin/i386-elf-gcc-14.2.0"
+                      "bin/i386-elf-gcov"
+                      "bin/i386-elf-gcov-dump"
+                      "bin/i386-elf-gcov-tool"
+                      "libexec/gcc/i386-elf/14.2.0/cc1"
+                      "libexec/gcc/i386-elf/14.2.0/gnat1"
+                      "libexec/gcc/i386-elf/14.2.0/install-tools/fixincl"
+                      "libexec/gcc/i386-elf/14.2.0/lto1"
+                      "libexec/gcc/i386-elf/14.2.0/plugin/gengtype"
+                      "libexec/gcc/i386-elf/14.2.0/collect2"
+                      "libexec/gcc/i386-elf/14.2.0/lto-wrapper")))))
+          (delete 'validate-runpath))
+      #:configure-flags
+      #~(list "--enable-languages=c,ada,lto"
+              "--enable-libada"
+              "--disable-nls"
+              "--without-libiconv-prefix"
+              "--disable-multilib"
+              "--enable-threads=posix"
+              "--target=i386-elf"
+              (string-append "--with-ld="
+                             #$binutils-patched "/bin/i386-elf-ld")
+              (string-append "--with-as="
+                             #$binutils-patched "/bin/i386-elf-as"))))
     (home-page "https://www.gnu.org/software/gnat/")
     (synopsis "GNU GNAT for i386 for coreboot")
     (description "GNU GNAT for i386 for coreboot")

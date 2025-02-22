@@ -125,20 +125,19 @@
     (inputs (list lua-5.4 sdl2 sdl2-image readline))
     (arguments
      (list
-      #:phases #~(modify-phases %standard-phases
-                   (add-before 'configure 'chdir
-                     (lambda _
-                       (chdir "emulator")))
-                   (replace 'install
-                     (lambda* (#:key outputs #:allow-other-keys)
-                       (begin
-                         (install-file "emulator"
-                                       (string-append (assoc-ref outputs "out")
-                                                      "/bin"))
-                         (copy-recursively "../models"
-                                           (string-append (assoc-ref outputs
-                                                                     "out")
-                                                          "/models"))))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'configure 'chdir
+            (lambda _
+              (chdir "emulator")))
+          (replace 'install
+            (lambda* (#:key outputs #:allow-other-keys)
+              (begin
+                (install-file "emulator"
+                              (string-append (assoc-ref outputs "out") "/bin"))
+                (copy-recursively "../models"
+                                  (string-append (assoc-ref outputs "out")
+                                                 "/models"))))))))
     (home-page "https://github.com/jakiki6/CasioEmu")
     (synopsis "An emulator for nX-U8 based Casio fx-es PLUS calculators.")
     (description
@@ -194,15 +193,16 @@
      (list
       #:tests? #f
       #:build-type "Release"
-      #:phases #~(modify-phases %standard-phases
-                   (add-after 'install 'move
-                     (lambda* (#:key outputs #:allow-other-keys)
-                       (let ((d (assoc-ref outputs "out")))
-                         (begin
-                           (rename-file d "/tmp/bin")
-                           (mkdir d)
-                           (rename-file "/tmp/bin"
-                                        (string-append d "/bin")))))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'move
+            (lambda* (#:key outputs #:allow-other-keys)
+              (let ((d (assoc-ref outputs "out")))
+                (begin
+                  (rename-file d "/tmp/bin")
+                  (mkdir d)
+                  (rename-file "/tmp/bin"
+                               (string-append d "/bin")))))))))
     (home-page "https://github.com/kimci86/bkcrack")
     (synopsis
      "Crack legacy zip encryption with Biham and Kocher's known plaintext attack.")
@@ -553,15 +553,17 @@ the application that copied exits.")
     (propagated-inputs (list appsteam-for-flatpak-builder))
     (arguments
      (list
-      #:configure-flags #~(list "--enable-documentation=false")
+      #:configure-flags
+      #~(list "--enable-documentation=false")
       #:tests? #f
-      #:phases #~(modify-phases %standard-phases
-                   (add-after 'install 'wrap-program
-                     (lambda* (#:key outputs #:allow-other-keys)
-                       (wrap-program (string-append (assoc-ref outputs "out")
-                                                    "/bin/flatpak-builder")
-                         '("FLATPAK_VALIDATE_ICON" ":" =
-                           ("/usr/bin/true"))))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'wrap-program
+            (lambda* (#:key outputs #:allow-other-keys)
+              (wrap-program (string-append (assoc-ref outputs "out")
+                                           "/bin/flatpak-builder")
+                '("FLATPAK_VALIDATE_ICON" ":" =
+                  ("/usr/bin/true"))))))))
     (home-page "https://github.com/flatpak/flatpak-builder")
     (synopsis "Tool to build flatpaks from source")
     (description
@@ -611,9 +613,10 @@ matching.")
     (arguments
      (list
       #:import-path "github.com/jedib0t/go-pretty/v6"
-      #:phases #~(modify-phases %standard-phases
-                   (delete 'build)
-                   (delete 'check))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'build)
+          (delete 'check))))
     (propagated-inputs `(("go-golang-org-x-term" ,go-golang-org-x-term)
                          ("go-golang-org-x-sys" ,go-golang-org-x-sys)
                          ("go-github-com-stretchr-testify" ,go-github-com-stretchr-testify)
@@ -1097,19 +1100,19 @@ needs to be signed in the boot chain.")
     (build-system gnu-build-system)
     (arguments
      (list
-      #:phases #~(modify-phases %standard-phases
-                   (replace 'configure
-                     (lambda _
-                       (chdir "jni")))
-                   (replace 'build
-                     (lambda _
-                       (system "gcc -O2 -o vbmeta-disable-verification main.c")))
-                   (delete 'check)
-                   (replace 'install
-                     (lambda* (#:key outputs #:allow-other-keys)
-                       (install-file "vbmeta-disable-verification"
-                                     (string-append (assoc-ref outputs "out")
-                                                    "/bin/")))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'configure
+            (lambda _
+              (chdir "jni")))
+          (replace 'build
+            (lambda _
+              (system "gcc -O2 -o vbmeta-disable-verification main.c")))
+          (delete 'check)
+          (replace 'install
+            (lambda* (#:key outputs #:allow-other-keys)
+              (install-file "vbmeta-disable-verification"
+                            (string-append (assoc-ref outputs "out") "/bin/")))))))
     (home-page "https://github.com/libxzr/vbmeta-disable-verification")
     (synopsis
      "Patch Android vbmeta image and disable verification flags inside.")
@@ -1356,22 +1359,21 @@ needs to be signed in the boot chain.")
     (inputs (list sdl2))
     (arguments
      (list
-      #:phases #~(modify-phases %standard-phases
-                   (delete 'configure)
-                   (replace 'build
-                     (lambda* (#:key outputs #:allow-other-keys)
-                       (system "./build.sh")))
-                   (delete 'check)
-                   (replace 'install
-                     (lambda* (#:key outputs #:allow-other-keys)
-                       (begin
-                         (install-file "lite"
-                                       (string-append (assoc-ref outputs "out")
-                                                      "/bin"))
-                         (copy-recursively "data"
-                                           (string-append (assoc-ref outputs
-                                                                     "out")
-                                                          "/bin/data"))))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'configure)
+          (replace 'build
+            (lambda* (#:key outputs #:allow-other-keys)
+              (system "./build.sh")))
+          (delete 'check)
+          (replace 'install
+            (lambda* (#:key outputs #:allow-other-keys)
+              (begin
+                (install-file "lite"
+                              (string-append (assoc-ref outputs "out") "/bin"))
+                (copy-recursively "data"
+                                  (string-append (assoc-ref outputs "out")
+                                                 "/bin/data"))))))))
     (home-page "https://github.com/rxi/lite")
     (synopsis "A lightweight text editor written in Lua")
     (description
@@ -1441,10 +1443,11 @@ needs to be signed in the boot chain.")
     (native-inputs (list vala pkg-config gobject-introspection))
     (arguments
      (list
-      #:phases #~(modify-phases %standard-phases
-                   (add-before 'configure 'chdir
-                     (lambda _
-                       (chdir "lib/astal/io"))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'configure 'chdir
+            (lambda _
+              (chdir "lib/astal/io"))))))
     (home-page "https://aylur.github.io/astal/")
     (synopsis "Building blocks for creating custom desktop shells")
     (description "Building blocks for creating custom desktop shells")
@@ -1468,10 +1471,11 @@ needs to be signed in the boot chain.")
     (native-inputs (list vala pkg-config gobject-introspection))
     (arguments
      (list
-      #:phases #~(modify-phases %standard-phases
-                   (add-before 'configure 'chdir
-                     (lambda _
-                       (chdir "lib/astal/gtk3"))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'configure 'chdir
+            (lambda _
+              (chdir "lib/astal/gtk3"))))))
     (home-page "https://aylur.github.io/astal/")
     (synopsis "Building blocks for creating custom desktop shells")
     (description "Building blocks for creating custom desktop shells")
@@ -1625,10 +1629,11 @@ needs to be signed in the boot chain.")
     (native-inputs (list autoconf automake))
     (arguments
      (list
-      #:phases #~(modify-phases %standard-phases
-                   (add-before 'configure 'reconf
-                     (lambda _
-                       (system "aclocal -I cmulocal"))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'configure 'reconf
+            (lambda _
+              (system "aclocal -I cmulocal"))))))
     (home-page "https://github.com/league/mpack")
     (synopsis "Tools for encoding/decoding MIME messages")
     (description

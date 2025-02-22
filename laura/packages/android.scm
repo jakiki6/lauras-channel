@@ -60,23 +60,23 @@
     (build-system meson-build-system)
     (arguments
      (list
-      #:phases #~(modify-phases %standard-phases
-                   (add-before 'configure 'fix-env
-                     (lambda* (#:key inputs #:allow-other-keys)
-                       (setenv "LIBRARY_PATH"
-                               (string-append (getenv "LIBRARY_PATH") ":"
-                                              (assoc-ref inputs
-                                                         "art-standalone")
-                                              "/lib/art"))))
-                   (add-before 'configure 'patch-paths
-                     (lambda* (#:key inputs #:allow-other-keys)
-                       (substitute* "../source/meson.build"
-                         (("error.*$")
-                          (string-append "bootclasspath = '"
-                                         (assoc-ref inputs "art-standalone")
-                                         "/lib/java/core-all_classes.jar'\n"))
-                         (("^bootclasspath = bootclasspath_dir.*$")
-                          "")))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'configure 'fix-env
+            (lambda* (#:key inputs #:allow-other-keys)
+              (setenv "LIBRARY_PATH"
+                      (string-append (getenv "LIBRARY_PATH") ":"
+                                     (assoc-ref inputs "art-standalone")
+                                     "/lib/art"))))
+          (add-before 'configure 'patch-paths
+            (lambda* (#:key inputs #:allow-other-keys)
+              (substitute* "../source/meson.build"
+                (("error.*$")
+                 (string-append "bootclasspath = '"
+                                (assoc-ref inputs "art-standalone")
+                                "/lib/java/core-all_classes.jar'\n"))
+                (("^bootclasspath = bootclasspath_dir.*$")
+                 "")))))))
     (native-inputs (list pkg-config openjdk gcc-toolchain-14
                          (list openjdk "jdk")
                          (list glib "bin")))
@@ -135,30 +135,30 @@
     (build-system gnu-build-system)
     (arguments
      (list
-      #:phases #~(modify-phases %standard-phases
-                   (delete 'configure)
-                   (delete 'check)
-                   (delete 'validate-runpath)
-                   (add-before 'build 'fix-paths
-                     (lambda _
-                       (begin
-                         (substitute* "art/runtime/native_stack_dump.cc" (("/usr/bin/addr2line")
-                                       (string-append #$binutils
-                                                      "/bin/addr2line")))
-                         (substitute* "art/tools/timeout_dumper/timeout_dumper.cc" (("/usr/bin/addr2line")
-                                       (string-append #$binutils
-                                                      "/bin/addr2line"))))))
-                   (add-before 'build 'fix-env
-                     (lambda* (#:key inputs #:allow-other-keys)
-                       (setenv "ANDROID_BUILD_SHELL"
-                               (string-append (assoc-ref inputs "bash")
-                                              "/bin/bash"))))
-                   (replace 'install
-                     (lambda* (#:key outputs #:allow-other-keys)
-                       (system (string-append
-                                "make ____LIBDIR=lib ____PREFIX="
-                                (assoc-ref outputs "out") " ____INSTALL_ETC="
-                                (assoc-ref outputs "out") "/etc install")))))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'configure)
+          (delete 'check)
+          (delete 'validate-runpath)
+          (add-before 'build 'fix-paths
+            (lambda _
+              (begin
+                (substitute* "art/runtime/native_stack_dump.cc"
+                  (("/usr/bin/addr2line")
+                   (string-append #$binutils "/bin/addr2line")))
+                (substitute* "art/tools/timeout_dumper/timeout_dumper.cc"
+                  (("/usr/bin/addr2line")
+                   (string-append #$binutils "/bin/addr2line"))))))
+          (add-before 'build 'fix-env
+            (lambda* (#:key inputs #:allow-other-keys)
+              (setenv "ANDROID_BUILD_SHELL"
+                      (string-append (assoc-ref inputs "bash") "/bin/bash"))))
+          (replace 'install
+            (lambda* (#:key outputs #:allow-other-keys)
+              (system (string-append "make ____LIBDIR=lib ____PREFIX="
+                                     (assoc-ref outputs "out")
+                                     " ____INSTALL_ETC="
+                                     (assoc-ref outputs "out") "/etc install")))))))
     (native-inputs (list bash
                          coreutils
                          python-3

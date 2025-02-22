@@ -33,6 +33,7 @@
         amdgpu-top
         nomadnet
         pacman
+        ipatool
         Amogus-File-Encoder
         gcc-cross-riscv64-linux-gnu-toolchain
         CasioEmu

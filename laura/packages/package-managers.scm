@@ -3,6 +3,7 @@
   #:use-module ((guix licenses)
                 #:prefix license:)
   #:use-module (gnu packages)
+  #:use-module (guix build-system go)
   #:use-module (guix build-system meson)
   #:use-module (guix git-download)
   #:use-module (guix gexp)
@@ -16,7 +17,12 @@
   #:use-module (gnu packages curl)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages base)
-  #:use-module (gnu packages linux))
+  #:use-module (gnu packages linux)
+  #:use-module (gnu packages golang-build)
+  #:use-module (gnu packages golang-check)
+  #:use-module (gnu packages golang-crypto)
+  #:use-module (gnu packages golang-xyz)
+  #:use-module (laura packages go-common))
 
 (define-public pacman
   (package
@@ -63,3 +69,54 @@
     (description
      "Pacman - package management combining a simple binary package format with an easy-to-use build system.")
     (license license:gpl2)))
+
+(define-public ipatool
+  (package
+    (name "ipatool")
+    (version "2.1.6")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/majd/ipatool")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "05px5rlvn3agz8gfccc3x4mcmp1i33jc1gbhrgk36jxw7jnmip1m"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:import-path "github.com/majd/ipatool"
+      #:unpack-path "github.com/majd/ipatool"
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'build 'deref-symlinks
+            (lambda* (#:key inputs #:allow-other-keys)
+              (begin
+                (delete-file-recursively
+                 "src/golang.org/x/net/publicsuffix/data")
+                (copy-recursively (string-append (assoc-ref inputs
+                                                  "go-golang-org-x-net")
+                                   "/src/golang.org/x/net/publicsuffix/data")
+                                  "src/golang.org/x/net/publicsuffix/data")))))))
+    (propagated-inputs (list go-howett-net-plist
+                             go-golang-org-x-term
+                             go-golang-org-x-net
+                             go-go-uber-org-mock
+                             go-github-com-thediveo-enumflag
+                             go-github-com-spf13-cobra
+                             go-github-com-schollz-progressbar-v3
+                             go-github-com-rs-zerolog
+                             go-github-com-onsi-gomega
+                             go-github-com-onsi-ginkgo-v2
+                             go-github-com-juju-persistent-cookiejar
+                             go-github-com-avast-retry-go
+                             go-github-com-99designs-keyring))
+    (home-page "https://github.com/majd/ipatool")
+    (synopsis "IPATool")
+    (description
+     "@@code{ipatool} is a command line tool that allows you to search for @code{iOS}
+apps on the @@url{https://apps.apple.com,App Store} and download a copy of the
+app package, known as an file.")
+    (license license:expat)))

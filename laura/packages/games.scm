@@ -131,49 +131,89 @@
                              ,(string-append (assoc-ref inputs "pango") "/lib")
                              ,(string-append (assoc-ref inputs "cairo") "/lib")
                              ,(string-append (assoc-ref inputs "bzip2") "/lib")
-                             ,(string-append (assoc-ref inputs "libcloudproviders-minimal") "/lib")
-                             ,(string-append (assoc-ref inputs "libdatrie") "/lib")
-                             ,(string-append (assoc-ref inputs "libepoxy") "/lib")
-                             ,(string-append (assoc-ref inputs "libffi") "/lib")
-                             ,(string-append (assoc-ref inputs "fontconfig-minimal") "/lib")
-                             ,(string-append (assoc-ref inputs "freetype") "/lib")
-                             ,(string-append (assoc-ref inputs "fribidi") "/lib")
+                             ,(string-append (assoc-ref inputs
+                                              "libcloudproviders-minimal")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libdatrie")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libepoxy")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libffi")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs
+                                                        "fontconfig-minimal")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "freetype")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "fribidi")
+                                             "/lib")
                              ,(string-append (assoc-ref inputs "gmp") "/lib")
-                             ,(string-append (assoc-ref inputs "gnutls") "/lib")
-                             ,(string-append (assoc-ref inputs "graphite2") "/lib")
-                             ,(string-append (assoc-ref inputs "harfbuzz") "/lib")
-                             ,(string-append (assoc-ref inputs "nettle") "/lib")
-                             ,(string-append (assoc-ref inputs "libidn2") "/lib")
-                             ,(string-append (assoc-ref inputs "libjpeg-turbo") "/lib")
-                             ,(string-append (assoc-ref inputs "nettle") "/lib")
-                             ,(string-append (assoc-ref inputs "p11-kit") "/lib")
+                             ,(string-append (assoc-ref inputs "gnutls")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "graphite2")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "harfbuzz")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "nettle")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libidn2")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libjpeg-turbo")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "nettle")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "p11-kit")
+                                             "/lib")
                              ,(string-append (assoc-ref inputs "pcre2") "/lib")
-                             ,(string-append (assoc-ref inputs "pixman") "/lib")
-                             ,(string-append (assoc-ref inputs "libpng") "/lib")
-                             ,(string-append (assoc-ref inputs "libpsl") "/lib")
-                             ,(string-append (assoc-ref inputs "libtasn1") "/lib")
-                             ,(string-append (assoc-ref inputs "libthai") "/lib")
-                             ,(string-append (assoc-ref inputs "libunistring") "/lib")
-                             ,(string-append (assoc-ref inputs "wayland") "/lib")
-                             ,(string-append (assoc-ref inputs "libxau") "/lib")
-                             ,(string-append (assoc-ref inputs "libxcursor") "/lib")
-                             ,(string-append (assoc-ref inputs "libxdmcp") "/lib")
-                             ,(string-append (assoc-ref inputs "libxinerama") "/lib")
+                             ,(string-append (assoc-ref inputs "pixman")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libpng")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libpsl")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libtasn1")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libthai")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libunistring")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "wayland")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libxau")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libxcursor")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libxdmcp")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libxinerama")
+                                             "/lib")
                              ,(string-append (assoc-ref inputs "libxi") "/lib")
-                             ,(string-append (assoc-ref inputs "libxrender") "/lib")
-                             ,(string-append (assoc-ref inputs "libsecret") "/lib")
-                             ,(string-append (assoc-ref inputs "libgpg-error") "/lib")
-                             ,(string-append (assoc-ref inputs "libgcrypt") "/lib")
-                             ,(string-append (assoc-ref inputs "mit-krb5") "/lib")
-                             ,(string-append (assoc-ref inputs "e2fsprogs") "/lib")
-                             ,(string-append (assoc-ref inputs "nghttp2") "/lib")
-                             ,(string-append (assoc-ref inputs "libxfce4util") "/lib")
+                             ,(string-append (assoc-ref inputs "libxrender")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libsecret")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libgpg-error")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libgcrypt")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "mit-krb5")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "e2fsprogs")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "nghttp2")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libxfce4util")
+                                             "/lib")
                              ,(string-append (assoc-ref inputs "avahi") "/lib")
-                             ,(string-append (assoc-ref inputs "elfutils") "/lib")
+                             ,(string-append (assoc-ref inputs "elfutils")
+                                             "/lib")
                              ,(string-append (assoc-ref inputs "llvm") "/lib")
-                             ,(string-append (assoc-ref inputs "libpciaccess") "/lib")
-                             ,(string-append (assoc-ref inputs "xfconf") "/lib")
-                             ,(string-append (assoc-ref inputs "libxshmfence") "/lib")
+                             ,(string-append (assoc-ref inputs "libpciaccess")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "xfconf")
+                                             "/lib")
+                             ,(string-append (assoc-ref inputs "libxshmfence")
+                                             "/lib")
                              ,(string-append (assoc-ref inputs "alsa-lib")
                                              "/lib")))))))
          #:patchelf-plan `(("minecraft-launcher" ("glibc" "gcc" "gdk-pixbuf"
@@ -283,27 +323,25 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
      (list
       #:tests? #f
       #:build-type "Release"
-      #:phases #~(modify-phases %standard-phases
-                   (add-before 'configure 'chdir-to-source
-                     (lambda _
-                       (chdir "ScuffedMinecraft")))
-                   (replace 'install
-                     (lambda* (#:key inputs outputs #:allow-other-keys)
-                       (begin
-                         (install-file "../ScuffedMinecraft/bin/scuffed_mc"
-                                       (string-append (assoc-ref outputs "out")
-                                                      "/bin/"))
-                         (mkdir-p (string-append (assoc-ref outputs "out")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'configure 'chdir-to-source
+            (lambda _
+              (chdir "ScuffedMinecraft")))
+          (replace 'install
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (begin
+                (install-file "../ScuffedMinecraft/bin/scuffed_mc"
+                              (string-append (assoc-ref outputs "out") "/bin/"))
+                (mkdir-p (string-append (assoc-ref outputs "out")
+                                        "/share/scuffed_mc/assets"))
+                (copy-recursively "../ScuffedMinecraft/assets"
+                                  (string-append (assoc-ref outputs "out")
                                                  "/share/scuffed_mc/assets"))
-                         (copy-recursively "../ScuffedMinecraft/assets"
-                                           (string-append (assoc-ref outputs
-                                                                     "out")
-                                            "/share/scuffed_mc/assets"))
-                         (wrap-program (string-append (assoc-ref outputs "out")
-                                                      "/bin/scuffed_mc")
-                           `("LD_LIBRARY_PATH" =
-                             ,(list (string-append (assoc-ref inputs "mesa")
-                                                   "/lib"))))))))))
+                (wrap-program (string-append (assoc-ref outputs "out")
+                                             "/bin/scuffed_mc")
+                  `("LD_LIBRARY_PATH" =
+                    ,(list (string-append (assoc-ref inputs "mesa") "/lib"))))))))))
     (home-page "https://github.com/EvanatorM/ScuffedMinecraft")
     (synopsis "A Minecraft Clone in C++")
     (description "A Minecraft clone made in C++ and OpenGL")
@@ -352,30 +390,32 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
      (list
       #:tests? #f
       #:build-type "Release"
-      #:configure-flags #~(list "-Wno-dev"
-                                "-DUSE_SYSTEM_OPENAL=ON"
-                                "-DUSE_SYSTEM_CURL=ON"
-                                "-DUSE_SYSTEM_LIBPNG=ON"
-                                "-DUSE_SYSTEM_ZLIB=ON"
-                                "-DUSE_SYSTEM_WOLFSSL=OFF"
-                                "-DUSE_SYSTEM_FLATBUFFERS=ON"
-                                "-DUSE_SYSTEM_PUGIXML=ON"
-                                "-DUSE_SYSTEM_LIBUSB=ON"
-                                "-DUSE_SYSTEM_XXHASH=ON"
-                                "-DUSE_SYSTEM_MVK=ON"
-                                "-DUSE_SYSTEM_FAUDIO=ON"
-                                "-DUSE_SYSTEM_FFMPEG=ON"
-                                "-DUSE_SYSTEM_SDL=ON"
-                                "-DUSE_NATIVE_INSTRUCTIONS=OFF")
-      #:phases #~(modify-phases %standard-phases
-                   (add-before 'build 'fix-source
-                     (lambda _
-                       (substitute* "../source/rpcs3/Emu/Cell/PPUThread.cpp"
-                         (("std::fesetround\\(FE_TONEAREST\\);")
-                          ""))
-                       (substitute* "../source/rpcs3/Emu/Cell/SPUThread.cpp"
-                         (("std::fesetround\\(FE_TOWARDZERO\\);")
-                          "")))))))
+      #:configure-flags
+      #~(list "-Wno-dev"
+              "-DUSE_SYSTEM_OPENAL=ON"
+              "-DUSE_SYSTEM_CURL=ON"
+              "-DUSE_SYSTEM_LIBPNG=ON"
+              "-DUSE_SYSTEM_ZLIB=ON"
+              "-DUSE_SYSTEM_WOLFSSL=OFF"
+              "-DUSE_SYSTEM_FLATBUFFERS=ON"
+              "-DUSE_SYSTEM_PUGIXML=ON"
+              "-DUSE_SYSTEM_LIBUSB=ON"
+              "-DUSE_SYSTEM_XXHASH=ON"
+              "-DUSE_SYSTEM_MVK=ON"
+              "-DUSE_SYSTEM_FAUDIO=ON"
+              "-DUSE_SYSTEM_FFMPEG=ON"
+              "-DUSE_SYSTEM_SDL=ON"
+              "-DUSE_NATIVE_INSTRUCTIONS=OFF")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'build 'fix-source
+            (lambda _
+              (substitute* "../source/rpcs3/Emu/Cell/PPUThread.cpp"
+                (("std::fesetround\\(FE_TONEAREST\\);")
+                 ""))
+              (substitute* "../source/rpcs3/Emu/Cell/SPUThread.cpp"
+                (("std::fesetround\\(FE_TOWARDZERO\\);")
+                 "")))))))
     (native-inputs (list pkg-config gcc-toolchain-14))
     (inputs (list zlib
                   mesa
@@ -446,7 +486,8 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
     (arguments
      (list
       #:tests? #f
-      #:configure-flags #~(list "-Dworkaround_elusive_bzip2=false" "-Doptimization=3")))
+      #:configure-flags
+      #~(list "-Dworkaround_elusive_bzip2=false" "-Doptimization=3")))
     (home-page "https://powdertoy.co.uk")
     (synopsis "The Powder Toy")
     (description
