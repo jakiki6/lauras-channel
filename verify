@@ -22,6 +22,7 @@
 (define to-test
   (list android-translation-layer
         axmldec
+        simg2img
         squirrel-3.2
         drand-rs
         minecraft-launcher
