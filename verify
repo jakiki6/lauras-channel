@@ -70,7 +70,8 @@
         binwalk-3
         wl-screenrec
         xwaylandvideobridge
-        mpack))
+        mpack
+        cshatag))
 
 (use-modules (guix)
              (guix derivations)

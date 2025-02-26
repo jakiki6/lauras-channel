@@ -1639,3 +1639,32 @@ needs to be signed in the boot chain.")
     (description
      "When the attachment's suggested filename has spaces or other undesirable characters, munpack replaces them with 'X'. ThisXisXugly, and I'd prefer to let the user specify a replacement character. Here is a patch that adds an option [-r character] so that munpack -r- would produce This-is-better. The default is still 'X', so as not to disrupt any expectations. The manual page and usage string have been updated accordingly.")
     (license license:expat)))
+
+(define-public cshatag
+  (package
+    (name "cshatag")
+    (version "2.2.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/rfjakob/cshatag")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0b9zgkdbfiq1nhw6w0ddvyq55b82zg80ngzhbhxsi275lxp0z926"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/rfjakob/cshatag"))
+    (propagated-inputs (list go-github-com-pkg-xattr))
+    (home-page "https://github.com/rfjakob/cshatag")
+    (synopsis "Similar Tools")
+    (description
+     "@@url{https://github.com/rfjakob/cshatag/actions/workflows/ci.yml,(img (@@ (src
+https://github.com/rfjakob/cshatag/actions/workflows/ci.yml/badge.svg) (alt
+CI)))} @@url{https://goreportcard.com/report/github.com/rfjakob/cshatag,(img (@@
+(src https://goreportcard.com/badge/github.com/rfjakob/cshatag) (alt Go Report
+Card)))} • @@url{#readme-Changelog,View Changelog} •
+@@url{https://github.com/rfjakob/cshatag/releases,Download Binary Releases}.")
+    (license license:expat)))
