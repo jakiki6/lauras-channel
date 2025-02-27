@@ -15,6 +15,7 @@
              (laura packages nomadnet)
              (laura packages rust-common)
              (laura packages utils)
+             (laura packages 3ds)
              (laura services utils)
              (laura home services wine)
              (laura home services audio))
@@ -71,7 +72,10 @@
         wl-screenrec
         xwaylandvideobridge
         mpack
-        cshatag))
+        cshatag
+        otptool
+        ctrtool
+        makerom))
 
 (use-modules (guix)
              (guix derivations)

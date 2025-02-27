@@ -173,8 +173,8 @@
           (replace 'build
             (lambda _
               (begin
-                (system "make all-gcc -j6")
-                (system "make all-target-libgcc -j6"))))
+                (system (string-append "make all-gcc -j" (number->string (parallel-job-count))))
+                (system (string-append "make all-target-libgcc -j" (number->string (parallel-job-count)))))))
           (replace 'install
             (lambda _
               (begin
