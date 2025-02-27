@@ -8,6 +8,7 @@
   #:use-module (guix download)
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system copy)
+  #:use-module (guix build-system zig)
   #:use-module (gnu packages)
   #:use-module (gnu packages crates-io)
   #:use-module (gnu packages crates-graphics)
@@ -1667,4 +1668,23 @@ CI)))} @@url{https://goreportcard.com/report/github.com/rfjakob/cshatag,(img (@@
 (src https://goreportcard.com/badge/github.com/rfjakob/cshatag) (alt Go Report
 Card)))} • @@url{#readme-Changelog,View Changelog} •
 @@url{https://github.com/rfjakob/cshatag/releases,Download Binary Releases}.")
+    (license license:expat)))
+
+(define-public dsvpn
+  (package
+    (name "dsvpn")
+    (version "0.1.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/jedisct1/dsvpn")
+              (commit "327928d")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1z0nligx2v2kp707z9rpi9p5y347zzniclxciv98zpa0h7f9j9b8"))))
+    (build-system zig-build-system)
+    (arguments (list #:tests? #f))
+    (home-page "https://github.com/jedisct1/dsvpn")
+    (synopsis "A Dead Simple VPN.")
+    (description "DSVPN is a Dead Simple VPN, designed to address the most common use case for using a VPN.")
     (license license:expat)))
