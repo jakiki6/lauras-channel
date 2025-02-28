@@ -71,10 +71,10 @@
         binwalk-3
         wl-screenrec
         xwaylandvideobridge
-        mpack
         cshatag
         dsvpn
         sslscan
+        ssh-audit
         otptool
         ctrtool
         makerom))

@@ -9,6 +9,7 @@
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system copy)
   #:use-module (guix build-system zig)
+  #:use-module (guix build-system pyproject)
   #:use-module (gnu packages)
   #:use-module (gnu packages crates-io)
   #:use-module (gnu packages crates-graphics)
@@ -62,6 +63,7 @@
   #:use-module (gnu packages gl)
   #:use-module (gnu packages web)
   #:use-module (gnu packages crates-compression)
+  #:use-module (gnu packages python-build)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -1613,34 +1615,6 @@ needs to be signed in the boot chain.")
      "This package provides Analyzes data for embedded file types.")
     (license license:expat)))
 
-(define-public mpack
-  (package
-    (name "mpack")
-    (version "1.6")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/league/mpack")
-             (commit "8f00e80ad8dc220ee7417145b054ca6fe6e839f5")))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "10xb50jhysvhfc3s2n98zxf8hc2751xliiyjsk7lzlhkswacnyci"))))
-    (build-system gnu-build-system)
-    (native-inputs (list autoconf automake))
-    (arguments
-     (list
-      #:phases
-      #~(modify-phases %standard-phases
-          (add-before 'configure 'reconf
-            (lambda _
-              (system "aclocal -I cmulocal"))))))
-    (home-page "https://github.com/league/mpack")
-    (synopsis "Tools for encoding/decoding MIME messages")
-    (description
-     "When the attachment's suggested filename has spaces or other undesirable characters, munpack replaces them with 'X'. ThisXisXugly, and I'd prefer to let the user specify a replacement character. Here is a patch that adds an option [-r character] so that munpack -r- would produce This-is-better. The default is still 'X', so as not to disrupt any expectations. The manual page and usage string have been updated accordingly.")
-    (license license:expat)))
-
 (define-public cshatag
   (package
     (name "cshatag")
@@ -1776,3 +1750,21 @@ Card)))} • @@url{#readme-Changelog,View Changelog} •
     (description
      "sslscan version 2 has now been released. This includes a major rewrite of the backend scanning code, which means that it is no longer reliant on the version of OpenSSL for many checks. This means that it is possible to support legacy protocols (SSLv2 and SSLv3), as well as supporting TLSv1.3 - regardless of the version of OpenSSL that it has been compiled against.")
     (license license:gpl3)))
+
+(define-public ssh-audit
+  (package
+    (name "ssh-audit")
+    (version "3.3.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "ssh_audit" version))
+       (sha256
+        (base32 "1c55c5k0ybfm7fs9zhid8486lxj69cx2k7vck1j5vx24k2n3cvmp"))))
+    (build-system pyproject-build-system)
+    (native-inputs (list python-setuptools python-wheel))
+    (home-page "https://github.com/jtesta/ssh-audit")
+    (synopsis "An SSH server & client configuration security auditing tool")
+    (description
+     "An SSH server & client configuration security auditing tool.")
+    (license license:expat)))
