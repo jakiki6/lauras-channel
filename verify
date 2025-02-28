@@ -74,6 +74,7 @@
         mpack
         cshatag
         dsvpn
+        sslscan
         otptool
         ctrtool
         makerom))

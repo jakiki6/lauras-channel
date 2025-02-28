@@ -1675,16 +1675,104 @@ Card)))} • @@url{#readme-Changelog,View Changelog} •
     (name "dsvpn")
     (version "0.1.4")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/jedisct1/dsvpn")
-              (commit "327928d")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "1z0nligx2v2kp707z9rpi9p5y347zzniclxciv98zpa0h7f9j9b8"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/jedisct1/dsvpn")
+             (commit "327928d")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1z0nligx2v2kp707z9rpi9p5y347zzniclxciv98zpa0h7f9j9b8"))))
     (build-system zig-build-system)
-    (arguments (list #:tests? #f))
+    (arguments
+     (list
+      #:tests? #f))
     (home-page "https://github.com/jedisct1/dsvpn")
     (synopsis "A Dead Simple VPN.")
-    (description "DSVPN is a Dead Simple VPN, designed to address the most common use case for using a VPN.")
+    (description
+     "DSVPN is a Dead Simple VPN, designed to address the most common use case for using a VPN.")
     (license license:expat)))
+
+(define openssl-with-compression
+  (package/inherit openssl
+    (inputs (list zlib))
+    (arguments (substitute-keyword-arguments (package-arguments openssl)
+                 ((#:phases phases
+                   '%standard-phases)
+                  #~(modify-phases #$phases
+                      (replace 'configure
+                        (lambda* (#:key configure-flags #:allow-other-keys)
+                          ;; It's not a shebang so patch-source-shebangs misses it.
+                          (substitute* "config"
+                            (("/usr/bin/env")
+                             (which "env")))
+                          (apply invoke
+                                 #$@(if (%current-target-system)
+                                        #~("./Configure")
+                                        #~("./config"))
+                                 "shared" ;build shared libraries
+                                 "--libdir=lib"
+
+                                 ;; The default for this catch-all directory is
+                                 ;; PREFIX/ssl.  Change that to something more
+                                 ;; conventional.
+                                 (string-append "--openssldir="
+                                                #$output "/share/openssl-"
+                                                #$(package-version
+                                                   this-package))
+
+                                 (string-append "--prefix="
+                                                #$output)
+                                 (string-append "-Wl,-rpath,"
+                                                (string-append #$output "/lib"))
+                                 "enable-weak-ssl-ciphers"
+                                 "zlib"
+                                 #$@(if (%current-target-system)
+                                        #~((getenv "CONFIGURE_TARGET_ARCH"))
+                                        #~())
+                                 configure-flags)
+                          ;; Output the configure variables.
+                          (invoke "perl" "configdata.pm" "--dump")))
+                      (replace 'remove-miscellany
+                        (lambda _
+                          ;; The 'misc' directory contains random undocumented shell and
+                          ;; Perl scripts.  Remove them to avoid retaining a reference on
+                          ;; Perl.
+                          (delete-file-recursively (string-append #$output
+                                                    "/share/openssl-"
+                                                    #$(package-version
+                                                       this-package) "/misc"))))))))))
+
+(define-public sslscan
+  (package
+    (name "sslscan")
+    (version "2.1.6")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/rbsec/sslscan")
+             (commit "2.1.6")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0bkvv5w5qi2yqxxrdpd0nzgz3wdl6b0xq6md4pzl8zkf3g016njw"))))
+    (build-system gnu-build-system)
+    (inputs (list openssl-with-compression))
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'configure
+            (lambda _
+              (setenv "CC" "gcc")))
+          (replace 'install
+            (lambda _
+              (install-file "sslscan"
+                            (string-append #$output "/bin")))))))
+    (home-page "https://github.com/rbsec/sslscan")
+    (synopsis
+     "Test SSL/TLS enabled services to discover supported cipher suites.")
+    (description
+     "sslscan version 2 has now been released. This includes a major rewrite of the backend scanning code, which means that it is no longer reliant on the version of OpenSSL for many checks. This means that it is possible to support legacy protocols (SSLv2 and SSLv3), as well as supporting TLSv1.3 - regardless of the version of OpenSSL that it has been compiled against.")
+    (license license:gpl3)))
