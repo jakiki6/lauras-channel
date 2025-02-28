@@ -217,7 +217,7 @@
                        ("rust-actix-tls" ,rust-actix-tls-3)
                        ("rust-actix-utils" ,rust-actix-utils-3)
                        ("rust-ahash" ,rust-ahash-0.8)
-                       ("rust-base64" ,rust-base64-0.22)
+                       ("rust-base64" ,rust-base64-0.22.1)
                        ("rust-bitflags" ,rust-bitflags-2)
                        ("rust-brotli" ,rust-brotli-6)
                        ("rust-bytes" ,rust-bytes-1)
@@ -2015,7 +2015,7 @@ over AT-SPI.")
 in a Rust program.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-base64-0.22
+(define-public rust-base64-0.22.1
   (package
     (name "rust-base64")
     (version "0.22.1")
@@ -4165,7 +4165,7 @@ ristretto255 and Curve25519.")
      "This package provides Color structs and color conversion utilities.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-edit-0.1
+(define-public rust-edit-0.1.5
   (package
     (name "rust-edit")
     (version "0.1.5")
@@ -10570,7 +10570,7 @@ and compilation time.")
     (arguments
      `(#:skip-build? #t
        #:cargo-inputs (("rust-async-compression" ,rust-async-compression-0.4)
-                       ("rust-base64" ,rust-base64-0.22)
+                       ("rust-base64" ,rust-base64-0.22.1)
                        ("rust-bytes" ,rust-bytes-1)
                        ("rust-cookie" ,rust-cookie-0.17)
                        ("rust-cookie-store" ,rust-cookie-store-0.20)
@@ -13368,7 +13368,7 @@ Standard Annex #11 rules.")
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build? #t
-       #:cargo-inputs (("rust-base64" ,rust-base64-0.22)
+       #:cargo-inputs (("rust-base64" ,rust-base64-0.22.1)
                        ("rust-brotli-decompressor" ,rust-brotli-decompressor-2)
                        ("rust-cookie" ,rust-cookie-0.18)
                        ("rust-cookie-store" ,rust-cookie-store-0.21)
@@ -18211,7 +18211,7 @@ ratatui::text::Text type from ratatui library.")
 @code{PostgreSQL}, SQLite, and @code{MySQL}.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-termsize-0.1
+(define-public rust-termsize-0.1.9
   (package
     (name "rust-termsize")
     (version "0.1.9")
@@ -18397,7 +18397,7 @@ ratatui::text::Text type from ratatui library.")
      "This package provides a cross-platform font loading library.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-plotters-0.3
+(define-public rust-plotters-0.3.7
   (package
     (name "rust-plotters")
     (version "0.3.7")
