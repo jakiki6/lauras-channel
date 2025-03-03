@@ -1768,3 +1768,23 @@ Card)))} • @@url{#readme-Changelog,View Changelog} •
     (description
      "An SSH server & client configuration security auditing tool.")
     (license license:expat)))
+
+(define-public simdutf
+  (package
+    (name "simdutf")
+    (version "6.2.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/simdutf/simdutf")
+              (commit "v6.2.0")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1r6hw3ds4rjjq6s2zmrbmqfmsiyy57bg5zwldckprk16l0jb0clj"))))
+    (build-system cmake-build-system)
+    (arguments (list 
+                     #:build-type "Release"))
+    (home-page "https://github.com/simdutf/simdutf")
+    (synopsis "simdutf: Unicode validation and transcoding at billions of characters per second")
+    (description "Unicode routines (UTF8, UTF16, UTF32) and Base64: billions of characters per second using SSE2, AVX2, NEON, AVX-512, RISC-V Vector Extension, LoongArch64. Part of Node.js, WebKit/Safari, Ladybird, Chromium, Cloudflare Workers and Bun.")
+    (license license:asl2.0)))

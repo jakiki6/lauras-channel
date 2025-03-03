@@ -75,6 +75,7 @@
         dsvpn
         sslscan
         ssh-audit
+        simdutf
         otptool
         ctrtool
         makerom))
