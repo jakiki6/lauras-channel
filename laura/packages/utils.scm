@@ -1774,17 +1774,47 @@ Card)))} • @@url{#readme-Changelog,View Changelog} •
     (name "simdutf")
     (version "6.2.0")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/simdutf/simdutf")
-              (commit "v6.2.0")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "1r6hw3ds4rjjq6s2zmrbmqfmsiyy57bg5zwldckprk16l0jb0clj"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/simdutf/simdutf")
+             (commit "v6.2.0")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1r6hw3ds4rjjq6s2zmrbmqfmsiyy57bg5zwldckprk16l0jb0clj"))))
     (build-system cmake-build-system)
-    (arguments (list 
-                     #:build-type "Release"))
+    (arguments
+     (list
+      #:build-type "Release"))
     (home-page "https://github.com/simdutf/simdutf")
-    (synopsis "simdutf: Unicode validation and transcoding at billions of characters per second")
-    (description "Unicode routines (UTF8, UTF16, UTF32) and Base64: billions of characters per second using SSE2, AVX2, NEON, AVX-512, RISC-V Vector Extension, LoongArch64. Part of Node.js, WebKit/Safari, Ladybird, Chromium, Cloudflare Workers and Bun.")
+    (synopsis
+     "simdutf: Unicode validation and transcoding at billions of characters per second")
+    (description
+     "Unicode routines (UTF8, UTF16, UTF32) and Base64: billions of characters per second using SSE2, AVX2, NEON, AVX-512, RISC-V Vector Extension, LoongArch64. Part of Node.js, WebKit/Safari, Ladybird, Chromium, Cloudflare Workers and Bun.")
     (license license:asl2.0)))
+
+(define-public bzip3
+  (package
+    (name "bzip3")
+    (version "1.5.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/kspalaiologos/bzip3")
+             (commit "1.5.1")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0f81a05rp6y8bmi9ffwvyfilnp8rlfrvxn7v86k1srzlqg8cmjs0"))
+       (snippet #~(let ((file (open-output-file ".tarball-version")))
+                    (display "1.5.1" file)
+                    (close-output-port file)))))
+    (build-system gnu-build-system)
+    (native-inputs (list autoconf automake libtool pkg-config git))
+    (home-page "https://github.com/kspalaiologos/bzip3")
+    (synopsis "A better and stronger spiritual successor to BZip2.")
+    (description
+     "A better, faster and stronger spiritual successor to BZip2. Features higher compression ratios and better performance thanks to a order-0 context mixing entropy coder, a fast Burrows-Wheeler transform code making use of suffix arrays and a RLE with Lempel Ziv+Prediction pass based on LZ77-style string matching and PPM-style context modeling.
+
+Like its ancestor, BZip3 excels at compressing text or code.")
+    (license license:lgpl3)))

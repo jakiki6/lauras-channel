@@ -76,6 +76,7 @@
         sslscan
         ssh-audit
         simdutf
+        bzip3
         otptool
         ctrtool
         makerom))
