@@ -57,3 +57,16 @@
        (patch-flags '("-p1" "--binary"))
        (sha256
         (base32 "1nw1ghr4nxsvpk5bm9q0arrx4zrjpq5bai5sc17vj90by19187r1"))))))
+
+(define-public shepherd-core
+  (package
+    (inherit shepherd-1.0)
+    (version "1.0.100")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "mirror://gnu/shepherd/shepherd-1.0.2.tar.gz")
+       (patches (list (search-patch
+                       "laura/packages/patches/shepherd-core.patch")))
+       (sha256
+        (base32 "1gr4k57jv2flks2zvvmm0i1lpi9cmj9844zdz6l6yixhnh2aqjyz"))))))

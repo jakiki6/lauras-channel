@@ -25,6 +25,7 @@
         axmldec
         simg2img
         squirrel-3.2
+        shepherd-core
         drand-rs
         minecraft-launcher
         ScuffedMinecraft

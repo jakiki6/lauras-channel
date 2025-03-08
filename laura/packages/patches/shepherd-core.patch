@@ -1,0 +1,12 @@
+diff --color --recursive --text --unified a/modules/shepherd.scm b/modules/shepherd.scm
+--- a/modules/shepherd.scm	1970-01-01 01:00:01.000000000 +0100
++++ b/modules/shepherd.scm	2025-03-08 17:10:19.775504647 +0100
+@@ -547,6 +547,8 @@
+                 (unless (member err (list EINVAL EPERM ENOSYS))
+                   (apply throw args)))))
+ 
++          (setrlimit 'core -1 -1)
++
+           ;; Load the SIGSEGV/SIGABRT handler.  This is what allows PID 1 to
+           ;; dump core on "/", should something go wrong.
+           (false-if-exception
