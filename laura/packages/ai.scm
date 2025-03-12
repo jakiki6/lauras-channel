@@ -60,7 +60,7 @@
                              go-github-com-nlpodyssey-gopickle
                              go-github-com-mattn-go-runewidth
                              go-github-com-google-go-cmp
-                             go-github-com-emirpasic-gods
+                             go-github-com-emirpasic-gods-v2
                              go-github-com-dlclark-regexp2-v1.11.5
                              go-github-com-d4l3k-go-bfloat16
                              go-github-com-agnivade-levenshtein

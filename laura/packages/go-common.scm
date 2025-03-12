@@ -837,9 +837,9 @@ and spf13/pflag with enumeration flags.")
     (description "BFloat16 conversion utilities for Go/Golang.")
     (license license:expat)))
 
-(define-public go-github-com-emirpasic-gods
+(define-public go-github-com-emirpasic-gods-v2
   (package
-    (name "go-github-com-emirpasic-gods")
+    (name "go-github-com-emirpasic-gods-v2")
     (version "2.0.0-alpha")
     (source
      (origin
