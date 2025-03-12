@@ -16,9 +16,7 @@
              (laura packages rust-common)
              (laura packages utils)
              (laura packages 3ds)
-             (laura services utils)
-             (laura home services wine)
-             (laura home services audio))
+             (laura packages ai))
 
 (define to-test
   (list android-translation-layer
@@ -80,7 +78,8 @@
         bzip3
         otptool
         ctrtool
-        makerom))
+        makerom
+        ollama))
 
 (use-modules (guix)
              (guix derivations)
