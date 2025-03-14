@@ -11,6 +11,7 @@
   #:use-module (gnu packages golang-maths)
   #:use-module (gnu packages golang-check)
   #:use-module (gnu packages golang-web)
+  #:use-module (gnu packages cmake)
   #:use-module (laura packages go-common))
 
 (define-public ollama
@@ -42,10 +43,24 @@
     (build-system go-build-system)
     (arguments
      (list
-      #:tests? #f
       #:go go-1.23
       #:unpack-path "github.com/ollama/ollama"
-      #:import-path "github.com/ollama/ollama"))
+      #:import-path "github.com/ollama/ollama"
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check)
+          (delete 'validate-runpath)
+          (add-after 'install 'accelerators
+            (lambda _
+              (begin
+                (chdir "src/github.com/ollama/ollama")
+                (system "cmake .")
+                (system (string-append "make -j"
+                                       (number->string (parallel-job-count))))
+                (system (string-append "cp -r lib "
+                                       #$output))
+                (chdir "../../../..")))))))
+    (native-inputs (list cmake))
     (propagated-inputs (list go-std-1.23
                              go-google-golang-org-protobuf
                              go-golang-org-x-text
@@ -71,9 +86,7 @@
                              go-github-com-olekukonko-tablewriter
                              go-github-com-google-uuid
                              go-github-com-gin-gonic-gin
-                             go-github-com-containerd-console
-
-                             ))
+                             go-github-com-containerd-console))
     (home-page "https://ollama.com")
     (synopsis "Get up and running with large language models.")
     (description
