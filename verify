@@ -24,6 +24,7 @@
         simg2img
         squirrel-3.2
         shepherd-core
+        fwupd-nonfree-polkit
         drand-rs
         minecraft-launcher
         ScuffedMinecraft

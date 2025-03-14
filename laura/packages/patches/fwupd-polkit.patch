@@ -1,0 +1,12 @@
+diff --color -ruN a/meson.build b/meson.build
+--- a/meson.build	2024-09-04 14:26:24.240821336 +0200
++++ b/meson.build	2024-09-04 15:09:17.890926147 +0200
+@@ -250,7 +250,7 @@
+   if polkit.version().version_compare('>= 0.114')
+     conf.set('HAVE_POLKIT_0_114', '1')
+   endif
+-  conf.set_quoted ('POLKIT_ACTIONDIR', polkit.get_variable(pkgconfig: 'actiondir'))
++  conf.set_quoted ('POLKIT_ACTIONDIR', prefix + '/share/polkit-1/actions')
+ endif
+ if build_daemon
+   if not polkit.found()
