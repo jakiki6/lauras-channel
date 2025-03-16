@@ -5,6 +5,7 @@
   #:use-module (guix packages)
   #:use-module (guix channels)
   #:use-module (guix store)
+  #:use-module (guix monads)
   #:use-module (guix derivations)
   #:use-module (guix build-system channel))
 
@@ -39,11 +40,29 @@
                                      (http-get url))) urls))
          (channel-source (derivation-output-path (assoc-ref (derivation-outputs
                                                              (run-with-store (open-connection)
-                                                                             (gexp->derivation
-                                                                              "guix-channel-patched"
-                                                                              #~(begin
-                                                                                  (mkdir #$output)))))
-                                                            "out"))))
+                                                                             (let 
+                                                                                  (
+                                                                                   (drv
+                                                                                    (gexp->derivation
+                                                                                     "guix-channel-patched"
+                                                                                     #~(begin
+                                                                                         
+                                                                                         (mkdir #$output)))))
+                                                                               
+                                                                               (mbegin
+                                                                                %store-monad
+
+                                                                                
+                                                                                (built-derivations
+                                                                                 (list
+                                                                                  drv))
+
+                                                                                
+                                                                                (return
+                                                                                 (assoc-ref
+                                                                                  (derivation-outputs
+                                                                                   drv)
+                                                                                  "out"))))))))))
     (channel
       (name 'guix)
       (url channel-source))))
