@@ -4,6 +4,8 @@
   #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (guix channels)
+  #:use-module (guix store)
+  #:use-module (guix derivations)
   #:use-module (guix build-system channel))
 
 (define guix-channel
@@ -34,9 +36,14 @@
                     issues))
          (patches (map (lambda (url)
                          (plain-file "guix-patch"
-                                     (http-get url))) urls)))
+                                     (http-get url))) urls))
+         (channel-source (derivation-output-path (assoc-ref (derivation-outputs
+                                                             (run-with-store (open-connection)
+                                                                             (gexp->derivation
+                                                                              "guix-channel-patched"
+                                                                              #~(begin
+                                                                                  (mkdir #$output)))))
+                                                            "out"))))
     (channel
       (name 'guix)
-      (url "https://git.savannah.gnu.org/git/guix.git")
-      (location (computed-file "patched-guix"
-                               #~())))))
+      (url channel-source))))
