@@ -23,8 +23,9 @@
         (begin
           (chdir checkout)
           (map (lambda (patch)
-                 (let ((port (open-output-pipe "patch -p1")))
+                 (let ((port (open-output-pipe "patch -p1 --no-backup-if-mismatch")))
                         (put-string port patch)
+                        (put-string port "\n")
                         (close-port port))
                    ) patches)
           (chdir cwd))))))
