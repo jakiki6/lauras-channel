@@ -1818,3 +1818,23 @@ Card)))} • @@url{#readme-Changelog,View Changelog} •
 
 Like its ancestor, BZip3 excels at compressing text or code.")
     (license license:lgpl3)))
+
+(define-public faest-ref
+  (package
+    (name "faest-ref")
+    (version "2.0.3")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/faest-sign/faest-ref")
+              (recursive? #t)
+              (commit "v2.0.3")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "0bawgc34piswbbkz62sk9ybmai8cqjw5jvcx82495mz96xjirsva"))))
+    (build-system meson-build-system)
+    (native-inputs (list python-3))
+    (home-page "https://faest.info")
+    (synopsis "FAEST reference implementation")
+    (description "FAEST reference implementation")
+    (license license:expat)))
