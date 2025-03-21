@@ -1,0 +1,12 @@
+diff --color --recursive --text --unified a/src/main.rs b/src/main.rs
+--- a/src/main.rs	2025-03-21 20:22:37.170566285 +0100
++++ b/src/main.rs	2025-03-21 20:26:26.136233003 +0100
+@@ -234,7 +234,7 @@
+             "cpu_rec_corpus".to_string()
+         } else {
+             let exe_path = std::env::current_exe().with_context(|| "Could not get exe filename")?;
+-            let parent_path = exe_path.parent().unwrap();
++            let parent_path = exe_path.parent().unwrap().parent().unwrap().join("share");
+             if parent_path.join("cpu_rec_corpus").is_dir() {
+                 // Found it in the exe path
+                 parent_path

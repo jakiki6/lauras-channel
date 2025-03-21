@@ -78,6 +78,7 @@
         simdutf
         bzip3
         faest-ref
+        cpu-rec-rs
         otptool
         ctrtool
         makerom

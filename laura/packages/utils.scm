@@ -1838,3 +1838,40 @@ Like its ancestor, BZip3 excels at compressing text or code.")
     (synopsis "FAEST reference implementation")
     (description "FAEST reference implementation")
     (license license:expat)))
+
+(define-public cpu-rec-rs
+  (package
+    (name "cpu-rec-rs")
+    (version "1.0.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/trou/cpu_rec_rs")
+             (commit (string-append "release-" version))))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (patches (search-patches "laura/packages/patches/cpu-rec-rs-corpus.patch"))
+       (sha256
+        (base32 "0xhayjf7m1v64dy6d9rvwih3ck97gnhalz3xvrjshh0ak9rm9i6i"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'copy-corpus
+            (lambda _
+              (copy-recursively "cpu_rec_corpus"
+                                (string-append #$output "/share/cpu_rec_corpus")))))
+      #:cargo-inputs `(("rust-anyhow" ,rust-anyhow-1)
+                       ("rust-clap" ,rust-clap-4.4)
+                       ("rust-glob" ,rust-glob-0.3)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-simple-logger" ,rust-simple-logger-4)
+                       ("rust-tablestream" ,rust-tablestream-0.1)
+                       ("rust-assert-approx-eq" ,rust-assert-approx-eq-1))))
+    (home-page "https://github.com/trou/cpu_rec_rs")
+    (synopsis "Determine which CPU architecture is used in a binary file.")
+    (description
+     "cpu_rec_rs is a Rust reimplementation of the original cpu_rec.")
+    (license license:asl2.0)))

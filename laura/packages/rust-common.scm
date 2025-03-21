@@ -18495,3 +18495,109 @@ fallback.")
     (description
      "This package provides a port of the CRC-32 algorithm to Rust.")
     (license license:expat)))
+
+(define-public rust-tablestream-0.1
+  (package
+    (name "rust-tablestream")
+    (version "0.1.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "tablestream" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0r8vchi4v9vwkamyv9fx82v5iv519gd47nz9c1qr3y7rmp3bx87y"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-crossterm" ,rust-crossterm-0.20)
+                       ("rust-unicode-truncate" ,rust-unicode-truncate-0.2)
+                       ("rust-unicode-width" ,rust-unicode-width-0.1))
+       #:cargo-development-inputs (("rust-structopt" ,rust-structopt-0.3))))
+    (home-page "https://github.com/NfNitLoop/tablestream")
+    (synopsis "streaming table formatter for the console")
+    (description
+     "This package provides a streaming table formatter for the console.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-clap-derive-4.4
+  (package
+    (name "rust-clap-derive")
+    (version "4.4.7")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "clap_derive" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0hk4hcxl56qwqsf4hmf7c0gr19r9fbxk0ah2bgkr36pmmaph966g"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-heck" ,rust-heck-0.4)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-2))))
+    (home-page "https://github.com/clap-rs/clap")
+    (synopsis "Parse command line argument by defining a struct, derive crate")
+    (description
+     "This package provides Parse command line argument by defining a struct, derive crate.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-clap-builder-4.4
+  (package
+    (name "rust-clap-builder")
+    (version "4.4.18")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "clap_builder" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1iyif47075caa4x1p3ygk18b07lb4xl4k48w4c061i2hxi0dzx2d"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-anstream" ,rust-anstream-0.6)
+                       ("rust-anstyle" ,rust-anstyle-1)
+                       ("rust-backtrace" ,rust-backtrace-0.3)
+                       ("rust-clap-lex" ,rust-clap-lex-0.6)
+                       ("rust-strsim" ,rust-strsim-0.10)
+                       ("rust-terminal-size" ,rust-terminal-size-0.3)
+                       ("rust-unicase" ,rust-unicase-2)
+                       ("rust-unicode-width" ,rust-unicode-width-0.1))))
+    (home-page "https://github.com/clap-rs/clap")
+    (synopsis
+     "simple to use, efficient, and full-featured Command Line Argument Parser")
+    (description
+     "This package provides a simple to use, efficient, and full-featured Command Line
+Argument Parser.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-clap-4.4
+  (package
+    (name "rust-clap")
+    (version "4.4.18")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "clap" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0p46h346y8nval6gwzh27if3icbi9dwl95fg5ir36ihrqip8smqy"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-clap-builder" ,rust-clap-builder-4.4)
+                       ("rust-clap-derive" ,rust-clap-derive-4.4))
+       #:cargo-development-inputs (("rust-humantime" ,rust-humantime-2)
+                                   ("rust-rustversion" ,rust-rustversion-1)
+                                   ("rust-shlex" ,rust-shlex-1)
+                                   ("rust-snapbox" ,rust-snapbox-0.4)
+                                   ("rust-trybuild" ,rust-trybuild-1)
+                                   ("rust-trycmd" ,rust-trycmd-0.14))))
+    (home-page "https://github.com/clap-rs/clap")
+    (synopsis
+     "simple to use, efficient, and full-featured Command Line Argument Parser")
+    (description
+     "This package provides a simple to use, efficient, and full-featured Command Line
+Argument Parser.")
+    (license (list license:expat license:asl2.0))))
