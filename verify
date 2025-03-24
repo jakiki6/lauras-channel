@@ -79,6 +79,8 @@
         bzip3
         faest-ref
         cpu-rec-rs
+        echfs-fuse
+        echfs-utils
         otptool
         ctrtool
         makerom

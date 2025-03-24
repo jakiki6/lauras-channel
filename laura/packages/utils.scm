@@ -64,6 +64,7 @@
   #:use-module (gnu packages web)
   #:use-module (gnu packages crates-compression)
   #:use-module (gnu packages python-build)
+  #:use-module (gnu system uuid)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
@@ -1875,3 +1876,31 @@ Like its ancestor, BZip3 excels at compressing text or code.")
     (description
      "cpu_rec_rs is a Rust reimplementation of the original cpu_rec.")
     (license license:asl2.0)))
+
+
+(define-public echfs-fuse
+  (package
+    (name "echfs-fuse")
+    (version "1.0.0")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/echfs/echfs")
+              (commit "ed17326")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1ns3aipiz12pidql3jyv43v14nlwxjqqz1bxfichq8aw2grdy3bw"))))
+    (build-system gnu-build-system)
+    (native-inputs (list pkg-config autoconf automake libtool))
+    (inputs (list fuse))
+    (arguments (list #:tests? #f #:phases #~(modify-phases %standard-phases (add-before 'bootstrap 'chdir (lambda _ (chdir "echfs-fuse"))))))
+    (home-page "https://github.com/echfs/echfs")
+    (synopsis "The echfs filesystem")
+    (description "The echfs filesystem is a 64-bit FAT-like filesystem which aims to support most UNIX and POSIX-style features while being extremely simple to implement. Ideal for hobbyist OS developers who want a simple filesystem and don't want to deal with old crufty FAT (which isn't UNIX/POSIX compliant either), or complex filesystems such as ext2/3/4.")
+    (license license:bsd-2)))
+
+(define-public echfs-utils
+  (package/inherit echfs-fuse
+    (name "echfs-utils")
+    (inputs (list `(,util-linux "lib")))
+    (arguments (list #:tests? #f #:phases #~(modify-phases %standard-phases (add-before 'bootstrap 'chdir (lambda _ (chdir "echfs-utils"))))))))
