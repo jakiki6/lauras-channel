@@ -195,3 +195,21 @@
      "This package aims to make updating firmware on GNU/Linux
 automatic, safe and reliable.  It is used by tools such as GNOME Software. Now with nonfree firmware.")
     (license license:lgpl2.1+)))
+
+(define-public openssl-3.4.1
+  (package
+    (inherit openssl-3.0)
+    (version "3.4.1")
+    (source (origin
+              (method url-fetch)
+              (uri (list (string-append "https://www.openssl.org/source/openssl-"
+                                        version ".tar.gz")
+                         (string-append "ftp://ftp.openssl.org/source/"
+                                        "openssl-" version ".tar.gz")
+                         (string-append "ftp://ftp.openssl.org/source/old/"
+                                        (string-trim-right version char-set:letter)
+                                        "/openssl-" version ".tar.gz")))
+              (patches (search-patches "openssl-3.0-c-rehash-in.patch"))
+              (sha256
+               (base32
+                "1wvx37d0dvpylhm7ha64lvdgiak5cgcvshvcljzg92xm61mjsah0"))))))

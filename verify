@@ -25,6 +25,7 @@
         squirrel-3.2
         shepherd-core
         fwupd-nonfree-polkit
+        openssl-3.4.1
         drand-rs
         minecraft-launcher
         ScuffedMinecraft
