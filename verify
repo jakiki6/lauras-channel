@@ -16,7 +16,8 @@
              (laura packages rust-common)
              (laura packages utils)
              (laura packages 3ds)
-             (laura packages ai))
+             (laura packages ai)
+             (laura packages binary))
 
 (define to-test
   (list android-translation-layer
@@ -85,7 +86,8 @@
         otptool
         ctrtool
         makerom
-        ollama))
+        ollama
+        radicle-heartwood))
 
 (use-modules (guix)
              (guix derivations)
