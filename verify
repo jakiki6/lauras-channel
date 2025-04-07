@@ -83,6 +83,7 @@
         cpu-rec-rs
         echfs-fuse
         echfs-utils
+        dumpasn1
         otptool
         ctrtool
         makerom

@@ -1904,3 +1904,36 @@ Like its ancestor, BZip3 excels at compressing text or code.")
     (name "echfs-utils")
     (inputs (list `(,util-linux "lib")))
     (arguments (list #:tests? #f #:phases #~(modify-phases %standard-phases (add-before 'bootstrap 'chdir (lambda _ (chdir "echfs-utils"))))))))
+
+(define-public dumpasn1
+  (package
+    (name "dumpasn1")
+    (version "20230207.0.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/katexochen/dumpasn1")
+             (commit "v20230207.0.0")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0wv9rf92hjrzgy4rrymsra8gz0qan6vjpwxxnwdjd36x4b6ir3dg"))))
+    (build-system gnu-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'configure
+            (lambda _
+              (list (setenv "CC" "gcc")
+                    (setenv "prefix"
+                            #$output)
+                    (substitute* "dumpasn1.c"
+                      (("/etc/dumpasn1/")
+                       (string-append #$output "/etc/")))))))))
+    (home-page "https://www.cs.auckland.ac.nz/~pgut001/#standards")
+    (synopsis "Display and debug ASN.1 data")
+    (description
+     "dumpasn1 is an ASN.1 object dump program that will dump data encoded using any of the ASN.1 encoding rules in a variety of user-specified formats.")
+    (license license:bsd-2)))
