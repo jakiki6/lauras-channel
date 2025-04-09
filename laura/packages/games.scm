@@ -494,31 +494,51 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
      "Written in C++ and using SDL, The Powder Toy is a desktop version of the classic 'falling sand' physics sandbox, it simulates air pressure and velocity as well as heat. ")
     (license license:gpl3)))
 
-(define-public uesave
+(define-public rust-uesave-lib-0.6
   (package
-    (name "uesave")
-    (version "0.3.0")
+    (name "rust-uesave-lib")
+    (version "0.6.1")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "uesave" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "14rh7c62cmxb5fqd0mss69hih9k7xw8jmbqc04bmni929av3729s"))))
+        (base32 "03hqng0j0cg6ss0j6sydcnidb56dv3ln3qkjv4lg2scjgsln1v85"))))
     (build-system cargo-build-system)
     (arguments
-     `(#:cargo-inputs (("rust-anyhow" ,rust-anyhow-1.0.86)
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2)
                        ("rust-byteorder" ,rust-byteorder-1)
-                       ("rust-clap" ,rust-clap-4.5.6)
-                       ("rust-edit" ,rust-edit-0.1.5)
-                       ("rust-indexmap" ,rust-indexmap-2.2.6)
-                       ("rust-serde" ,rust-serde-1.0.203)
-                       ("rust-serde-json" ,rust-serde-json-1.0.117)
-                       ("rust-shell-words" ,rust-shell-words-1)
-                       ("rust-tempfile" ,rust-tempfile-3.10.1)
-                       ("rust-thiserror" ,rust-thiserror-1.0.61)
-                       ("rust-uuid" ,rust-uuid-1))
-       #:cargo-development-inputs (("rust-pretty-assertions" ,rust-pretty-assertions-1))))
+                       ("rust-indexmap" ,rust-indexmap-2)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-uuid" ,rust-uuid-1))))
+    (home-page "https://github.com/trumank/uesave-rs")
+    (synopsis "Unreal Engine save file (GVAS) reading/writing")
+    (description
+     "This package provides Unreal Engine save file (GVAS) reading/writing.")
+    (license license:expat)))
+
+(define-public uesave
+  (package
+    (name "uesave")
+    (version "0.6.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "uesave_cli" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "18j0a64if5m2qvrs3xgsslk5fxb56dhy7kid5ir1q9j4xr7ldvs5"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-anyhow" ,rust-anyhow-1)
+                       ("rust-clap" ,rust-clap-4)
+                       ("rust-edit" ,rust-edit-0.1)
+                       ("rust-serde-json" ,rust-serde-json-1)
+                       ("rust-tempfile" ,rust-tempfile-3)
+                       ("rust-uesave" ,rust-uesave-lib-0.6))))
     (home-page "https://github.com/trumank/uesave-rs")
     (synopsis "Unreal Engine save file (GVAS) reading/writing")
     (description
