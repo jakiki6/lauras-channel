@@ -61,32 +61,32 @@
                                        #$output))
                 (chdir "../../../..")))))))
     (native-inputs (list cmake))
-    (propagated-inputs (list go-std-1.23
-                             go-google-golang-org-protobuf
-                             go-golang-org-x-text
-                             go-golang-org-x-term
-                             go-golang-org-x-sys
-                             go-golang-org-x-exp
-                             go-golang-org-x-crypto
-                             go-github-com-gin-contrib-cors
-                             go-golang-org-x-tools
-                             go-golang-org-x-image
-                             go-gorgonia-org-tensor
-                             go-github-com-nlpodyssey-gopickle
-                             go-github-com-mattn-go-runewidth
-                             go-github-com-google-go-cmp
-                             go-github-com-emirpasic-gods-v2
-                             go-github-com-dlclark-regexp2-v1.11.5
-                             go-github-com-d4l3k-go-bfloat16
-                             go-github-com-agnivade-levenshtein
-                             go-golang-org-x-sync
-                             go-github-com-x448-float16
-                             go-github-com-stretchr-testify
-                             go-github-com-spf13-cobra
-                             go-github-com-olekukonko-tablewriter
-                             go-github-com-google-uuid
-                             go-github-com-gin-gonic-gin
-                             go-github-com-containerd-console))
+    (inputs (list go-std-1.23
+                  go-google-golang-org-protobuf
+                  go-golang-org-x-text
+                  go-golang-org-x-term
+                  go-golang-org-x-sys
+                  go-golang-org-x-exp
+                  go-golang-org-x-crypto
+                  go-github-com-gin-contrib-cors
+                  go-golang-org-x-tools
+                  go-golang-org-x-image
+                  go-gorgonia-org-tensor
+                  go-github-com-nlpodyssey-gopickle
+                  go-github-com-mattn-go-runewidth
+                  go-github-com-google-go-cmp
+                  go-github-com-emirpasic-gods-v2
+                  go-github-com-dlclark-regexp2-v1.11.5
+                  go-github-com-d4l3k-go-bfloat16
+                  go-github-com-agnivade-levenshtein
+                  go-golang-org-x-sync
+                  go-github-com-x448-float16
+                  go-github-com-stretchr-testify
+                  go-github-com-spf13-cobra
+                  go-github-com-olekukonko-tablewriter
+                  go-github-com-google-uuid
+                  go-github-com-gin-gonic-gin
+                  go-github-com-containerd-console))
     (home-page "https://ollama.com")
     (synopsis "Get up and running with large language models.")
     (description
