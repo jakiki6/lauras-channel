@@ -84,6 +84,7 @@
         echfs-fuse
         echfs-utils
         dumpasn1
+        amaranth
         otptool
         ctrtool
         makerom

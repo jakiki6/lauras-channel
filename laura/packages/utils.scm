@@ -64,6 +64,11 @@
   #:use-module (gnu packages web)
   #:use-module (gnu packages crates-compression)
   #:use-module (gnu packages python-build)
+  #:use-module (gnu packages python-crypto)
+  #:use-module (gnu packages check)
+  #:use-module (gnu packages python-check)
+  #:use-module (gnu packages python-web)
+  #:use-module (gnu packages fpga)
   #:use-module (gnu system uuid)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
@@ -1936,4 +1941,72 @@ Like its ancestor, BZip3 excels at compressing text or code.")
     (synopsis "Display and debug ASN.1 data")
     (description
      "dumpasn1 is an ASN.1 object dump program that will dump data encoded using any of the ASN.1 encoding rules in a variety of user-specified formats.")
+    (license license:bsd-2)))
+
+(define-public python-jschon
+  (package
+    (name "python-jschon")
+    (version "0.11.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "jschon" version))
+       (sha256
+        (base32 "17qlpwaq5xv5szm93bpkg9waf166bvbixf96sw1llsgin7m0pjn0"))))
+    (build-system pyproject-build-system)
+    (arguments (list #:tests? #f))
+    (propagated-inputs (list python-rfc3986))
+    (native-inputs (list python-coverage
+                         python-hypothesis
+                         python-pytest
+                         python-pytest-benchmark
+                         python-pytest-httpserver
+                         python-requests
+                         python-setuptools
+                         python-tox
+                         python-wheel))
+    (home-page "https://github.com/marksparkza/jschon")
+    (synopsis "A JSON toolkit for Python developers.")
+    (description "This package provides a JSON toolkit for Python developers.")
+    (license license:expat)))
+
+(define-public python-pyvcd
+  (package
+    (name "python-pyvcd")
+    (version "0.4.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "pyvcd" version))
+       (sha256
+        (base32 "15nnydvr1a4ykh8cagi484sfgvdg0dnjxaw6c0ivhjbrbblpaqnw"))))
+    (build-system pyproject-build-system)
+    (native-inputs (list python-setuptools python-setuptools-scm python-wheel))
+    (home-page "http://pyvcd.readthedocs.io/en/latest/")
+    (synopsis "Python VCD file support")
+    (description "Python VCD file support.")
+    (license license:expat)))
+
+(define-public amaranth
+  (package
+    (name "amaranth")
+    (version "0.5.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "amaranth" version))
+       (sha256
+        (base32 "1zd4p14v7xi61qjwhip1gd1j75r7glkl6g5m4iahvc4a6pz7zsm0"))))
+    (build-system pyproject-build-system)
+    (arguments (list #:tests? #f))
+    (propagated-inputs (list python-importlib-resources
+                             python-jinja2
+                             python-jschon
+                             python-paramiko
+                             python-pyvcd
+                             yosys))
+    (native-inputs (list python-pdm-backend))
+    (home-page "https://amaranth-lang.org/")
+    (synopsis "Amaranth hardware definition language")
+    (description "Amaranth hardware definition language.")
     (license license:bsd-2)))
