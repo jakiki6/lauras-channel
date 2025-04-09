@@ -458,16 +458,16 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
 (define-public tpt
   (package
     (name "tpt")
-    (version "99.2.382")
+    (version "99.3.384")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://github.com/The-Powder-Toy/The-Powder-Toy")
-             (commit "v99.2.382")))
+             (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1mag6ch6sfday1sdb2v660ygqcs31cir2hf3zdm8n5z7k3rkiaha"))))
+        (base32 "0l067j0bbzvr0i2prxrgb0af4xdpl648x741jgnyp4bjzdbm61x7"))))
     (build-system meson-build-system)
     (native-inputs (list pkg-config cmake python-3))
     (inputs (list luajit
