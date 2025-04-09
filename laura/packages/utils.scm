@@ -69,6 +69,7 @@
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages fpga)
+  #:use-module (gnu packages sagemath)
   #:use-module (gnu system uuid)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
@@ -2010,3 +2011,22 @@ Like its ancestor, BZip3 excels at compressing text or code.")
     (synopsis "Amaranth hardware definition language")
     (description "Amaranth hardware definition language.")
     (license license:bsd-2)))
+
+(define-public badkeys
+  (package
+    (name "badkeys")
+    (version "0.0.13")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "badkeys" version))
+       (sha256
+        (base32 "03jkairy3bps5h1yn0rbpy4d2bmq100if95nd9r3v691c94s44v0"))))
+    (build-system pyproject-build-system)
+    (arguments (list #:tests? #f))
+    (propagated-inputs (list python-cryptography python-gmpy2))
+    (native-inputs (list python-setuptools python-setuptools-scm python-wheel))
+    (home-page "https://badkeys.info/")
+    (synopsis "Check cryptographic keys for known weaknesses")
+    (description "Check cryptographic keys for known weaknesses.")
+    (license license:expat)))

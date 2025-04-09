@@ -85,6 +85,7 @@
         echfs-utils
         dumpasn1
         amaranth
+        badkeys
         otptool
         ctrtool
         makerom
