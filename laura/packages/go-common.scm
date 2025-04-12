@@ -4,6 +4,7 @@
   #:use-module (guix gexp)
   #:use-module (guix build-system go)
   #:use-module (guix build-system trivial)
+  #:use-module (guix build-system gnu)
   #:use-module ((guix licenses)
                 #:prefix license:)
   #:use-module (guix git-download)
@@ -18,7 +19,9 @@
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages golang-maths)
   #:use-module (gnu packages golang-compression)
-  #:use-module (gnu packages tls))
+  #:use-module (gnu packages tls)
+  #:use-module (gnu packages xorg)
+  #:use-module (gnu packages gl))
 
 (define-public go-github-com-rogpeppe-clock
   (package
@@ -1273,4 +1276,679 @@ commonly in arithmetic, comparison and linear algebra operations.")
     (home-page "https://github.com/dlclark/regexp2/")
     (synopsis "Full featured regular expressions for Go")
     (description "Regexp2 is a feature-rich RegExp engine for Go.")
+    (license license:expat)))
+
+(define-public go-github-com-zachomedia-go-bdf
+  (package
+    (name "go-github-com-zachomedia-go-bdf")
+    (version "0.0.0-20220611021443-a3af701111be")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/zachomedia/go-bdf")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1x7sn7nd5nsh01y2whfdc0gihkmdzhlmgz495w6z0w08wiqizbsb"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/zachomedia/go-bdf"))
+    (propagated-inputs (list go-golang-org-x-text go-golang-org-x-image))
+    (home-page "https://github.com/zachomedia/go-bdf")
+    (synopsis "Glyph Bitmap Distribution Format (BDF) Fonts for Go")
+    (description "This package provides the ability to use BDF fonts in Go.")
+    (license license:expat)))
+
+(define-public go-github-com-dchest-jsmin
+  (package
+    (name "go-github-com-dchest-jsmin")
+    (version "1.0.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/dchest/jsmin")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0237z3wr6xkl1qi3j48jxd9n9zxy9iwch2bazwis71bib0ih5rql"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/dchest/jsmin"))
+    (home-page "https://github.com/dchest/jsmin")
+    (synopsis #f)
+    (description
+     "Package jsmin implements @code{JavaScript} minifier.  It's a direct port of
+Doulas Crockford's JSMin.")
+    (license license:expat)))
+
+(define-public go-github-com-akavel-rsrc
+  (package
+    (name "go-github-com-akavel-rsrc")
+    (version "0.10.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/akavel/rsrc")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1frdxqdnk923p4245lk0wwqrxsdy8aj2qxl3m0zfgnh02vfz3hs2"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/akavel/rsrc"))
+    (home-page "https://github.com/akavel/rsrc")
+    (synopsis #f)
+    (description #f)
+    (license license:expat)))
+
+(define-public go-github-com-josephspurrier-goversioninfo
+  (package
+    (name "go-github-com-josephspurrier-goversioninfo")
+    (version "1.5.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/josephspurrier/goversioninfo")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "07plmi5gy7bl5n5cnymvrirhq2gv3rx6p8ry3kvcdlh7i0x0baj8"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/josephspurrier/goversioninfo"))
+    (propagated-inputs (list go-github-com-stretchr-testify
+                             go-github-com-akavel-rsrc))
+    (home-page "https://github.com/josephspurrier/goversioninfo")
+    (synopsis "GoVersionInfo")
+    (description
+     "Package goversioninfo creates a syso file which contains Microsoft Version
+Information and an optional icon.")
+    (license license:expat)))
+
+(define-public go-github-com-randall77-makefat
+  (package
+    (name "go-github-com-randall77-makefat")
+    (version "0.0.0-20210315173500-7ddd0e42c844")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/randall77/makefat")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0x8pwhs5srg1dwdi7dj6mi126rx6w371bxw6id228f28ndn062m2"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/randall77/makefat"))
+    (home-page "https://github.com/randall77/makefat")
+    (synopsis "makefat")
+    (description
+     "This package provides a tool for making fat OSX binaries (a portable lipo).")
+    (license license:unlicense)))
+
+(define-public go-github-com-ncruces-zenity
+  (package
+    (name "go-github-com-ncruces-zenity")
+    (version "0.10.14")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ncruces/zenity")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0pyhr75f1scmgw2ffh3q35amaafwrqqlh5c8qyql6vwh8bmh02qn"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:import-path "github.com/ncruces/zenity"))
+    (propagated-inputs (list go-golang-org-x-sys
+                             go-golang-org-x-image
+                             go-go-uber-org-goleak
+                             go-github-com-randall77-makefat
+                             go-github-com-ncruces-go-strftime
+                             go-github-com-josephspurrier-goversioninfo
+                             go-github-com-dchest-jsmin))
+    (home-page "https://github.com/ncruces/zenity")
+    (synopsis "Zenity dialogs for Golang, Windows and macOS")
+    (description
+     "Package zenity provides cross-platform access to simple dialogs that interact
+graphically with the user.")
+    (license license:expat)))
+
+(define-public go-github-com-mitchellh-hashstructure-v2
+  (package
+    (name "go-github-com-mitchellh-hashstructure")
+    (version "2.0.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/mitchellh/hashstructure")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0yyr1igvyv7dzjxs9hbwk7qhshwxys0hq59sy2g2a46hjgi311iv"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/mitchellh/hashstructure"
+      #:unpack-path "github.com/mitchellh/hashstructure"))
+    (home-page "https://github.com/mitchellh/hashstructure")
+    (synopsis "hashstructure")
+    (description
+     "hashstructure is a Go library for creating a unique hash value for arbitrary
+values in Go.")
+    (license license:expat)))
+
+(define-public go-github-com-jeandeaual-go-locale
+  (package
+    (name "go-github-com-jeandeaual-go-locale")
+    (version "0.0.0-20241217141322-fcc2cadd6f08")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/jeandeaual/go-locale")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "162qsvf8ryj1wnk8r34vrjpv2qw07jr25rqnww67nj3ykkx0wp5n"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:import-path "github.com/jeandeaual/go-locale"))
+    (propagated-inputs (list go-golang-org-x-sys
+                             go-github-com-stretchr-testify))
+    (home-page "https://github.com/jeandeaual/go-locale")
+    (synopsis "go-locale")
+    (description
+     "Go library used to retrieve the current locale(s) of the operating system.")
+    (license license:expat)))
+
+(define-public go-github-com-ebitengine-gomobile
+  (package
+    (name "go-github-com-ebitengine-gomobile")
+    (version "0.0.0-20250329061421-6d0a8e981e4c")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ebitengine/gomobile")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1bd38rdn76mkadad1pqcrn7lmk2rfk12c6kdglnpq8bf6ak27yji"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'build))
+      #:import-path "github.com/ebitengine/gomobile"))
+    (propagated-inputs (list go-golang-org-x-tools go-golang-org-x-sync
+                             go-golang-org-x-mod go-golang-org-x-image))
+    (home-page "https://github.com/ebitengine/gomobile")
+    (synopsis "Go support for Mobile devices")
+    (description
+     "The Go mobile repository holds packages and build tools for using Go on mobile
+platforms.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-ebitengine-hideconsole
+  (package
+    (name "go-github-com-ebitengine-hideconsole")
+    (version "1.0.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ebitengine/hideconsole")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "06q5dgzfyarc3wr8ji3v2w6miv8mgag8537in1n35ccb5b69gqv1"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/ebitengine/hideconsole"))
+    (propagated-inputs (list go-golang-org-x-sys))
+    (home-page "https://github.com/ebitengine/hideconsole")
+    (synopsis "HideConsole")
+    (description
+     "Package hideconsole is a utility package to hide a console automatically even
+without `-ldflags \"-Hwindowsgui\"` on Windows.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-ebitengine-oto-v3
+  (package
+    (name "go-github-com-ebitengine-oto")
+    (version "3.3.3")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ebitengine/oto")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0fypv4hsvxx7cmvpd5r0lr75d719y7cakmcg9cv0a4dka955nzqw"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'build))
+      #:import-path "github.com/ebitengine/oto/v3"
+      #:unpack-path "github.com/ebitengine/oto/v3"))
+    (propagated-inputs (list go-golang-org-x-sys
+                             go-github-com-ebitengine-purego))
+    (home-page "https://github.com/ebitengine/oto")
+    (synopsis "Oto (v3)")
+    (description "This package provides a low-level library to play sound.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-gen2brain-mpeg
+  (package
+    (name "go-github-com-gen2brain-mpeg")
+    (version "0.3.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/gen2brain/mpeg")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "16nhzb3rdvqn9bz81y8gs985900lpmh4m17xhhfg7wd3k5dhkpcm"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/gen2brain/mpeg"))
+    (home-page "https://github.com/gen2brain/mpeg")
+    (synopsis "mpeg")
+    (description
+     "Package mpeg implements MPEG-1 Video decoder, MP2 Audio decoder and MPEG-PS
+demuxer.")
+    (license license:expat)))
+
+(define-public go-github-com-go-text-typesetting-utils
+  (package
+    (name "go-github-com-go-text-typesetting-utils")
+    (version "0.0.0-20250317161857-4bc07585f84e")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/go-text/typesetting-utils")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1iz3ns7hky0ihlwq08j4m58j4w094f8m3cxfd9l1k3dwjk7cgv3m"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'build))
+      #:import-path "github.com/go-text/typesetting-utils"))
+    (propagated-inputs (list go-golang-org-x-tools go-golang-org-x-text
+                             go-golang-org-x-net))
+    (home-page "https://github.com/go-text/typesetting-utils")
+    (synopsis "Developpement resources for go-text/typesetting")
+    (description
+     "This module provides resources used when developping
+@@url{https://github.com/go-text/typesetting,go-text/typesetting}, such as :.")
+    (license (list license:unlicense license:bsd-3))))
+
+(define-public go-github-com-go-text-typesetting
+  (package
+    (name "go-github-com-go-text-typesetting")
+    (version "0.3.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/go-text/typesetting")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1vpqy67gv84rvn1ps0s0j7bs5dz5rsdy277fyvybrn8x55w213b6"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'build))
+      #:import-path "github.com/go-text/typesetting"))
+    (propagated-inputs (list go-golang-org-x-text go-golang-org-x-image
+                             go-github-com-go-text-typesetting-utils))
+    (home-page "https://github.com/go-text/typesetting")
+    (synopsis "typesetting")
+    (description
+     "This library provides typesetting capabilities in pure Go.  It is appropriate
+for use in GUI applications, and is shared by multiple Go UI toolkits including
+@@url{https://fyne.io,Fyne}, @@url{https://gioui.org,Gio}, and
+@@url{https://ebitengine.org,Ebitengine}.")
+    (license (list license:unlicense license:bsd-3))))
+
+(define-public go-github-com-ebitengine-purego
+  (package
+    (name "go-github-com-ebitengine-purego")
+    (version "0.8.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ebitengine/purego")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0ky3k7q4qkn2njikvxlrw0f0glqk7kjif1jbskd42ipyallkqx3z"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:import-path "github.com/ebitengine/purego"))
+    (home-page "https://github.com/ebitengine/purego")
+    (synopsis "purego")
+    (description
+     "This package provides a library for calling C functions from Go without Cgo.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-hajimehoshi-oto-v2
+  (package
+    (name "go-github-com-hajimehoshi-oto")
+    (version "2.4.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ebitengine/oto")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1i325fcv2v9l0yi9grjw2pxx9jaqacqqhxqnpfz5057p9252wqbh"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'build))
+      #:import-path "github.com/hajimehoshi/oto/v2"
+      #:unpack-path "github.com/hajimehoshi/oto"))
+    (propagated-inputs (list go-golang-org-x-sys
+                             go-github-com-ebitengine-purego))
+    (home-page "https://github.com/hajimehoshi/oto")
+    (synopsis "Oto (v2)")
+    (description "This package provides a low-level library to play sound.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-hajimehoshi-go-mp3
+  (package
+    (name "go-github-com-hajimehoshi-go-mp3")
+    (version "0.3.4")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/hajimehoshi/go-mp3")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0w1yk8lxyz6y7b9a6bx79rs3q22fsfhi430zfirivlhjw8z79ac7"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/hajimehoshi/go-mp3"))
+    (propagated-inputs (list go-github-com-hajimehoshi-oto-v2))
+    (home-page "https://github.com/hajimehoshi/go-mp3")
+    (synopsis "go-mp3")
+    (description "An MP3 decoder in pure Go based on
+@@url{https://github.com/technosaurus/PDMP3,PDMP3}.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-jakecoffman-cp
+  (package
+    (name "go-github-com-jakecoffman-cp")
+    (version "1.2.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/jakecoffman/cp")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "09l7790y3sc0pvnkf6g57ldhwz8ais3p8d9f5mv4spxkzk1h9rhk"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/jakecoffman/cp"))
+    (home-page "https://github.com/jakecoffman/cp")
+    (synopsis "cp")
+    (description
+     "@@url{https://github.com/slembcke/Chipmunk2D,Chipmunk2D} ported to Go.")
+    (license license:expat)))
+
+(define-public go-github-com-jezek-xgb
+  (package
+    (name "go-github-com-jezek-xgb")
+    (version "1.1.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/jezek/xgb")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0dhhrybxs1sapxz19hb39igackv69j55bzpx75afbkcx3mdwfdif"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:import-path "github.com/jezek/xgb"))
+    (home-page "https://github.com/jezek/xgb")
+    (synopsis #f)
+    (description
+     "Package XGB provides the X Go Binding, which is a low-level API to communicate
+with the core X protocol and many of the X extensions.")
+    (license license:bsd-3)))
+
+(define-public go-github-com-jfreymuth-vorbis
+  (package
+    (name "go-github-com-jfreymuth-vorbis")
+    (version "1.0.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/jfreymuth/vorbis")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1kkskfbfrrzmxbfiajmxv9j7kg3j1f93bl4lqbn3k93ryvybwm41"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/jfreymuth/vorbis"))
+    (home-page "https://github.com/jfreymuth/vorbis")
+    (synopsis "vorbis")
+    (description "Package vorbis implements a vorbis decoder.")
+    (license license:expat)))
+
+(define-public go-github-com-jfreymuth-oggvorbis
+  (package
+    (name "go-github-com-jfreymuth-oggvorbis")
+    (version "1.0.5")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/jfreymuth/oggvorbis")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0p8rbrgz6l1sqb13hwds7k3ngmaknfg6ay47yi9qdpzblc4m764f"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/jfreymuth/oggvorbis"))
+    (propagated-inputs (list go-github-com-jfreymuth-vorbis))
+    (home-page "https://github.com/jfreymuth/oggvorbis")
+    (synopsis "oggvorbis")
+    (description "Package oggvorbis decodes audio from ogg/vorbis files.")
+    (license license:expat)))
+
+(define-public go-github-com-kisielk-errcheck
+  (package
+    (name "go-github-com-kisielk-errcheck")
+    (version "1.9.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/kisielk/errcheck")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1gzqzk6nyl352w5lxr62rbxbx9pkfhasx249w3jr3708pqjah4qf"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/kisielk/errcheck"))
+    (propagated-inputs (list go-golang-org-x-tools))
+    (home-page "https://github.com/kisielk/errcheck")
+    (synopsis "errcheck")
+    (description
+     "errcheck is a program for checking for unchecked errors in Go code.")
+    (license license:expat)))
+
+(define-public go-github-com-hajimehoshi-ebiten-v2
+  (package
+    (name "go-github-com-hajimehoshi-ebiten")
+    (version "2.8.7")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/hajimehoshi/ebiten")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "01fykwi1zmxyljwqvvmicmxz2iq0y52rw0cd29v9xbf2xqqg859h"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:import-path "github.com/hajimehoshi/ebiten"
+      #:unpack-path "github.com/hajimehoshi/ebiten"))
+    (inputs (list libx11
+                  libxrandr
+                  libxcursor
+                  libxinerama
+                  libxi
+                  mesa))
+    (propagated-inputs (list go-golang-org-x-tools
+                             go-golang-org-x-text
+                             go-golang-org-x-sys
+                             go-golang-org-x-sync
+                             go-golang-org-x-image
+                             go-github-com-kisielk-errcheck
+                             go-github-com-jfreymuth-oggvorbis
+                             go-github-com-jezek-xgb
+                             go-github-com-jakecoffman-cp
+                             go-github-com-hajimehoshi-go-mp3
+                             go-github-com-hajimehoshi-bitmapfont-v3
+                             go-github-com-go-text-typesetting
+                             go-github-com-gen2brain-mpeg
+                             go-github-com-ebitengine-purego
+                             go-github-com-ebitengine-oto-v3
+                             go-github-com-ebitengine-hideconsole
+                             go-github-com-ebitengine-gomobile))
+    (home-page "https://github.com/hajimehoshi/ebiten")
+    (synopsis "Ebitengine (v2)")
+    (description
+     "Package ebiten provides graphics and input API to develop a 2D game.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-hajimehoshi-bitmapfont-v3
+  (package
+    (name "go-github-com-hajimehoshi-bitmapfont")
+    (version "3.2.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/hajimehoshi/bitmapfont")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1dfp90w555cqkd502ah8b6baib4ywwi2j45qi3pf8r9nwqnnkrfr"))))
+    (build-system gnu-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'configure)
+          (delete 'build)
+          (replace 'install
+            (lambda _
+              (begin
+                (mkdir-p (string-append #$output
+                          "/src/github.com/hajimehoshi/bitmapfont"))
+                (copy-recursively "."
+                                  (string-append #$output
+                                   "/src/github.com/hajimehoshi/bitmapfont"))))))))
+    (propagated-inputs (list go-golang-org-x-text go-golang-org-x-image
+                             go-github-com-pkg-browser
+                             go-github-com-pierrec-lz4-v4))
+    (home-page "https://github.com/hajimehoshi/bitmapfont")
+    (synopsis "bitmapfont (v3)")
+    (description
+     "Package bitmapfont provides font.Face values with bitmap glyphs.")
+    (license license:asl2.0)))
+
+(define-public go-github-com-fardog-tmx
+  (package
+    (name "go-github-com-fardog-tmx")
+    (version "0.0.0-20210504210836-02c45f261672")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/fardog/tmx")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0fby5jsv2ps99zhaszklxr5sy57yhsapmrhd1np735v83252xcga"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/fardog/tmx"))
+    (home-page "https://github.com/fardog/tmx")
+    (synopsis "tmx")
+    (description
+     "Package tmx implements a parser for the TMX file format used in the Tiled Map
+Editor.")
     (license license:expat)))

@@ -8,6 +8,7 @@
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system meson)
   #:use-module (guix build-system gnu)
+  #:use-module (guix build-system go)
   #:use-module (gnu packages cmake)
   #:use-module ((guix licenses)
                 #:prefix license:)
@@ -62,9 +63,12 @@
   #:use-module (gnu packages avahi)
   #:use-module (gnu packages elf)
   #:use-module (gnu packages python)
+  #:use-module (gnu packages golang-xyz)
+  #:use-module (gnu packages golang-build)
   #:use-module (nonguix licenses)
   #:use-module (nonguix build-system binary)
-  #:use-module (laura packages rust-common))
+  #:use-module (laura packages rust-common)
+  #:use-module (laura packages go-common))
 
 (define-public minecraft-launcher
   (let ((launcher-version "2.2.1441"))
@@ -544,3 +548,90 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
     (description
      "This package provides Unreal Engine save file (GVAS) reading/writing.")
     (license license:expat)))
+
+(define-public aaaaxy
+  (package
+    (name "aaaaxy")
+    (version "1.6.176")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/divVerent/aaaaxy")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "13yy5w19xmkpnfznqmsh8dmq2xqbdf98l3h5s7vwvfsqrj95msyc"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:import-path "github.com/divVerent/aaaaxy"
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'build
+            (lambda _
+              (begin
+                (delete-file-recursively "src/github.com/hajimehoshi/ebiten")
+                (copy-recursively (string-append #$go-github-com-hajimehoshi-ebiten-v2
+                                   "/src/github.com/hajimehoshi/ebiten")
+                                  "src/github.com/hajimehoshi/ebiten")
+                (delete-file-recursively
+                 "src/github.com/hajimehoshi/bitmapfont")
+                (copy-recursively (string-append #$go-github-com-hajimehoshi-bitmapfont-v3
+                                   "/src/github.com/hajimehoshi/bitmapfont")
+                                  "src/github.com/hajimehoshi/bitmapfont")
+                (substitute* "src/github.com/divVerent/aaaaxy/generate_licenses.go"
+                  (("^//.*$")
+                   ""))
+                (substitute* "src/github.com/divVerent/aaaaxy/licenses/embed.go"
+                  (("^//.*$")
+                   ""))
+                (invoke "make" "-C" "src/github.com/divVerent/aaaaxy"
+                        "BUILDTYPE=embedrelease"))))
+          (replace 'install
+            (lambda _
+              (begin
+                (install-file "src/github.com/divVerent/aaaaxy/aaaaxy"
+                              (string-append #$output "/bin"))
+                (wrap-program (string-append #$output "/bin/aaaaxy")
+                  `("LD_LIBRARY_PATH" ":" =
+                    (,(string-append #$mesa "/lib"))))))))))
+    (inputs (list libx11
+                  libxrandr
+                  libxcursor
+                  libxinerama
+                  libxi
+                  mesa
+                  alsa-lib))
+    (native-inputs (list pkg-config))
+    (propagated-inputs (list go-github-com-spf13-cobra
+                             go-github-com-otiai10-copy
+                             go-golang-org-x-text
+                             go-golang-org-x-sys
+                             go-golang-org-x-image
+                             go-github-com-zachomedia-go-bdf
+                             go-github-com-ncruces-zenity
+                             go-github-com-mitchellh-hashstructure-v2
+                             go-github-com-lucasb-eyer-go-colorful
+                             go-github-com-lestrrat-go-strftime
+                             go-github-com-leonelquinteros-gotext
+                             go-github-com-jeandeaual-go-locale
+                             go-github-com-hajimehoshi-ebiten-v2
+                             go-github-com-hajimehoshi-bitmapfont-v3
+                             go-github-com-google-go-cmp
+                             go-github-com-fardog-tmx
+                             go-github-com-akavel-rsrc
+                             go-github-com-adrg-xdg))
+    (home-page "https://divverent.github.io/aaaaxy/")
+    (synopsis
+     "AAAAXY is a nonlinear 2D puzzle platformer taking place in impossible spaces.")
+    (description
+     "Although your general goal is reaching the surprising end of the game, you are encouraged to set your own goals while playing. Exploration will be rewarded, and secrets await you!
+
+So jump and run around, and enjoy losing your sense of orientation in this World of Wicked Weirdness. Find out what Van Vlijmen will make you do. Pick a path, get inside a Klein Bottle, recognize some memes, and by all means: don’t look up.
+
+And beware of a minor amount of trolling.
+
+To reach the end, a new player will take about 4 to 6 hours, a full playthrough can be finished in about 1 hour and the end can be reached in about 15 minutes.")
+    (license license:asl2.0)))
