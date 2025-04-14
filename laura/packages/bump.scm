@@ -52,7 +52,15 @@
   #:use-module (gnu packages backup)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages base)
-  #:use-module (gnu packages check))
+  #:use-module (gnu packages check)
+  #:use-module (gnu packages engineering)
+  #:use-module (gnu packages boost)
+  #:use-module (gnu packages graphics)
+  #:use-module (gnu packages maths)
+  #:use-module (gnu packages algebra)
+  #:use-module (gnu packages fontutils)
+  #:use-module (gnu packages multiprecision)
+  #:use-module (gnu packages tbb))
 
 (define-public squirrel-3.2
   (package
@@ -213,3 +221,38 @@ automatic, safe and reliable.  It is used by tools such as GNOME Software. Now w
               (sha256
                (base32
                 "1wvx37d0dvpylhm7ha64lvdgiak5cgcvshvcljzg92xm61mjsah0"))))))
+
+(define-public openscad-bumped
+  (package/inherit openscad
+    (name "openscad")
+    (version "2025.99.99")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/openscad/openscad")
+              (recursive? #t)
+              (commit "7166904")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1n6ssvr2mz65nx8p7hx0j9mymfkgrl7nhdv3dwp19205fj8k7xi5"))))
+    (build-system cmake-build-system)
+    (inputs
+     (list boost
+           cgal
+           double-conversion
+           eigen
+           fontconfig
+           glew
+           gmp
+           harfbuzz
+           libxml2
+           libzip
+           mpfr
+           opencsg
+           qscintilla
+           qtbase-5
+           qtmultimedia-5
+           qtsvg-5
+           cairo
+           tbb))
+    (arguments (list #:tests? #f #:configure-flags #~(list "-DENABLE_EGL=OFF")))))

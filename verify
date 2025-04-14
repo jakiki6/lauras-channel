@@ -27,6 +27,7 @@
         shepherd-core
         fwupd-nonfree-polkit
         openssl-3.4.1
+        openscad-bumped
         drand-rs
         minecraft-launcher
         ScuffedMinecraft
