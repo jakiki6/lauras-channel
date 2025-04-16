@@ -21,6 +21,7 @@
     (lambda (checkout)
       (let ((cwd (getcwd)))
         (begin
+          (map (lambda (issue) (format #t "Applying ~a\n" issue)) issues)
           (chdir checkout)
           (map (lambda (patch)
                  (let ((port (open-output-pipe "patch -p1 --no-backup-if-mismatch")))
