@@ -60,7 +60,10 @@
   #:use-module (gnu packages algebra)
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages multiprecision)
-  #:use-module (gnu packages tbb))
+  #:use-module (gnu packages tbb)
+  #:use-module (gnu packages llvm)
+  #:use-module (gnu packages imagemagick)
+  #:use-module (gnu packages xorg))
 
 (define-public squirrel-3.2
   (package
@@ -226,33 +229,51 @@ automatic, safe and reliable.  It is used by tools such as GNOME Software. Now w
   (package/inherit openscad
     (name "openscad")
     (version "2025.99.99")
-    (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/openscad/openscad")
-              (recursive? #t)
-              (commit "7166904")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "1n6ssvr2mz65nx8p7hx0j9mymfkgrl7nhdv3dwp19205fj8k7xi5"))))
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/openscad/openscad")
+                    (recursive? #t)
+                    (commit "7166904")))
+              (file-name (git-file-name name version))
+              (sha256 (base32
+                       "1n6ssvr2mz65nx8p7hx0j9mymfkgrl7nhdv3dwp19205fj8k7xi5"))))
     (build-system cmake-build-system)
-    (inputs
-     (list boost
-           cgal
-           double-conversion
-           eigen
-           fontconfig
-           glew
-           gmp
-           harfbuzz
-           libxml2
-           libzip
-           mpfr
-           opencsg
-           qscintilla
-           qtbase-5
-           qtmultimedia-5
-           qtsvg-5
-           cairo
-           tbb))
-    (arguments (list #:tests? #f #:configure-flags #~(list "-DENABLE_EGL=OFF")))))
+    (native-inputs (list clang-toolchain
+                         pkg-config
+                         bison
+                         flex
+                         gettext-minimal
+                         which
+                         imagemagick
+                         procps
+                         python
+                         xorg-server-for-tests))
+    (inputs (list boost
+                  cgal
+                  double-conversion
+                  eigen
+                  fontconfig
+                  glew
+                  gmp
+                  harfbuzz
+                  libxml2
+                  libzip
+                  mpfr
+                  opencsg
+                  qscintilla
+                  qtbase-5
+                  qtmultimedia-5
+                  qtsvg-5
+                  cairo
+                  tbb))
+    (arguments (list #:tests? #f
+                     #:configure-flags #~(list "-DENABLE_EGL=OFF"
+                                               "-DCMAKE_C_COMPILER=clang"
+                                               "-DCMAKE_CXX_COMPILER=clang++")
+                     #:phases #~(modify-phases %standard-phases
+                                  (add-after 'unpack 'patch
+                                    (lambda _
+                                      (substitute* "src/glview/PolySetRenderer.cc"
+                                        (("isnan")
+                                         "std::isnan")))))))))

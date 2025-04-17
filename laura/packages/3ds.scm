@@ -4,11 +4,13 @@
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (guix build-system gnu)
+  #:use-module (guix build-system cmake)
   #:use-module ((guix licenses)
                 #:prefix license:)
   #:use-module (gnu packages)
   #:use-module (gnu packages gnupg)
-  #:use-module (gnu packages tls))
+  #:use-module (gnu packages tls)
+  #:use-module (gnu packages qt))
 
 (define-public otptool
   (package
@@ -120,3 +122,28 @@
     (description
      "A CLI tool to create CTR (Nintendo 3DS) ROM images.")
     (license license:gpl3+)))
+
+(define-public azahar
+  (package
+    (name "azahar")
+    (version "2120.3")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/azahar-emu/azahar")
+              (recursive? #t)
+              (commit "2120.3")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "03qpg34sizzwrkb4xjph9w7gs2l0kvblkhy6mgmcrqhk4x6qjlj5"))))
+    (build-system cmake-build-system)
+    (inputs (list qtbase qtmultimedia))
+    (arguments (list #:tests? #f #:build-type "Release"))
+    (home-page "https://azahar-emu.org/")
+    (synopsis "An open-source 3DS emulator project based on Citra.")
+    (description "Azahar is an open-source 3DS emulator project based on Citra.
+
+It was created from the merging of PabloMK7's Citra fork and the Lime3DS project, both of which emerged shortly after Citra was taken down.
+
+The goal of this project is to be the de-facto platform for future development.")
+    (license license:gpl2)))
