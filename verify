@@ -68,7 +68,6 @@
         waydroid
         wshowkeys
         yara
-        imhex
         lite
         binsider
         mbw
@@ -88,6 +87,7 @@
         dumpasn1
         amaranth
         badkeys
+        ssh-x25519
         otptool
         ctrtool
         makerom

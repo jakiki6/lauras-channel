@@ -1328,29 +1328,6 @@ needs to be signed in the boot chain.")
      "YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples.")
     (license license:bsd-3)))
 
-(define-public imhex
-  (package
-    (name "imhex")
-    (version "1.35.4")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/WerWolv/ImHex")
-             (recursive? #t)
-             (commit "v1.35.4")))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0gi5772w0fzgr1w403ckq2mkwiyvcxv08frs2fjr2hlc8hb6c2p9"))))
-    (build-system cmake-build-system)
-    (native-inputs (list gcc-toolchain-14 pkg-config))
-    (inputs (list freetype mesa glfw-3.4 curl dbus))
-    (home-page "https://imhex.werwolv.net/")
-    (synopsis "A Hex Editor.")
-    (description
-     "A Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM.")
-    (license license:gpl2)))
-
 (define-public lite
   (package
     (name "lite")
@@ -2028,4 +2005,33 @@ Like its ancestor, BZip3 excels at compressing text or code.")
     (home-page "https://badkeys.info/")
     (synopsis "Check cryptographic keys for known weaknesses")
     (description "Check cryptographic keys for known weaknesses.")
+    (license license:expat)))
+
+(define-public ssh-x25519
+  (package
+    (name "ssh-x25519")
+    (version "0.0.0-20211029144534-88351537beaf")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/arachsys/ssh-x25519")
+             (commit (go-version->git-ref version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0jgr40jx5fsywqyqw2d4mah0smmayr0ww7f9j6gww6cbkca1z996"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/arachsys/ssh-x25519"))
+    (propagated-inputs (list go-golang-org-x-term go-golang-org-x-crypto
+                             go-filippo-io-edwards25519))
+    (home-page "https://github.com/arachsys/ssh-x25519")
+    (synopsis "Map ssh-ed25519 keys into x25519 keys")
+    (description "
+The twisted Edwards curve used for Ed25519 signatures is birationally
+equivalent to the Montgomery curve used for X25519. In Ed25519, the secret
+scalar is half of the private key's SHA512 hash, whereas X25519 uses the
+private key directly as a scalar. It is therefore straightforward to map
+ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
     (license license:expat)))
