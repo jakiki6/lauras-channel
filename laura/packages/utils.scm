@@ -207,12 +207,11 @@
       #~(modify-phases %standard-phases
           (add-after 'install 'move
             (lambda* (#:key outputs #:allow-other-keys)
-              (let ((d (assoc-ref outputs "out")))
-                (begin
-                  (rename-file d "/tmp/bin")
-                  (mkdir d)
-                  (rename-file "/tmp/bin"
-                               (string-append d "/bin")))))))))
+              (begin
+                (chdir #$output)
+                (mkdir "bin")
+                (rename-file "bkcrack" "bin/bkcrack")
+                (map delete-file-recursively (list "example" "tools" "readme.md" "license.txt"))))))))
     (home-page "https://github.com/kimci86/bkcrack")
     (synopsis
      "Crack legacy zip encryption with Biham and Kocher's known plaintext attack.")
