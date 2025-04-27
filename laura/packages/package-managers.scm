@@ -5,6 +5,7 @@
   #:use-module (gnu packages)
   #:use-module (guix build-system go)
   #:use-module (guix build-system meson)
+  #:use-module (guix build-system gnu)
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (guix build utils)
@@ -22,6 +23,9 @@
   #:use-module (gnu packages golang-check)
   #:use-module (gnu packages golang-crypto)
   #:use-module (gnu packages golang-xyz)
+  #:use-module (gnu packages compression)
+  #:use-module (gnu packages man)
+  #:use-module (gnu packages lua)
   #:use-module (laura packages go-common))
 
 (define-public pacman
@@ -120,3 +124,26 @@
 apps on the @@url{https://apps.apple.com,App Store} and download a copy of the
 app package, known as an file.")
     (license license:expat)))
+
+
+(define-public apk-tools
+  (package
+    (name "apk-tools")
+    (version "3.0.0_rc4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://gitlab.alpinelinux.org/alpine/apk-tools")
+              (commit (string-append "v" version))))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1533hfmzdkh7v1hawmfd8b5mnl8ssxfqz4vn0kg2agrldbgh7i58"))))
+    (build-system meson-build-system)
+    (arguments (list #:tests? #f #:configure-flags #~(list "-Dhelp=enabled" "-Dcompressed-help=false" "-Dlua_version=")))
+    (native-inputs (list pkg-config lua))
+    (inputs (list zlib (list zstd "lib") openssl python scdoc))
+    (home-page "https://gitlab.alpinelinux.org/alpine/apk-tools")
+    (synopsis "Alpine package manager")
+    (description "Alpine Package Keeper (apk) is a package manager originally built for Alpine Linux,
+but now used by several other distributions as well.")
+    (license license:gpl2+)))
