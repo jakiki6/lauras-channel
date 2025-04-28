@@ -41,6 +41,7 @@
         pacman
         ipatool
         apk-tools
+        apk-tools-static
         Amogus-File-Encoder
         gcc-cross-riscv64-linux-gnu-toolchain
         CasioEmu

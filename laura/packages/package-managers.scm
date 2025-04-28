@@ -131,19 +131,55 @@ app package, known as an file.")
     (name "apk-tools")
     (version "3.0.0_rc4")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://gitlab.alpinelinux.org/alpine/apk-tools")
-              (commit (string-append "v" version))))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "1533hfmzdkh7v1hawmfd8b5mnl8ssxfqz4vn0kg2agrldbgh7i58"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://gitlab.alpinelinux.org/alpine/apk-tools")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1533hfmzdkh7v1hawmfd8b5mnl8ssxfqz4vn0kg2agrldbgh7i58"))))
     (build-system meson-build-system)
-    (arguments (list #:tests? #f #:configure-flags #~(list "-Dhelp=enabled" "-Dcompressed-help=false" "-Dlua_version=")))
+    (arguments
+     (list
+      #:tests? #f
+      #:configure-flags
+      #~(list "-Dhelp=enabled" "-Dcompressed-help=false" "-Dlua_version=")))
     (native-inputs (list pkg-config lua))
-    (inputs (list zlib (list zstd "lib") openssl python scdoc))
+    (inputs (list zlib
+                  (list zstd "lib") openssl python scdoc))
     (home-page "https://gitlab.alpinelinux.org/alpine/apk-tools")
     (synopsis "Alpine package manager")
-    (description "Alpine Package Keeper (apk) is a package manager originally built for Alpine Linux,
+    (description
+     "Alpine Package Keeper (apk) is a package manager originally built for Alpine Linux,
 but now used by several other distributions as well.")
     (license license:gpl2+)))
+
+(define-public apk-tools-static
+  (package/inherit apk-tools
+    (name "apk-tools-static")
+    (native-inputs (list pkg-config python upx))
+    (inputs (list zlib
+                  (list zlib "static")
+                  (list zstd "lib")
+                  (list zstd "static")
+                  openssl
+                  (list openssl "static")))
+    (arguments (list #:tests? #f
+                     #:phases #~(modify-phases %standard-phases
+                                  (replace 'install
+                                    (lambda _
+                                      (begin
+                                        (mkdir-p (string-append #$output
+                                                                "/bin"))
+                                        (system "strip src/apk")
+                                        (system "upx --ultra-brute src/apk")
+                                        (copy-file "src/apk"
+                                                   (string-append #$output
+                                                                  "/bin/apk")))))
+                                  (delete 'shrink-runpath))
+                     #:configure-flags #~(list "-Dhelp=disabled"
+                                               "-Dpython=disabled"
+                                               "-Dc_link_args=\"-static\""
+                                               "-Dprefer_static=true"
+                                               "-Ddefault_library=static")))))
