@@ -65,6 +65,7 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages golang-build)
+  #:use-module (guix build-system qt)
   #:use-module (nonguix licenses)
   #:use-module (nonguix build-system binary)
   #:use-module (laura packages rust-common)
@@ -635,3 +636,44 @@ And beware of a minor amount of trolling.
 
 To reach the end, a new player will take about 4 to 6 hours, a full playthrough can be finished in about 1 hour and the end can be reached in about 15 minutes.")
     (license license:asl2.0)))
+
+(define-public cubiomes-viewer
+  (package
+    (name "cubiomes-viewer")
+    (version "4.1.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Cubitect/cubiomes-viewer")
+             (recursive? #t)
+             (commit "4.1.2")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0llzkr1wpn9pjbg5q08vl40cksqxj5awdj4saymksd8b9x5wlc4b"))))
+    (build-system qt-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:build-type "Release"
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'configure
+            (lambda _
+              (begin
+                (mkdir "../build")
+                (chdir "../build")
+                (system "qmake ../source"))))
+          (replace 'install
+            (lambda _
+              (begin
+                (mkdir-p (string-append #$output "/bin"))
+                (copy-file "cubiomes-viewer"
+                           (string-append #$output "/bin/cubiomes-viewer"))))))))
+    (home-page "https://github.com/Cubitect/cubiomes-viewer")
+    (synopsis "An efficient graphical Minecraft seed finder and map viewer.")
+    (description
+     "Cubiomes Viewer provides a graphical interface for the efficient and flexible seed-finding utilities provided by cubiomes and a map viewer for the Minecraft biomes and structure generation.
+
+The tool is designed for high performance and supports Minecraft Java Edition main releases up to 1.21.")
+    (license license:gpl3)))
