@@ -9,6 +9,7 @@
   #:use-module (guix build-system meson)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system go)
+  #:use-module (guix build-system copy)
   #:use-module (gnu packages cmake)
   #:use-module ((guix licenses)
                 #:prefix license:)
@@ -65,6 +66,7 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages golang-build)
+  #:use-module (gnu packages maths)
   #:use-module (guix build-system qt)
   #:use-module (nonguix licenses)
   #:use-module (nonguix build-system binary)
@@ -677,3 +679,60 @@ To reach the end, a new player will take about 4 to 6 hours, a full playthrough 
 
 The tool is designed for high performance and supports Minecraft Java Edition main releases up to 1.21.")
     (license license:gpl3)))
+
+(define-public emptyepsilon
+  (package
+    (name "emptyepsilon")
+    (version "2024.12.08")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/daid/EmptyEpsilon")
+             (commit "EE-2024.12.08")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "13r3lqhbqad99hcw4dhk8rz4cdn34q8vpzcwd4h6nm3qpg0wbh96"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:build-type "Release"
+      #:configure-flags
+      #~(list (string-append "-DSERIOUS_PROTON_DIR="
+                             (assoc-ref %build-inputs "seriousproton-src")) "-Dbasis_POPULATED=true")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'build 'symlink-sources
+            (lambda _
+              (mkdir-p "_deps")
+              (copy-recursively (assoc-ref %build-inputs "basis-src") "_deps/basis-src"))))))
+    (native-inputs (list `("seriousproton-src" ,(origin
+                                                  (method git-fetch)
+                                                  (uri (git-reference (url
+                                                                       "https://github.com/daid/SeriousProton")
+                                                                      (commit
+                                                                       "EE-2024.12.08")))
+                                                  (file-name (git-file-name
+                                                              "seriousproton"
+                                                              "2024.12.08"))
+                                                  (sha256 (base32
+                                                           "1p8bg1mrylkrs7a87i3j0rjdjqlf163m7i2ifsjby809n43h4mlk"))))
+                         `("basis-src" ,(origin
+                                          (method git-fetch)
+                                          (uri (git-reference (url
+                                                               "https://github.com/BinomialLLC/basis_universal")
+                                                              (commit
+                                                               "v1_15_update")))
+                                          (file-name (git-file-name "basis"
+                                                      "v1_15_update"))
+                                          (sha256 (base32
+                                                   "0klis7k102kwza742zn4ms8ss7p0fq455m16h74631d7yjmz7jfs"))))))
+    (inputs (list sdl2 glm))
+    (home-page "https://daid.github.io/EmptyEpsilon/")
+    (synopsis
+     "Open source bridge simulator. Build with the SeriousProton engine.")
+    (description
+     "Started as a cross-platform, open-source \"clone\" of Artemis Spaceship Bridge Simulator, EmptyEpsilon has already deviated from Artemis with new features and gameplay, including a Game Master mode and multiple AI factions. We strive to get EmptyEpsilon working on several platforms, and Windows, Linux, and Android are fully supported.
+
+The game is written in C++ with the SeriousProton engine and uses SDL2 for most of the heavy lifting.")
+    (license license:gpl2)))
