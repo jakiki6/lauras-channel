@@ -1,0 +1,16 @@
+diff --color --recursive --text --unified a/Formats/xbinary.cpp b/Formats/xbinary.cpp
+--- a/Formats/xbinary.cpp	2025-05-14 18:15:38.457288203 +0200
++++ b/Formats/xbinary.cpp	2025-05-14 18:16:05.175031138 +0200
+@@ -698,11 +698,7 @@
+ 
+     if (sPathName.contains("$data"))  // TODO Check Linux
+     {
+-#ifdef Q_OS_MAC
+-        sResult.replace("$data", QCoreApplication::applicationDirPath() + "/../Resources");
+-#else
+-        sResult.replace("$data", QCoreApplication::applicationDirPath());
+-#endif
++        sResult.replace("$data", QCoreApplication::applicationDirPath() + "/../lib/die");
+         sResult.replace("/", QDir::separator());
+     }
+ 
