@@ -91,6 +91,7 @@
         amaranth
         badkeys
         ssh-x25519
+        die-engine
         otptool
         ctrtool
         makerom

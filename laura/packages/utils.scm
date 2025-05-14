@@ -2035,3 +2035,24 @@ scalar is half of the private key's SHA512 hash, whereas X25519 uses the
 private key directly as a scalar. It is therefore straightforward to map
 ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
     (license license:expat)))
+
+(define-public die-engine
+  (package
+    (name "die-engine")
+    (version "3.10")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/horsicq/DIE-engine")
+              (recursive? #t)
+              (commit "3.10")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "057w3317045q72q2ipcd68jrpqls6r4pjw2ckhv2d6rr51i32y68"))))
+    (build-system cmake-build-system)
+    (arguments (list #:tests? #f #:build-type "Release"))
+    (inputs (list qtbase-5 qtsvg-5 qtscript))
+    (home-page "https://github.com/horsicq/DIE-engine")
+    (synopsis "DIE engine")
+    (description "GUI & console sources for Detect It Easy(DiE)")
+    (license license:expat)))
