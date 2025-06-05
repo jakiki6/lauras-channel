@@ -1,0 +1,588 @@
+diff --git a/src/lib.rs b/src/lib.rs
+index 165a27e..b24a4ed 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -11,12 +11,14 @@ use std::path::PathBuf;
+ use std::str::FromStr;
+ use std::{env, fmt, io};
+ 
+-use radicle_cli::git::Rev;
+ use thiserror::Error;
+ 
+-use radicle::git;
++use radicle::prelude::NodeId;
+ use radicle::storage::git::transport::local::{Url, UrlError};
+ use radicle::storage::{ReadRepository, WriteStorage};
++use radicle::{cob, profile};
++use radicle::{git, storage, Profile};
++use radicle_cli::git::Rev;
+ use radicle_cli::terminal as cli;
+ 
+ #[derive(Debug, Error)]
+@@ -90,28 +92,26 @@ pub fn run(profile: radicle::Profile) -> Result<(), Error> {
+     // module is aware of that.
+     cli::Paint::set_terminal(io::stderr());
+ 
+-    let url: Url = {
++    let (remote, url): (Option<git::RefString>, Url) = {
+         let args = env::args().skip(1).take(2).collect::<Vec<_>>();
+ 
+         match args.as_slice() {
+-            [url] => url.parse(),
+-            [_, url] => url.parse(),
++            [url] => (None, url.parse()?),
++            [remote, url] => (git::RefString::try_from(remote.as_str()).ok(), url.parse()?),
+ 
+             _ => {
+                 return Err(Error::InvalidArguments(args));
+             }
+         }
+-    }?;
++    };
+ 
+     let stored = profile.storage.repository_mut(url.repo)?;
+     if stored.is_empty()? {
+         return Err(Error::RepositoryNotFound(stored.path().to_path_buf()));
+     }
+ 
+-    // `GIT_DIR` is expected to be set by Git tooling, and points to the working copy.
+-    let working = env::var("GIT_DIR")
+-        .map(PathBuf::from)
+-        .map_err(|_| Error::NoGitDir)?;
++    // `GIT_DIR` is set by Git tooling, if we're in a working copy.
++    let working = env::var("GIT_DIR").map(PathBuf::from);
+     // Whether we should output debug logs.
+     let debug = radicle::profile::env::debug();
+ 
+@@ -162,7 +162,7 @@ pub fn run(profile: radicle::Profile) -> Result<(), Error> {
+ 
+                 // N.b. `working` is the `.git` folder and `fetch::run`
+                 // requires the working directory.
+-                let working = working.canonicalize()?;
++                let working = working.map_err(|_| Error::NoGitDir)?.canonicalize()?;
+                 let working = working.parent().ok_or_else(|| Error::NoWorkingCopy {
+                     path: working.clone(),
+                 })?;
+@@ -171,9 +171,14 @@ pub fn run(profile: radicle::Profile) -> Result<(), Error> {
+                     .map_err(Error::from);
+             }
+             ["push", refspec] => {
++                // We have to be in a working copy to push.
++                let working = working.map_err(|_| Error::NoGitDir)?;
++
+                 return push::run(
+                     vec![refspec.to_string()],
+                     &working,
++                    // N.b. assume the default remote if there was no remote
++                    remote.unwrap_or((*radicle::rad::REMOTE_NAME).clone()),
+                     url,
+                     &stored,
+                     &profile,
+@@ -256,3 +261,36 @@ pub(crate) fn hint(s: impl fmt::Display) {
+ pub(crate) fn warn(s: impl fmt::Display) {
+     eprintln!("{}", cli::format::hint(format!("warn: {s}")));
+ }
++
++/// Get the patch store.
++pub(crate) fn patches<'a, R: ReadRepository + cob::Store<Namespace = NodeId>>(
++    profile: &Profile,
++    repo: &'a R,
++) -> Result<cob::patch::Cache<cob::patch::Patches<'a, R>, cob::cache::StoreReader>, list::Error> {
++    match profile.patches(repo) {
++        Ok(patches) => Ok(patches),
++        Err(err @ profile::Error::CobsCache(cob::cache::Error::OutOfDate)) => {
++            hint(cli::cob::MIGRATION_HINT);
++            Err(err.into())
++        }
++        Err(err) => Err(err.into()),
++    }
++}
++
++/// Get the mutable patch store.
++pub(crate) fn patches_mut<'a>(
++    profile: &Profile,
++    repo: &'a storage::git::Repository,
++) -> Result<
++    cob::patch::Cache<cob::patch::Patches<'a, storage::git::Repository>, cob::cache::StoreWriter>,
++    push::Error,
++> {
++    match profile.patches_mut(repo) {
++        Ok(patches) => Ok(patches),
++        Err(err @ profile::Error::CobsCache(cob::cache::Error::OutOfDate)) => {
++            hint(cli::cob::MIGRATION_HINT);
++            Err(err.into())
++        }
++        Err(err) => Err(err.into()),
++    }
++}
+diff --git a/src/list.rs b/src/list.rs
+index fd8c35d..fef535d 100644
+--- a/src/list.rs
++++ b/src/list.rs
+@@ -4,6 +4,7 @@ use thiserror::Error;
+ 
+ use radicle::cob;
+ use radicle::git;
++use radicle::prelude::NodeId;
+ use radicle::storage::git::transport::local::Url;
+ use radicle::storage::ReadRepository;
+ use radicle::Profile;
+@@ -34,7 +35,7 @@ pub enum Error {
+ }
+ 
+ /// List refs for fetching (`git fetch` and `git ls-remote`).
+-pub fn for_fetch<R: ReadRepository + cob::Store + 'static>(
++pub fn for_fetch<R: ReadRepository + cob::Store<Namespace = NodeId> + 'static>(
+     url: &Url,
+     profile: &Profile,
+     stored: &R,
+@@ -83,11 +84,11 @@ pub fn for_push<R: ReadRepository>(profile: &Profile, stored: &R) -> Result<(),
+ }
+ 
+ /// List canonical patch references. These are magic refs that can be used to pull patch updates.
+-fn patch_refs<R: ReadRepository + cob::Store + 'static>(
++fn patch_refs<R: ReadRepository + cob::Store<Namespace = NodeId> + 'static>(
+     profile: &Profile,
+     stored: &R,
+ ) -> Result<(), Error> {
+-    let patches = profile.patches(stored)?;
++    let patches = crate::patches(profile, stored)?;
+     for patch in patches.list()? {
+         let Ok((id, patch)) = patch else {
+             // Ignore patches that fail to decode.
+diff --git a/src/push.rs b/src/push.rs
+index d479ce3..41d1785 100644
+--- a/src/push.rs
++++ b/src/push.rs
+@@ -1,17 +1,18 @@
+ #![allow(clippy::too_many_arguments)]
+ use std::collections::HashMap;
+ use std::io::IsTerminal;
+-use std::path::Path;
++use std::path::{Path, PathBuf};
+ use std::str::FromStr;
+ use std::{assert_eq, io};
+ 
++use radicle::node::device::Device;
+ use thiserror::Error;
+ 
+ use radicle::cob;
+ use radicle::cob::object::ParseObjectId;
+ use radicle::cob::patch;
+ use radicle::cob::patch::cache::Patches as _;
+-use radicle::crypto::Signer;
++use radicle::crypto;
+ use radicle::explorer::ExplorerResource;
+ use radicle::git::canonical;
+ use radicle::git::canonical::Canonical;
+@@ -30,6 +31,10 @@ use crate::{hint, read_line, warn, Options};
+ 
+ #[derive(Debug, Error)]
+ pub enum Error {
++    #[error(
++        "the Git repository found at {path:?} is a bare repository, expected a working directory"
++    )]
++    BareRepository { path: PathBuf },
+     /// Public key doesn't match the remote namespace we're pushing to.
+     #[error("cannot push to remote namespace owned by {0}")]
+     KeyMismatch(Did),
+@@ -93,6 +98,9 @@ pub enum Error {
+     /// Patch not found in store.
+     #[error("patch `{0}` not found")]
+     NotFound(patch::PatchId),
++    /// Revision not found in store.
++    #[error("revision `{0}` not found")]
++    RevisionNotFound(patch::RevisionId),
+     /// Patch is empty.
+     #[error("patch commits are already included in the base branch")]
+     EmptyPatch,
+@@ -156,6 +164,7 @@ impl FromStr for Command {
+ pub fn run(
+     mut specs: Vec<String>,
+     working: &Path,
++    remote: git::RefString,
+     url: Url,
+     stored: &storage::git::Repository,
+     profile: &Profile,
+@@ -218,14 +227,16 @@ pub fn run(
+             }
+             Command::Push(git::Refspec { src, dst, force }) => {
+                 let working = git::raw::Repository::open(working)?;
++                let patches = crate::patches_mut(profile, stored)?;
+ 
+                 if dst == &*rad::PATCHES_REFNAME {
+                     patch_open(
+                         src,
++                        &remote,
+                         &nid,
+                         &working,
+                         stored,
+-                        profile.patches_mut(stored)?,
++                        patches,
+                         &signer,
+                         profile,
+                         opts.clone(),
+@@ -245,7 +256,7 @@ pub fn run(
+                             &nid,
+                             &working,
+                             stored,
+-                            profile.patches_mut(stored)?,
++                            patches,
+                             &signer,
+                             opts.clone(),
+                         )
+@@ -264,8 +275,12 @@ pub fn run(
+                         if dst == canonical_ref && delegates.contains(&me) && delegates.len() > 1 {
+                             let head = working.find_reference(src.as_str())?;
+                             let head = head.peel_to_commit()?.id();
+-                            let mut canonical =
+-                                Canonical::default_branch(stored, &project, &identity.delegates)?;
++
++                            let mut canonical = Canonical::default_branch(
++                                stored,
++                                &project,
++                                identity.delegates().as_ref(),
++                            )?;
+                             let converges = canonical::converges(
+                                 canonical
+                                     .tips()
+@@ -277,7 +292,7 @@ pub fn run(
+                                 canonical.modify_vote(me, head.into());
+                             }
+ 
+-                            match canonical.quorum(identity.threshold, &working) {
++                            match canonical.quorum(identity.threshold(), &working) {
+                                 Ok(canonical_oid) => {
+                                     // Canonical head is an ancestor of head.
+                                     let is_ff = head == *canonical_oid
+@@ -300,23 +315,24 @@ pub fn run(
+                                         ));
+                                     }
+                                 }
+-                                Err(canonical::QuorumError::NoQuorum) => {
+-                                    warn(format!("no quorum was found for `{canonical_ref}`"));
++                                Err(canonical::QuorumError::Diverging(e)) => {
++                                    warn(format!(
++                                        "could not determine canonical tip for `{canonical_ref}`"
++                                    ));
++                                    warn(e.to_string());
++                                    warn("it is recommended to find a commit to agree upon");
++                                }
++                                Err(canonical::QuorumError::NoCandidates(e)) => {
++                                    warn(format!(
++                                        "could not determine canonical tip for `{canonical_ref}`"
++                                    ));
++                                    warn(e.to_string());
+                                     warn("it is recommended to find a commit to agree upon");
+                                 }
+                                 Err(e) => return Err(e.into()),
+                             };
+                         }
+-                        push(
+-                            src,
+-                            &dst,
+-                            *force,
+-                            &nid,
+-                            &working,
+-                            stored,
+-                            profile.patches_mut(stored)?,
+-                            &signer,
+-                        )
++                        push(src, &dst, *force, &nid, &working, stored, patches, &signer)
+                     }
+                 }
+             }
+@@ -374,8 +390,9 @@ pub fn run(
+ }
+ 
+ /// Open a new patch.
+-fn patch_open<G: Signer>(
++fn patch_open<G>(
+     src: &git::RefStr,
++    upstream: &git::RefString,
+     nid: &NodeId,
+     working: &git::raw::Repository,
+     stored: &storage::git::Repository,
+@@ -383,10 +400,13 @@ fn patch_open<G: Signer>(
+         patch::Patches<'_, storage::git::Repository>,
+         cob::cache::StoreWriter,
+     >,
+-    signer: &G,
++    signer: &Device<G>,
+     profile: &Profile,
+     opts: Options,
+-) -> Result<Option<ExplorerResource>, Error> {
++) -> Result<Option<ExplorerResource>, Error>
++where
++    G: crypto::signature::Signer<crypto::Signature>,
++{
+     let reference = working.find_reference(src.as_str())?;
+     let commit = reference.peel_to_commit()?;
+     let dst = git::refs::storage::staging::patch(nid, commit.id());
+@@ -463,7 +483,7 @@ fn patch_open<G: Signer>(
+ 
+             // Setup current branch so that pushing updates the patch.
+             if let Some(branch) =
+-                rad::setup_patch_upstream(&patch, commit.id().into(), working, false)?
++                rad::setup_patch_upstream(&patch, commit.id().into(), working, upstream, false)?
+             {
+                 if let Some(name) = branch.name()? {
+                     if profile.hints() {
+@@ -493,7 +513,7 @@ fn patch_open<G: Signer>(
+ 
+ /// Update an existing patch.
+ #[allow(clippy::too_many_arguments)]
+-fn patch_update<G: Signer>(
++fn patch_update<G>(
+     src: &git::RefStr,
+     dst: &git::Qualified,
+     force: bool,
+@@ -505,9 +525,12 @@ fn patch_update<G: Signer>(
+         patch::Patches<'_, storage::git::Repository>,
+         cob::cache::StoreWriter,
+     >,
+-    signer: &G,
++    signer: &Device<G>,
+     opts: Options,
+-) -> Result<Option<ExplorerResource>, Error> {
++) -> Result<Option<ExplorerResource>, Error>
++where
++    G: crypto::signature::Signer<crypto::Signature>,
++{
+     let reference = working.find_reference(src.as_str())?;
+     let commit = reference.peel_to_commit()?;
+     let patch_id = radicle::cob::ObjectId::from(oid);
+@@ -515,7 +538,7 @@ fn patch_update<G: Signer>(
+ 
+     push_ref(src, &dst, force, working, stored.raw())?;
+ 
+-    let Ok(mut patch) = patches.get_mut(&patch_id) else {
++    let Ok(Some(patch)) = patches.get(&patch_id) else {
+         return Err(Error::NotFound(patch_id));
+     };
+ 
+@@ -523,10 +546,14 @@ fn patch_update<G: Signer>(
+     if patch.revisions().any(|(_, r)| *r.head() == commit.id()) {
+         return Ok(None);
+     }
++
++    let (latest_id, latest) = patch.latest();
++    let latest = latest.clone();
++
+     let message = term::patch::get_update_message(
+         opts.message,
+         &stored.backend,
+-        patch.latest().1,
++        &latest,
+         &commit.id().into(),
+     )?;
+ 
+@@ -537,13 +564,18 @@ fn patch_update<G: Signer>(
+     } else {
+         stored.merge_base(&target, &head)?
+     };
+-    let revision = patch.update(message, base, head, signer)?;
++
++    let mut patch_mut = patch::PatchMut::new(patch_id, patch, &mut patches);
++    let revision = patch_mut.update(message, base, head, signer)?;
++    let Some(revision) = patch_mut.revision(&revision).cloned() else {
++        return Err(Error::RevisionNotFound(revision));
++    };
+ 
+     eprintln!(
+         "{} Patch {} updated to revision {}",
+         term::format::positive("✓"),
+         term::format::tertiary(term::format::cob(&patch_id)),
+-        term::format::dim(revision)
++        term::format::dim(revision.id())
+     );
+ 
+     // In this case, the patch was already merged via git, and pushed to storage.
+@@ -552,14 +584,22 @@ fn patch_update<G: Signer>(
+     // This can happen if for eg. a patch commit is amended, the patch branch is merged
+     // and pushed, but the patch hasn't yet been updated. On push to the patch branch,
+     // it'll seem like the patch is "empty", because the changes are already in the base branch.
+-    if base == head && patch.is_open() {
+-        patch_merge(patch, revision, head, working, signer)?;
++    if base == head && patch_mut.is_open() {
++        patch_merge(patch_mut, revision.id(), head, working, signer)?;
++    } else {
++        eprintln!(
++            "To compare against your previous revision {}, run:\n\n   {}\n",
++            term::format::tertiary(term::format::cob(&cob::ObjectId::from(git::Oid::from(
++                latest_id
++            )))),
++            patch::RangeDiff::new(&latest, &revision).to_command()
++        );
+     }
+ 
+     Ok(Some(ExplorerResource::Patch { id: patch_id }))
+ }
+ 
+-fn push<G: Signer>(
++fn push<G>(
+     src: &git::RefStr,
+     dst: &git::Qualified,
+     force: bool,
+@@ -570,8 +610,11 @@ fn push<G: Signer>(
+         patch::Patches<'_, storage::git::Repository>,
+         cob::cache::StoreWriter,
+     >,
+-    signer: &G,
+-) -> Result<Option<ExplorerResource>, Error> {
++    signer: &Device<G>,
++) -> Result<Option<ExplorerResource>, Error>
++where
++    G: crypto::signature::Signer<crypto::Signature>,
++{
+     let head = match working.find_reference(src.as_str()) {
+         Ok(obj) => obj.peel_to_commit()?,
+         Err(e) => {
+@@ -615,7 +658,7 @@ fn push<G: Signer>(
+ }
+ 
+ /// Revert all patches that are no longer included in the base branch.
+-fn patch_revert_all<G: Signer>(
++fn patch_revert_all<G>(
+     old: git::Oid,
+     new: git::Oid,
+     stored: &git::raw::Repository,
+@@ -623,8 +666,11 @@ fn patch_revert_all<G: Signer>(
+         patch::Patches<'_, storage::git::Repository>,
+         cob::cache::StoreWriter,
+     >,
+-    _signer: &G,
+-) -> Result<(), Error> {
++    _signer: &Device<G>,
++) -> Result<(), Error>
++where
++    G: crypto::signature::Signer<crypto::Signature>,
++{
+     // Find all commits reachable from the old OID but not from the new OID.
+     let mut revwalk = stored.revwalk()?;
+     revwalk.push(*old)?;
+@@ -677,7 +723,7 @@ fn patch_revert_all<G: Signer>(
+ }
+ 
+ /// Merge all patches that have been included in the base branch.
+-fn patch_merge_all<G: Signer>(
++fn patch_merge_all<G>(
+     old: git::Oid,
+     new: git::Oid,
+     working: &git::raw::Repository,
+@@ -685,8 +731,11 @@ fn patch_merge_all<G: Signer>(
+         patch::Patches<'_, storage::git::Repository>,
+         cob::cache::StoreWriter,
+     >,
+-    signer: &G,
+-) -> Result<(), Error> {
++    signer: &Device<G>,
++) -> Result<(), Error>
++where
++    G: crypto::signature::Signer<crypto::Signature>,
++{
+     let mut revwalk = working.revwalk()?;
+     revwalk.push_range(&format!("{old}..{new}"))?;
+ 
+@@ -716,9 +765,9 @@ fn patch_merge_all<G: Signer>(
+         // It's possible for more than one revision to be merged by this push, so we pick the
+         // revision that is closest to the tip of the commit chain we're pushing.
+         for commit in &commits {
+-            if let Some((revision_id, _)) = revisions.iter().find(|(_, head)| commit == head) {
++            if let Some((revision_id, head)) = revisions.iter().find(|(_, head)| commit == head) {
+                 let patch = patch::PatchMut::new(id, patch, patches);
+-                patch_merge(patch, *revision_id, new, working, signer)?;
++                patch_merge(patch, *revision_id, *head, working, signer)?;
+ 
+                 break;
+             }
+@@ -727,13 +776,17 @@ fn patch_merge_all<G: Signer>(
+     Ok(())
+ }
+ 
+-fn patch_merge<C: cob::cache::Update<patch::Patch>, G: Signer>(
++fn patch_merge<C, G>(
+     mut patch: patch::PatchMut<storage::git::Repository, C>,
+     revision: patch::RevisionId,
+     commit: git::Oid,
+     working: &git::raw::Repository,
+-    signer: &G,
+-) -> Result<(), Error> {
++    signer: &Device<G>,
++) -> Result<(), Error>
++where
++    C: cob::cache::Update<patch::Patch>,
++    G: crypto::signature::Signer<crypto::Signature>,
++{
+     let (latest, _) = patch.latest();
+     let merged = patch.merge(revision, commit, signer)?;
+ 
+@@ -768,12 +821,32 @@ fn push_ref(
+     working: &git::raw::Repository,
+     stored: &git::raw::Repository,
+ ) -> Result<(), Error> {
+-    let mut remote = working.remote_anonymous(&git::url::File::new(stored.path()).to_string())?;
+-    let refspec = git::Refspec { src, dst, force };
+-
++    let url = git::url::File::new(stored.path()).to_string();
+     // Nb. The *force* indicator (`+`) is processed by Git tooling before we even reach this code.
+     // This happens during the `list for-push` phase.
+-    remote.push(&[refspec.to_string().as_str()], None)?;
++    let refspec = git::Refspec { src, dst, force };
++    let repo = working.workdir().ok_or(Error::BareRepository {
++        path: working.path().to_path_buf(),
++    })?;
++
++    radicle::git::run::<_, _, &str, &str>(
++        repo,
++        [
++            "push",
++            url.to_string().as_str(),
++            refspec.to_string().as_str(),
++        ],
++        [],
++    )
++    .map_err(|err| {
++        Error::Io(std::io::Error::new(
++            std::io::ErrorKind::Other,
++            format!(
++                "failed to run `git push {url} {refspec}` in {:?}: {err}",
++                working.path()
++            ),
++        ))
++    })?;
+ 
+     Ok(())
+ }
+@@ -805,18 +878,20 @@ fn sync(
+ 
+     let mut urls = Vec::new();
+ 
+-    for seed in profile.config.preferred_seeds.iter() {
+-        if result.synced(&seed.id).is_some() {
+-            for resource in updated {
+-                let url = profile
+-                    .config
+-                    .public_explorer
+-                    .url(seed.addr.host.clone(), repo.id)
+-                    .resource(resource);
+-
+-                urls.push(url);
++    if let Some(result) = result {
++        for seed in profile.config.preferred_seeds.iter() {
++            if result.is_synced(&seed.id) {
++                for resource in updated {
++                    let url = profile
++                        .config
++                        .public_explorer
++                        .url(seed.addr.host.clone(), repo.id)
++                        .resource(resource);
++
++                    urls.push(url);
++                }
++                break;
+             }
+-            break;
+         }
+     }
+ 

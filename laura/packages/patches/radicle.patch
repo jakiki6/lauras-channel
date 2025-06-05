@@ -1,0 +1,670 @@
+diff --git a/src/lib.rs b/src/lib.rs
+index 592dcd1..c2be087 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -24,7 +24,7 @@ pub mod node;
+ pub mod profile;
+ pub mod rad;
+ #[cfg(feature = "schemars")]
+-pub(crate) mod schemars_ext;
++pub mod schemars_ext;
+ pub mod serde_ext;
+ pub mod sql;
+ pub mod storage;
+diff --git a/src/node.rs b/src/node.rs
+index 2037d45..62ebc83 100644
+--- a/src/node.rs
++++ b/src/node.rs
+@@ -96,6 +96,7 @@ pub enum PingState {
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+ #[allow(clippy::large_enum_variant)]
+ #[serde(rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub enum State {
+     /// Initial state for outgoing connections.
+     Initial,
+@@ -106,6 +107,10 @@ pub enum State {
+     Connected {
+         /// Connected since this time.
+         #[serde(with = "crate::serde_ext::localtime::time")]
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::localtime::LocalDurationInSeconds")
++        )]
+         since: LocalTime,
+         /// Ping state.
+         #[serde(skip)]
+@@ -124,9 +129,17 @@ pub enum State {
+     Disconnected {
+         /// Since when has this peer been disconnected.
+         #[serde(with = "crate::serde_ext::localtime::time")]
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::localtime::LocalDurationInSeconds")
++        )]
+         since: LocalTime,
+         /// When to retry the connection.
+         #[serde(with = "crate::serde_ext::localtime::time")]
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::localtime::LocalDurationInSeconds")
++        )]
+         retry_at: LocalTime,
+     },
+ }
+@@ -185,6 +198,7 @@ impl Penalty {
+ #[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
+ #[serde(tag = "status")]
+ #[serde(rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub enum SyncStatus {
+     /// We're in sync.
+     #[serde(rename_all = "camelCase")]
+@@ -428,6 +442,7 @@ impl TryFrom<&sqlite::Value> for Alias {
+ 
+ /// Options passed to the "connect" node command.
+ #[derive(Debug, Clone, Serialize, Deserialize)]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub struct ConnectOptions {
+     /// Establish a persistent connection.
+     pub persistent: bool,
+@@ -480,6 +495,7 @@ impl From<Event> for CommandResult<Event> {
+ 
+ /// A success response.
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub struct Success {
+     /// Whether something was updated.
+     #[serde(default, skip_serializing_if = "crate::serde_ext::is_default")]
+@@ -589,6 +605,7 @@ impl From<Address> for HostName {
+ /// Command name.
+ #[derive(Debug, Clone, Serialize, Deserialize)]
+ #[serde(rename_all = "camelCase", tag = "command")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub enum Command {
+     /// Announce repository references for given repository to peers.
+     #[serde(rename_all = "camelCase")]
+@@ -616,7 +633,13 @@ pub enum Command {
+ 
+     /// Disconnect from a node.
+     #[serde(rename_all = "camelCase")]
+-    Disconnect { nid: NodeId },
++    Disconnect {
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::crypto::PublicKey")
++        )]
++        nid: NodeId,
++    },
+ 
+     /// Lookup seeds for the given repository in the routing table.
+     #[serde(rename_all = "camelCase")]
+@@ -626,12 +649,22 @@ pub enum Command {
+     Sessions,
+ 
+     /// Get a specific peer session.
+-    Session { nid: NodeId },
++    Session {
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::crypto::PublicKey")
++        )]
++        nid: NodeId,
++    },
+ 
+     /// Fetch the given repository from the network.
+     #[serde(rename_all = "camelCase")]
+     Fetch {
+         rid: RepoId,
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::crypto::PublicKey")
++        )]
+         nid: NodeId,
+         timeout: time::Duration,
+     },
+@@ -646,11 +679,24 @@ pub enum Command {
+ 
+     /// Follow the given node.
+     #[serde(rename_all = "camelCase")]
+-    Follow { nid: NodeId, alias: Option<Alias> },
++    Follow {
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::crypto::PublicKey")
++        )]
++        nid: NodeId,
++        alias: Option<Alias>,
++    },
+ 
+     /// Unfollow the given node.
+     #[serde(rename_all = "camelCase")]
+-    Unfollow { nid: NodeId },
++    Unfollow {
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::crypto::PublicKey")
++        )]
++        nid: NodeId,
++    },
+ 
+     /// Get the node's status.
+     Status,
+@@ -679,6 +725,7 @@ impl Command {
+ /// Connection link direction.
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+ #[serde(rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub enum Link {
+     /// Outgoing connection.
+     Outbound,
+@@ -688,7 +735,12 @@ pub enum Link {
+ 
+ /// An established network connection with a peer.
+ #[derive(Debug, Clone, Serialize, Deserialize)]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub struct Session {
++    #[cfg_attr(
++        feature = "schemars",
++        schemars(with = "crate::schemars_ext::crypto::PublicKey")
++    )]
+     pub nid: NodeId,
+     pub link: Link,
+     pub addr: Address,
+@@ -705,8 +757,14 @@ impl Session {
+ /// A seed for some repository, with metadata about its status.
+ #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+ #[serde(rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
++
+ pub struct Seed {
+     /// The Node ID.
++    #[cfg_attr(
++        feature = "schemars",
++        schemars(with = "crate::schemars_ext::crypto::PublicKey")
++    )]
+     pub nid: NodeId,
+     /// Known addresses for this seed.
+     pub addrs: Vec<KnownAddress>,
+@@ -748,7 +806,11 @@ impl Seed {
+ /// Represents a set of seeds with associated metadata. Uses an RNG
+ /// underneath, so every iteration returns a different ordering.
+ #[serde(into = "Vec<Seed>", from = "Vec<Seed>")]
+-pub struct Seeds(address::AddressBook<NodeId, Seed>);
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
++pub struct Seeds(
++    #[cfg_attr(feature = "schemars", schemars(with = "Vec<Seed>"))]
++    address::AddressBook<NodeId, Seed>,
++);
+ 
+ impl Seeds {
+     /// Create a new seeds list from an RNG.
+@@ -819,9 +881,14 @@ impl From<Vec<Seed>> for Seeds {
+ 
+ #[derive(Clone, Debug, Serialize, Deserialize)]
+ #[serde(tag = "status", rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub enum FetchResult {
+     Success {
+         updated: Vec<RefUpdate>,
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "HashSet<crate::schemars_ext::crypto::PublicKey>")
++        )]
+         namespaces: HashSet<NodeId>,
+         clone: bool,
+     },
+@@ -978,6 +1045,7 @@ impl Error {
+ 
+ #[derive(Debug, Serialize, Deserialize)]
+ #[serde(rename_all = "camelCase", tag = "status")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub enum ConnectResult {
+     Connected,
+     Disconnected { reason: String },
+diff --git a/src/node/address.rs b/src/node/address.rs
+index dac9ac4..52a087e 100644
+--- a/src/node/address.rs
++++ b/src/node/address.rs
+@@ -143,6 +143,7 @@ pub struct Node {
+ /// A known address.
+ #[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+ #[serde(rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub struct KnownAddress {
+     /// Network address.
+     pub addr: Address,
+@@ -150,9 +151,17 @@ pub struct KnownAddress {
+     pub source: Source,
+     /// Last time this address was used to successfully connect to a peer.
+     #[serde(with = "crate::serde_ext::localtime::option::time")]
++    #[cfg_attr(
++        feature = "schemars",
++        schemars(with = "Option<crate::schemars_ext::localtime::LocalDurationInSeconds>")
++    )]
+     pub last_success: Option<LocalTime>,
+     /// Last time this address was tried.
+     #[serde(with = "crate::serde_ext::localtime::option::time")]
++    #[cfg_attr(
++        feature = "schemars",
++        schemars(with = "Option<crate::schemars_ext::localtime::LocalDurationInSeconds>")
++    )]
+     pub last_attempt: Option<LocalTime>,
+     /// Whether this address has been banned.
+     pub banned: bool,
+@@ -174,6 +183,7 @@ impl KnownAddress {
+ /// Address source. Specifies where an address originated from.
+ #[derive(Debug, Copy, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+ #[serde(rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub enum Source {
+     /// An address that was shared by another peer.
+     Peer,
+diff --git a/src/node/config.rs b/src/node/config.rs
+index ab892b6..362e708 100644
+--- a/src/node/config.rs
++++ b/src/node/config.rs
+@@ -25,30 +25,26 @@ pub mod seeds {
+     use super::{ConnectAddress, PeerAddr};
+     use once_cell::sync::Lazy;
+ 
+-    /// The radicle public community seed node.
+-    pub static RADICLE_COMMUNITY_NODE: Lazy<ConnectAddress> = Lazy::new(|| {
++    /// A public Radicle seed node for the community.
++    pub static RADICLE_NODE_BOOTSTRAP_IRIS: Lazy<ConnectAddress> = Lazy::new(|| {
+         // SAFETY: `ConnectAddress` is known at compile time.
+         #[allow(clippy::unwrap_used)]
+-        PeerAddr::from_str(
+-            "z6MkrLMMsiPWUcNPHcRajuMi9mDfYckSoJyPwwnknocNYPm7@seed.radicle.garden:8776",
+-        )
+-        .unwrap()
+-        .into()
++        PeerAddr::from_str("z6MkrLMMsiPWUcNPHcRajuMi9mDfYckSoJyPwwnknocNYPm7@iris.radicle.xyz:8776")
++            .unwrap()
++            .into()
+     });
+ 
+-    /// The radicle public `ash` seed node.
+-    pub static RADICLE_ASH_NODE: Lazy<ConnectAddress> = Lazy::new(|| {
++    /// A public Radicle seed node for the community.
++    pub static RADICLE_NODE_BOOTSTRAP_ROSA: Lazy<ConnectAddress> = Lazy::new(|| {
+         // SAFETY: `ConnectAddress` is known at compile time.
+         #[allow(clippy::unwrap_used)]
+-        PeerAddr::from_str(
+-            "z6Mkmqogy2qEM2ummccUthFEaaHvyYmYBYh3dbe9W4ebScxo@ash.radicle.garden:8776",
+-        )
+-        .unwrap()
+-        .into()
++        PeerAddr::from_str("z6Mkmqogy2qEM2ummccUthFEaaHvyYmYBYh3dbe9W4ebScxo@rosa.radicle.xyz:8776")
++            .unwrap()
++            .into()
+     });
+ 
+-    /// The radicle team node.
+-    pub static RADICLE_TEAM_NODE: Lazy<ConnectAddress> = Lazy::new(|| {
++    /// The Radicle seed node that the Radicle team uses.
++    pub static RADICLE_NODE_TEAM: Lazy<ConnectAddress> = Lazy::new(|| {
+         // SAFETY: `ConnectAddress` is known at compile time.
+         #[allow(clippy::unwrap_used)]
+         PeerAddr::from_str("z6MksmpU5b1dS7oaqF2bHXhQi1DWy2hB7Mh9CuN7y1DN6QSz@seed.radicle.xyz:8776")
+@@ -72,8 +68,11 @@ impl Network {
+     pub fn bootstrap(&self) -> Vec<(Alias, ProtocolVersion, ConnectAddress)> {
+         match self {
+             Self::Main => [
+-                ("seed.radicle.garden", seeds::RADICLE_COMMUNITY_NODE.clone()),
+-                ("seed.radicle.xyz", seeds::RADICLE_TEAM_NODE.clone()),
++                (
++                    "iris.radicle.xyz",
++                    seeds::RADICLE_NODE_BOOTSTRAP_IRIS.clone(),
++                ),
++                ("seed.radicle.xyz", seeds::RADICLE_NODE_TEAM.clone()),
+             ]
+             .into_iter()
+             .map(|(a, s)| (Alias::new(a), 1, s))
+@@ -87,8 +86,8 @@ impl Network {
+     pub fn public_seeds(&self) -> Vec<ConnectAddress> {
+         match self {
+             Self::Main => vec![
+-                seeds::RADICLE_COMMUNITY_NODE.clone(),
+-                seeds::RADICLE_ASH_NODE.clone(),
++                seeds::RADICLE_NODE_BOOTSTRAP_IRIS.clone(),
++                seeds::RADICLE_NODE_BOOTSTRAP_ROSA.clone(),
+             ],
+             Self::Test => vec![],
+         }
+@@ -302,7 +301,7 @@ pub struct ConnectAddress(
+         with = "String",
+         regex(pattern = r"^.+@.+:((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$"),
+         extend("examples" = [
+-            "z6MkrLMMsiPWUcNPHcRajuMi9mDfYckSoJyPwwnknocNYPm7@seed.radicle.garden:8776",
++            "z6MkrLMMsiPWUcNPHcRajuMi9mDfYckSoJyPwwnknocNYPm7@rosa.radicle.xyz:8776",
+             "z6MkvUJtYD9dHDJfpevWRT98mzDDpdAtmUjwyDSkyqksUr7C@xmrhfasfg5suueegrnc4gsgyi2tyclcy5oz7f5drnrodmdtob6t2ioyd.onion:8776",
+             "z6MknSLrJoTcukLrE435hVNQT4JUhbvWLX4kUzqkEStBU8Vi@seed.example.com:8776",
+             "z6MkkfM3tPXNPrPevKr3uSiQtHPuwnNhu2yUVjgd2jXVsVz5@192.0.2.0:31337",
+diff --git a/src/node/db/migrations/1.sql b/src/node/db/migrations/1.sql
+deleted file mode 100644
+index 6e1f8e9..0000000
+--- a/src/node/db/migrations/1.sql
++++ /dev/null
+@@ -1,98 +0,0 @@
+--- Discovered nodes.
+-create table if not exists "nodes" (
+-  -- Node ID.
+-  "id"                 text      primary key not null,
+-  -- Node features.
+-  "features"           integer   not null,
+-  -- Node alias.
+-  "alias"              text      not null,
+-  --- Node announcement proof-of-work.
+-  "pow"                integer   default 0,
+-  -- Node announcement timestamp.
+-  "timestamp"          integer   not null,
+-  -- If this node is banned. Used as a boolean.
+-  "banned"             integer   default false
+-  --
+-) strict;
+-
+--- Node addresses. These are adresses advertized by a node.
+-create table if not exists "addresses" (
+-  -- Node ID.
+-  "node"               text      not null references "nodes" ("id") on delete cascade,
+-  -- Address type.
+-  "type"               text      not null,
+-  -- Address value, including port.
+-  "value"              text      not null,
+-  -- Where we got this address from.
+-  "source"             text      not null,
+-  -- When this address was announced.
+-  "timestamp"          integer   not null,
+-  -- Local time at which we last attempted to connect to this node.
+-  "last_attempt"       integer   default null,
+-  -- Local time at which we successfully connected to this node.
+-  "last_success"       integer   default null,
+-  -- If this address is banned from use. Used as a boolean.
+-  "banned"             integer   default false,
+-  -- Nb. This constraint allows more than one node to share the same address.
+-  -- This is useful in circumstances when a node wants to rotate its key, but
+-  -- remain reachable at the same address. The old entry will eventually be
+-  -- pruned.
+-  unique ("node", "type", "value")
+-  --
+-) strict;
+-
+--- Routing table. Tracks inventories.
+-create table if not exists "routing" (
+-  -- Repository being seeded.
+-  "repo"         text      not null,
+-  -- Node ID.
+-  "node"         text      not null references "nodes" ("id") on delete cascade,
+-  -- UNIX time at which this entry was added or refreshed.
+-  "timestamp"    integer   not null,
+-
+-  primary key ("repo", "node")
+-);
+-
+--- Gossip message store.
+-create table if not exists "announcements" (
+-  -- Node ID.
+-  --
+-  -- Nb. We don't use a foreign key constraint here, because announcements are
+-  -- currently added to the database before nodes.
+-  "node"               text      not null,
+-  -- Repo ID, if any, for example in ref announcements.
+-  -- For other announcement types, this should be an empty string.
+-  "repo"               text      not null,
+-  -- Announcement type.
+-  --
+-  -- Valid values are:
+-  --
+-  -- "refs"
+-  -- "node"
+-  -- "inventory"
+-  "type"               text      not null,
+-  -- Announcement message in wire format (binary).
+-  "message"            blob      not null,
+-  -- Signature over message.
+-  "signature"          blob      not null,
+-  -- Announcement timestamp.
+-  "timestamp"          integer   not null,
+-  --
+-  unique ("node", "repo", "type")
+-  --
+-) strict;
+-
+--- Repository sync status.
+-create table if not exists "repo-sync-status" (
+-  -- Repository ID.
+-  "repo"                 text      not null,
+-  -- Node ID.
+-  "node"                 text      not null references "nodes" ("id") on delete cascade,
+-  -- Head of your `rad/sigrefs` branch that was synced.
+-  "head"                 text      not null,
+-  -- When this entry was last updated.
+-  "timestamp"            integer   not null,
+-  --
+-  unique ("repo", "node")
+-  --
+-) strict;
+diff --git a/src/node/db/migrations/1.sql b/src/node/db/migrations/1.sql
+new file mode 120000
+index 0000000..1450fbb
+--- /dev/null
++++ b/src/node/db/migrations/1.sql
+@@ -0,0 +1 @@
++../schema.sql
+\ No newline at end of file
+diff --git a/src/node/seed.rs b/src/node/seed.rs
+index 3408e19..5e2ae4b 100644
+--- a/src/node/seed.rs
++++ b/src/node/seed.rs
+@@ -11,11 +11,17 @@ use crate::storage::{refs::RefsAt, ReadRepository, RemoteId};
+ /// Holds an oid and timestamp.
+ #[derive(Debug, Copy, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+ #[serde(rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub struct SyncedAt {
+     /// Head of `rad/sigrefs`.
++    #[cfg_attr(feature = "schemars", schemars(with = "crate::schemars_ext::git::Oid"))]
+     pub oid: git_ext::Oid,
+     /// When these refs were synced.
+     #[serde(with = "crate::serde_ext::localtime::time")]
++    #[cfg_attr(
++        feature = "schemars",
++        schemars(with = "crate::schemars_ext::localtime::LocalDurationInSeconds")
++    )]
+     pub timestamp: LocalTime,
+ }
+ 
+diff --git a/src/profile.rs b/src/profile.rs
+index c69ebc2..64866f3 100644
+--- a/src/profile.rs
++++ b/src/profile.rs
+@@ -728,8 +728,8 @@ mod test {
+             "listen": [],
+             "peers": { "type": "dynamic", "target": 8 },
+             "connect": [
+-              "z6Mkmqogy2qEM2ummccUthFEaaHvyYmYBYh3dbe9W4ebScxo@ash.radicle.garden:8776",
+-              "z6MkrLMMsiPWUcNPHcRajuMi9mDfYckSoJyPwwnknocNYPm7@seed.radicle.garden:8776"
++              "z6Mkmqogy2qEM2ummccUthFEaaHvyYmYBYh3dbe9W4ebScxo@rosa.radicle.xyz:8776",
++              "z6MkrLMMsiPWUcNPHcRajuMi9mDfYckSoJyPwwnknocNYPm7@iris.radicle.xyz:8776"
+             ],
+             "externalAddresses": [ "seed.radicle.xyz:8776" ],
+             "db": { "journalMode": "wal" },
+diff --git a/src/rad.rs b/src/rad.rs
+index a54d63b..5a0fcf5 100644
+--- a/src/rad.rs
++++ b/src/rad.rs
+@@ -259,7 +259,9 @@ pub fn checkout<P: AsRef<Path>, S: storage::ReadStorage>(
+     let project = doc.project()?;
+ 
+     let mut opts = git2::RepositoryInitOptions::new();
+-    opts.no_reinit(true).description(project.description());
++    opts.no_reinit(true)
++        .external_template(false)
++        .description(project.description());
+ 
+     let repo = git2::Repository::init_opts(path.as_ref(), &opts)?;
+     let url = git::Url::from(proj);
+diff --git a/src/schemars_ext.rs b/src/schemars_ext.rs
+index 34cc5ed..9157c72 100644
+--- a/src/schemars_ext.rs
++++ b/src/schemars_ext.rs
+@@ -4,6 +4,29 @@
+ 
+ use schemars::JsonSchema;
+ 
++pub mod crypto {
++    use super::*;
++    /// See [`crate::node::NodeId`]
++    /// See [`crate::storage::RemoteId`]
++    /// See [`::crypto::PublicKey`]
++    ///
++    /// An Ed25519 public key in multibase encoding.
++    ///
++    /// `MULTIBASE(base58-btc, MULTICODEC(public-key-type, raw-public-key-bytes))`
++    #[derive(JsonSchema)]
++    #[schemars(
++    title = "NodeId",
++    description = "An Ed25519 public key in multibase encoding.",
++    extend("examples" = [
++        "z6MkrLMMsiPWUcNPHcRajuMi9mDfYckSoJyPwwnknocNYPm7",
++        "z6MkvUJtYD9dHDJfpevWRT98mzDDpdAtmUjwyDSkyqksUr7C",
++        "z6MknSLrJoTcukLrE435hVNQT4JUhbvWLX4kUzqkEStBU8Vi",
++        "z6MkkfM3tPXNPrPevKr3uSiQtHPuwnNhu2yUVjgd2jXVsVz5",
++    ]),
++)]
++    pub struct PublicKey(String);
++}
++
+ pub(crate) mod log {
+     use super::*;
+ 
+@@ -56,4 +79,34 @@ pub(crate) mod localtime {
+         description = "A time duration measured locally in milliseconds."
+     )]
+     pub(crate) struct LocalDuration(u64);
++
++    /// See [`crate::serde_ext::localtime::time`]
++    #[derive(JsonSchema)]
++    #[schemars(
++        remote = "localtime::LocalDuration",
++        description = "A time duration measured locally in seconds."
++    )]
++    pub(crate) struct LocalDurationInSeconds(u64);
++}
++
++pub(crate) mod git {
++    use super::*;
++
++    /// See [`crate::git::Oid`]
++    /// See [`::git_ext::Oid`]
++    /// See [`::git2::Oid`]
++    ///
++    /// A Git Object Identifier in hexadecimal encoding.
++    #[derive(JsonSchema)]
++    #[schemars(
++        remote = "git2::Oid",
++        description = "A Git Object Identifier (SHA-1 or SHA-256 hash) in hexadecimal encoding."
++    )]
++    pub(crate) struct Oid(
++        #[schemars(regex(pattern = r"^([0-9a-fA-F]{64}|[0-9a-fA-F]{40})$"))] String,
++    );
++
++    /// See [`crate::git::RefString`]
++    #[derive(JsonSchema)]
++    pub(crate) struct RefString(String);
+ }
+diff --git a/src/storage.rs b/src/storage.rs
+index 4b454b1..b411363 100644
+--- a/src/storage.rs
++++ b/src/storage.rs
+@@ -191,11 +191,43 @@ pub type RemoteId = PublicKey;
+ /// An update to a reference.
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+ #[serde(rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub enum RefUpdate {
+-    Updated { name: RefString, old: Oid, new: Oid },
+-    Created { name: RefString, oid: Oid },
+-    Deleted { name: RefString, oid: Oid },
+-    Skipped { name: RefString, oid: Oid },
++    Updated {
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::git::RefString")
++        )]
++        name: RefString,
++        #[cfg_attr(feature = "schemars", schemars(with = "crate::schemars_ext::git::Oid"))]
++        old: Oid,
++        #[cfg_attr(feature = "schemars", schemars(with = "crate::schemars_ext::git::Oid"))]
++        new: Oid,
++    },
++    Created {
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::git::RefString")
++        )]
++        name: RefString,
++        #[cfg_attr(feature = "schemars", schemars(with = "crate::schemars_ext::git::Oid"))]
++        oid: Oid,
++    },
++    Deleted {
++        #[cfg_attr(
++            feature = "schemars",
++            schemars(with = "crate::schemars_ext::git::RefString")
++        )]
++        name: RefString,
++        #[cfg_attr(feature = "schemars", schemars(with = "crate::schemars_ext::git::Oid"))]
++        oid: Oid,
++    },
++    Skipped {
++        #[cfg_attr(feature = "schemars", schemars(with = "String"))]
++        name: RefString,
++        #[cfg_attr(feature = "schemars", schemars(with = "crate::schemars_ext::git::Oid"))]
++        oid: Oid,
++    },
+ }
+ 
+ impl RefUpdate {
+diff --git a/src/storage/refs.rs b/src/storage/refs.rs
+index 3d24e1f..a14c93d 100644
+--- a/src/storage/refs.rs
++++ b/src/storage/refs.rs
+@@ -377,10 +377,16 @@ impl<V> Deref for SignedRefs<V> {
+ /// references to other nodes.
+ #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+ #[serde(rename_all = "camelCase")]
++#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+ pub struct RefsAt {
+     /// The remote namespace of the `rad/sigrefs`.
++    #[cfg_attr(
++        feature = "schemars",
++        schemars(with = "crate::schemars_ext::crypto::PublicKey")
++    )]
+     pub remote: RemoteId,
+     /// The commit SHA that `rad/sigrefs` points to.
++    #[cfg_attr(feature = "schemars", schemars(with = "crate::schemars_ext::git::Oid"))]
+     pub at: Oid,
+ }
+ 
+diff --git a/src/test/arbitrary.rs b/src/test/arbitrary.rs
+index fc26fff..951e3e3 100644
+--- a/src/test/arbitrary.rs
++++ b/src/test/arbitrary.rs
+@@ -279,13 +279,9 @@ impl Arbitrary for Address {
+                 cyphernet::addr::HostName::Ip(net::IpAddr::V6(net::Ipv6Addr::from(octets)))
+             }
+             AddressType::Dns => cyphernet::addr::HostName::Dns(
+-                g.choose(&[
+-                    "seed.radicle.xyz",
+-                    "seed.radicle.garden",
+-                    "seed.radicle.cloudhead.io",
+-                ])
+-                .unwrap()
+-                .to_string(),
++                g.choose(&["seed.radicle.xyz", "iris.radicle.xyz", "rosa.radicle.xyz"])
++                    .unwrap()
++                    .to_string(),
+             ),
+             AddressType::Onion => {
+                 let pk = PublicKey::arbitrary(g);

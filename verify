@@ -17,7 +17,8 @@
              (laura packages utils)
              (laura packages 3ds)
              (laura packages ai)
-             (laura packages binary))
+             (laura packages binary)
+             (laura packages radicle))
 
 (define to-test
   (list android-translation-layer
@@ -96,7 +97,7 @@
         ctrtool
         makerom
         ollama
-        radicle-heartwood))
+        radicle))
 
 (use-modules (guix)
              (guix derivations)
