@@ -18,7 +18,8 @@
              (laura packages 3ds)
              (laura packages ai)
              (laura packages binary)
-             (laura packages radicle))
+             (laura packages radicle)
+             (laura packages sudo-rs))
 
 (define to-test
   (list android-translation-layer
@@ -97,7 +98,8 @@
         ctrtool
         makerom
         ollama
-        radicle))
+        radicle
+        sudo-rs))
 
 (use-modules (guix)
              (guix derivations)
