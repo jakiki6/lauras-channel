@@ -80,8 +80,8 @@
                            "_stable.tar.gz"))
        (file-name (string-append "squirrel-" version ".tar.gz"))
        (patches (search-patches
-                       "laura/packages/patches/squirrel-no-cmake-files.patch"
-                       "laura/packages/patches/squirrel-cve-2022-30292.patch"))
+                 "laura/packages/patches/squirrel-no-cmake-files.patch"
+                 "laura/packages/patches/squirrel-cve-2022-30292.patch"))
        (patch-flags '("-p1" "--binary"))
        (sha256
         (base32 "1nw1ghr4nxsvpk5bm9q0arrx4zrjpq5bai5sc17vj90by19187r1"))))))
@@ -211,19 +211,19 @@ automatic, safe and reliable.  It is used by tools such as GNOME Software. Now w
   (package
     (inherit openssl-3.0)
     (version "3.4.1")
-    (source (origin
-              (method url-fetch)
-              (uri (list (string-append "https://www.openssl.org/source/openssl-"
-                                        version ".tar.gz")
-                         (string-append "ftp://ftp.openssl.org/source/"
-                                        "openssl-" version ".tar.gz")
-                         (string-append "ftp://ftp.openssl.org/source/old/"
-                                        (string-trim-right version char-set:letter)
-                                        "/openssl-" version ".tar.gz")))
-              (patches (search-patches "openssl-3.0-c-rehash-in.patch"))
-              (sha256
-               (base32
-                "1wvx37d0dvpylhm7ha64lvdgiak5cgcvshvcljzg92xm61mjsah0"))))))
+    (source
+     (origin
+       (method url-fetch)
+       (uri (list (string-append "https://www.openssl.org/source/openssl-"
+                                 version ".tar.gz")
+                  (string-append "ftp://ftp.openssl.org/source/" "openssl-"
+                                 version ".tar.gz")
+                  (string-append "ftp://ftp.openssl.org/source/old/"
+                                 (string-trim-right version char-set:letter)
+                                 "/openssl-" version ".tar.gz")))
+       (patches (search-patches "openssl-3.0-c-rehash-in.patch"))
+       (sha256
+        (base32 "1wvx37d0dvpylhm7ha64lvdgiak5cgcvshvcljzg92xm61mjsah0"))))))
 
 (define-public openscad-bumped
   (package/inherit openscad

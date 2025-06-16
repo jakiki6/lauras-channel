@@ -8,7 +8,8 @@
   (list (shepherd-service (provision '(radicle))
                           (documentation "Start radicle")
                           (start #~(make-forkexec-constructor (list (string-append #$radicle
-                                                                     "/bin/radicle-node") "-f")))
+                                                                     "/bin/radicle-node")
+                                                                    "-f")))
                           (stop #~(make-kill-destructor)))))
 
 (define-public home-radicle-service-type
@@ -17,5 +18,4 @@
                                    home-shepherd-service-type
                                    home-radicle-shepherd-service)))
                 (default-value #f)
-                (description
-                 "Launch the radicle node")))
+                (description "Launch the radicle node")))

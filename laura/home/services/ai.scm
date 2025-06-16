@@ -8,7 +8,8 @@
   (list (shepherd-service (provision '(ollama))
                           (documentation "Start the ollama server")
                           (start #~(make-forkexec-constructor (list (string-append #$ollama
-                                                                     "/bin/ollama") "serve")))
+                                                                     "/bin/ollama")
+                                                                    "serve")))
                           (stop #~(make-kill-destructor)))))
 
 (define-public home-ollama-service-type

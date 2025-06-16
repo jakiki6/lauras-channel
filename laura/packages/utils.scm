@@ -211,7 +211,8 @@
                 (chdir #$output)
                 (mkdir "bin")
                 (rename-file "bkcrack" "bin/bkcrack")
-                (map delete-file-recursively (list "example" "tools" "readme.md" "license.txt"))))))))
+                (map delete-file-recursively
+                     (list "example" "tools" "readme.md" "license.txt"))))))))
     (home-page "https://github.com/kimci86/bkcrack")
     (synopsis
      "Crack legacy zip encryption with Biham and Kocher's known plaintext attack.")
@@ -1807,14 +1808,15 @@ Like its ancestor, BZip3 excels at compressing text or code.")
     (name "faest-ref")
     (version "2.0.3")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/faest-sign/faest-ref")
-              (recursive? #t)
-              (commit "v2.0.3")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "0bawgc34piswbbkz62sk9ybmai8cqjw5jvcx82495mz96xjirsva"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/faest-sign/faest-ref")
+             (recursive? #t)
+             (commit "v2.0.3")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0bawgc34piswbbkz62sk9ybmai8cqjw5jvcx82495mz96xjirsva"))))
     (build-system meson-build-system)
     (native-inputs (list python-3))
     (home-page "https://faest.info")
@@ -1833,7 +1835,8 @@ Like its ancestor, BZip3 excels at compressing text or code.")
              (url "https://github.com/trou/cpu_rec_rs")
              (commit (string-append "release-" version))))
        (file-name (string-append name "-" version ".tar.gz"))
-       (patches (search-patches "laura/packages/patches/cpu-rec-rs-corpus.patch"))
+       (patches (search-patches
+                 "laura/packages/patches/cpu-rec-rs-corpus.patch"))
        (sha256
         (base32 "0xhayjf7m1v64dy6d9rvwih3ck97gnhalz3xvrjshh0ak9rm9i6i"))))
     (build-system cargo-build-system)
@@ -1845,7 +1848,8 @@ Like its ancestor, BZip3 excels at compressing text or code.")
           (add-after 'install 'copy-corpus
             (lambda _
               (copy-recursively "cpu_rec_corpus"
-                                (string-append #$output "/share/cpu_rec_corpus")))))
+                                (string-append #$output
+                                               "/share/cpu_rec_corpus")))))
       #:cargo-inputs `(("rust-anyhow" ,rust-anyhow-1)
                        ("rust-clap" ,rust-clap-4.4)
                        ("rust-glob" ,rust-glob-0.3)
@@ -1859,33 +1863,45 @@ Like its ancestor, BZip3 excels at compressing text or code.")
      "cpu_rec_rs is a Rust reimplementation of the original cpu_rec.")
     (license license:asl2.0)))
 
-
 (define-public echfs-fuse
   (package
     (name "echfs-fuse")
     (version "1.0.0")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/echfs/echfs")
-              (commit "ed17326")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "1ns3aipiz12pidql3jyv43v14nlwxjqqz1bxfichq8aw2grdy3bw"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/echfs/echfs")
+             (commit "ed17326")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1ns3aipiz12pidql3jyv43v14nlwxjqqz1bxfichq8aw2grdy3bw"))))
     (build-system gnu-build-system)
     (native-inputs (list pkg-config autoconf automake libtool))
     (inputs (list fuse))
-    (arguments (list #:tests? #f #:phases #~(modify-phases %standard-phases (add-before 'bootstrap 'chdir (lambda _ (chdir "echfs-fuse"))))))
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'bootstrap 'chdir
+            (lambda _
+              (chdir "echfs-fuse"))))))
     (home-page "https://github.com/echfs/echfs")
     (synopsis "The echfs filesystem")
-    (description "The echfs filesystem is a 64-bit FAT-like filesystem which aims to support most UNIX and POSIX-style features while being extremely simple to implement. Ideal for hobbyist OS developers who want a simple filesystem and don't want to deal with old crufty FAT (which isn't UNIX/POSIX compliant either), or complex filesystems such as ext2/3/4.")
+    (description
+     "The echfs filesystem is a 64-bit FAT-like filesystem which aims to support most UNIX and POSIX-style features while being extremely simple to implement. Ideal for hobbyist OS developers who want a simple filesystem and don't want to deal with old crufty FAT (which isn't UNIX/POSIX compliant either), or complex filesystems such as ext2/3/4.")
     (license license:bsd-2)))
 
 (define-public echfs-utils
   (package/inherit echfs-fuse
     (name "echfs-utils")
     (inputs (list `(,util-linux "lib")))
-    (arguments (list #:tests? #f #:phases #~(modify-phases %standard-phases (add-before 'bootstrap 'chdir (lambda _ (chdir "echfs-utils"))))))))
+    (arguments (list #:tests? #f
+                     #:phases #~(modify-phases %standard-phases
+                                  (add-before 'bootstrap 'chdir
+                                    (lambda _
+                                      (chdir "echfs-utils"))))))))
 
 (define-public dumpasn1
   (package
@@ -1931,7 +1947,9 @@ Like its ancestor, BZip3 excels at compressing text or code.")
        (sha256
         (base32 "17qlpwaq5xv5szm93bpkg9waf166bvbixf96sw1llsgin7m0pjn0"))))
     (build-system pyproject-build-system)
-    (arguments (list #:tests? #f))
+    (arguments
+     (list
+      #:tests? #f))
     (propagated-inputs (list python-rfc3986))
     (native-inputs (list python-coverage
                          python-hypothesis
@@ -1975,7 +1993,9 @@ Like its ancestor, BZip3 excels at compressing text or code.")
        (sha256
         (base32 "1zd4p14v7xi61qjwhip1gd1j75r7glkl6g5m4iahvc4a6pz7zsm0"))))
     (build-system pyproject-build-system)
-    (arguments (list #:tests? #f))
+    (arguments
+     (list
+      #:tests? #f))
     (propagated-inputs (list python-importlib-resources
                              python-jinja2
                              python-jschon
@@ -1999,7 +2019,9 @@ Like its ancestor, BZip3 excels at compressing text or code.")
        (sha256
         (base32 "03jkairy3bps5h1yn0rbpy4d2bmq100if95nd9r3v691c94s44v0"))))
     (build-system pyproject-build-system)
-    (arguments (list #:tests? #f))
+    (arguments
+     (list
+      #:tests? #f))
     (propagated-inputs (list python-cryptography python-gmpy2))
     (native-inputs (list python-setuptools python-setuptools-scm python-wheel))
     (home-page "https://badkeys.info/")
@@ -2028,7 +2050,8 @@ Like its ancestor, BZip3 excels at compressing text or code.")
                              go-filippo-io-edwards25519))
     (home-page "https://github.com/arachsys/ssh-x25519")
     (synopsis "Map ssh-ed25519 keys into x25519 keys")
-    (description "
+    (description
+     "
 The twisted Edwards curve used for Ed25519 signatures is birationally
 equivalent to the Montgomery curve used for X25519. In Ed25519, the secret
 scalar is half of the private key's SHA512 hash, whereas X25519 uses the
@@ -2041,17 +2064,21 @@ ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
     (name "die-engine")
     (version "3.10")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/horsicq/DIE-engine")
-              (recursive? #t)
-              (commit "3.10")))
-        (file-name (git-file-name name version))
-        (patches (search-patches "laura/packages/patches/die-engine-db.patch"))
-        (sha256 (base32 "057w3317045q72q2ipcd68jrpqls6r4pjw2ckhv2d6rr51i32y68"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/horsicq/DIE-engine")
+             (recursive? #t)
+             (commit "3.10")))
+       (file-name (git-file-name name version))
+       (patches (search-patches "laura/packages/patches/die-engine-db.patch"))
+       (sha256
+        (base32 "057w3317045q72q2ipcd68jrpqls6r4pjw2ckhv2d6rr51i32y68"))))
     (build-system cmake-build-system)
-    (arguments (list #:tests? #f #:build-type "Release"))
+    (arguments
+     (list
+      #:tests? #f
+      #:build-type "Release"))
     (inputs (list qtbase-5 qtsvg-5 qtscript))
     (home-page "https://github.com/horsicq/DIE-engine")
     (synopsis "DIE engine")

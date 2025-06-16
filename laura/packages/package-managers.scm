@@ -125,7 +125,6 @@ apps on the @@url{https://apps.apple.com,App Store} and download a copy of the
 app package, known as an file.")
     (license license:expat)))
 
-
 (define-public apk-tools
   (package
     (name "apk-tools")
