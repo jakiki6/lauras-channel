@@ -17,33 +17,36 @@
 (define-public ollama
   (package
     (name "ollama")
-    (version "0.6.0")
+    (version "0.9.1")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://github.com/ollama/ollama")
-             (commit "v0.6.0")))
+             (commit "v0.9.1")))
        (file-name (git-file-name name version))
        (modules '((guix build utils)))
        (snippet #~(map (lambda x
                          (substitute* x
                            (("github.com/pdevine/tensor")
                             "gorgonia.org/tensor")))
-                       (list "convert/convert_gemma.go"
+                       (list "convert/convert_llama4.go"
+                             "convert/convert_mistral.go"
+                             "convert/convert_mllama.go"
+                             "convert/convert_gemma.go"
                              "convert/convert_gemma2_adapter.go"
                              "convert/convert_llama.go"
                              "convert/convert_llama_adapter.go"
+                             "convert/tensor.go"
+                             "convert/tensor_test.go"
                              "go.mod"
                              "go.sum")))
-       (patches (search-patches
-                 "laura/packages/patches/ollama-use-go-1.23.patch"))
        (sha256
-        (base32 "0a4vj6fk613lirzxg5z67dqjayx11qfm2s1n8i47wv6k38ng7jf5"))))
+        (base32 "1h9gan8l70ilsnzjlw2wjsd1bh558fb3xbg06zpbz3b5cilbq5pa"))))
     (build-system go-build-system)
     (arguments
      (list
-      #:go go-1.23
+      #:go go-1.24
       #:unpack-path "github.com/ollama/ollama"
       #:import-path "github.com/ollama/ollama"
       #:phases
