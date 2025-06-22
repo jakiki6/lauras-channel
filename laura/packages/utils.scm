@@ -559,7 +559,8 @@ the application that copied exits.")
                   libxml2
                   curl
                   elfutils
-                  xz))
+                  xz
+                  libyaml))
     (propagated-inputs (list appsteam-for-flatpak-builder))
     (arguments
      (list
