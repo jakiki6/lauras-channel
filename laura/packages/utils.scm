@@ -1274,7 +1274,8 @@ needs to be signed in the boot chain.")
                      ,(string-append #$python-pygobject packages-path)))
                   `("PATH" suffix
                     (,(string-append #$lxc "/bin") ,(string-append #$dnsmasq
-                                                                   "/sbin")))
+                                                                   "/sbin")
+                     ,(string-append #$iproute "/sbin")))
                   `("GI_TYPELIB_PATH" suffix
                     (,(string-append #$glib "/lib/girepository-1.0"))))))))))
     (inputs (list python
@@ -1283,7 +1284,8 @@ needs to be signed in the boot chain.")
                   python-pygobject
                   glib
                   lxc
-                  dnsmasq))
+                  dnsmasq
+                  iproute))
     (home-page "https://waydro.id")
     (synopsis
      "Waydroid uses a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu.")
