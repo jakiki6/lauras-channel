@@ -1274,7 +1274,7 @@ needs to be signed in the boot chain.")
                      ,(string-append #$python-pygobject packages-path)))
                   `("PATH" suffix
                     (,(string-append #$lxc "/bin") ,(string-append #$dnsmasq
-                                                                   "/bin")))
+                                                                   "/sbin")))
                   `("GI_TYPELIB_PATH" suffix
                     (,(string-append #$glib "/lib/girepository-1.0"))))))))))
     (inputs (list python
