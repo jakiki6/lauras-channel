@@ -1227,48 +1227,63 @@ needs to be signed in the boot chain.")
 (define-public waydroid
   (package
     (name "waydroid")
-    (version "1.4.2")
+    (version "1.5.4")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://github.com/waydroid/waydroid")
-             (commit "1.4.2")))
+             (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1cp528ybksgf1ifawygm2zqrxh870i264sqbk272775p4a36zlgx"))))
+        (base32 "050cn84ambjd02cnszp9qqgzm62x14jxg9jp7fxrzbv6qps8k2rb"))))
     (build-system gnu-build-system)
     (arguments
-     `(#:tests? #f
-       #:phases (modify-phases %standard-phases
-                  (delete 'configure)
-                  (delete 'build)
-                  (add-before 'install 'patch-environment
-                    (lambda* (#:key outputs #:allow-other-keys)
-                      (substitute* "Makefile"
-                        (("PREFIX := /usr")
-                         (string-append "PREFIX := "
-                                        (assoc-ref outputs "out")
-                                        "\nUSE_SYSTEMD := 0"))
-                        (("\\/etc")
-                         "$(PREFIX)/etc"))))
-                  (add-after 'install 'wrap-script
-                    (lambda* (#:key inputs outputs #:allow-other-keys)
-                      (wrap-program (string-append (assoc-ref outputs "out")
-                                                   "/bin/waydroid")
-                        `("PYTHONPATH" suffix
-                          (,(string-append (assoc-ref inputs "python-gbinder")
-                                           "/lib/python3.10/site-packages") ,(string-append
-                                                                              (assoc-ref
-                                                                               inputs
-                                                                               "python-dbus")
-                                                                              "/lib/python3.10/site-packages")
-                           ,(string-append (assoc-ref inputs
-                                                      "python-pygobject")
-                                           "/lib/python3.10/site-packages")))))))))
-    (inputs (list python-3.10))
-    (propagated-inputs (list python-gbinder python-dbus python-pygobject lxc
-                             dnsmasq))
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'configure)
+          (delete 'build)
+          (add-before 'install 'patch-environment
+            (lambda _
+              (substitute* "Makefile"
+                (("PREFIX := /usr")
+                 (string-append "PREFIX := "
+                                #$output "\nUSE_SYSTEMD := 0"))
+                (("\\/etc")
+                 "$(PREFIX)/etc"))))
+          (add-after 'install 'wrap-script
+            (lambda _
+              (let* ((python-version (string-join (list (list-ref (string-split #$
+                                                                   (package-version
+                                                                    python)
+                                                                   #\.) 0)
+                                                        (list-ref (string-split #$
+                                                                   (package-version
+                                                                    python)
+                                                                   #\.) 1))
+                                                  "."))
+                     (packages-path (string-append "/lib/python"
+                                                   python-version
+                                                   "/site-packages")))
+                (wrap-program (string-append #$output "/bin/waydroid")
+                  `("PYTHONPATH" suffix
+                    (,(string-append #$python-gbinder packages-path) ,(string-append #$python-dbus
+                                                                       packages-path)
+                     ,(string-append #$python-pygobject packages-path)))
+                  `("PATH" suffix
+                    (,(string-append #$lxc "/bin") ,(string-append #$dnsmasq
+                                                                   "/bin")))
+                  `("GI_TYPELIB_PATH" suffix
+                    (,(string-append #$glib "/lib/girepository-1.0"))))))))))
+    (inputs (list python
+                  python-gbinder
+                  python-dbus
+                  python-pygobject
+                  glib
+                  lxc
+                  dnsmasq))
     (home-page "https://waydro.id")
     (synopsis
      "Waydroid uses a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu.")
