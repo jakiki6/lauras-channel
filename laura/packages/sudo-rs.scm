@@ -77,14 +77,14 @@
 (define-public sudo-rs
   (package
     (name "sudo-rs")
-    (version "0.2.6")
+    (version "0.2.7")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "sudo-rs" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "081vj0vm7fhgmg1gzgqvy21fy47w1ccjpgl96mjfr39j2d8zs7fh"))))
+        (base32 "1pbrl7v1w8p9a0gd02v3dzmglnasbmfxj450fj82kcj02hkpw6jv"))))
     (build-system cargo-build-system)
     (inputs (list tzdata linux-pam))
     (arguments
