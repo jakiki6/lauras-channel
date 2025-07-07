@@ -70,6 +70,7 @@
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages fpga)
   #:use-module (gnu packages sagemath)
+  #:use-module (gnu packages base)
   #:use-module (gnu system uuid)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
@@ -78,6 +79,8 @@
   #:use-module (guix build-system meson)
   #:use-module (guix gexp)
   #:use-module (guix utils)
+  #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-26)
   #:use-module (laura packages go-common)
   #:use-module (laura packages rust-common))
 
@@ -2102,3 +2105,41 @@ ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
     (synopsis "DIE engine")
     (description "GUI & console sources for Detect It Easy(DiE)")
     (license license:expat)))
+
+(define %glibc-patches
+  (list "glibc-2.39-git-updates.patch"
+        "glibc-ldd-powerpc.patch"
+        "glibc-2.38-ldd-x86_64.patch"
+        "glibc-dl-cache.patch"
+        "glibc-2.37-versioned-locpath.patch"
+        ;; "glibc-allow-kernel-2.6.32.patch"
+        "glibc-reinstate-prlimit64-fallback.patch"
+        "glibc-supported-locales.patch"
+        "glibc-2.37-hurd-clock_t_centiseconds.patch"
+        "glibc-2.37-hurd-local-clock_gettime_MONOTONIC.patch"
+        "glibc-hurd-mach-print.patch"
+        "glibc-hurd-gettyent.patch"
+        "glibc-hurd-getauxval.patch"))
+
+(define-public glibc-ld
+  (package
+    (inherit glibc)
+    (name "glibc-ld")
+    (version (package-version glibc))
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "git://sourceware.org/git/glibc.git")
+                    ;; This is the latest commit from the
+                    ;; 'release/2.39/master' branch, where CVEs and other
+                    ;; important bug fixes are cherry picked.
+                    (commit "2c882bf9c15d206aaf04766d1b8e3ae5b1002cc2")))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "111yf24g0qcfcxywfzrilmjxysahlbkzxfimcz9rq8p00qzvvf51"))
+              (patches (append (map search-patch
+                            (fold (cut delete <...>)
+                                  %glibc-patches
+                                  '("glibc-2.39-git-updates.patch")))
+                         (search-patches "laura/packages/patches/glibc-ld.patch")))))))

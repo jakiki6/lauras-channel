@@ -94,6 +94,7 @@
         badkeys
         ssh-x25519
         die-engine
+        glibc-ld
         otptool
         ctrtool
         makerom
