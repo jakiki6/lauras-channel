@@ -1,12 +1,14 @@
 diff --color --recursive --unified a/elf/rtld.c b/elf/rtld.c
---- a/elf/rtld.c	2025-07-07 18:28:18.693410672 +0200
-+++ b/elf/rtld.c	2025-07-07 18:28:49.496380932 +0200
-@@ -293,7 +293,7 @@
+--- a/elf/rtld.c	2025-07-08 19:01:42.938481597 +0200
++++ b/elf/rtld.c	2025-07-08 20:48:46.283581753 +0200
+@@ -293,8 +293,8 @@
  dl_main_state_init (struct dl_main_state *state)
  {
    audit_list_init (&state->audit_list);
 -  state->library_path = NULL;
+-  state->library_path_source = NULL;
 +  state->library_path = "/run/current-system/profile/lib:~/.guix-profile/lib/:~/.guix-profile/lib/nss";
-   state->library_path_source = NULL;
++  state->library_path_source = "LD_LIBRARY_PATH";
    state->preloadlist = NULL;
    state->preloadarg = NULL;
+   state->glibc_hwcaps_prepend = NULL;
