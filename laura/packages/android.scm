@@ -230,3 +230,58 @@
     (description
      "AndroidManifest.xml in an APK file is binary encoded. This tool accepts either a binary or a text XML file and prints the decoded XML to the standard output or a file. It also allows you to extract the decoded AndroidManifest.xml directly from an APK file.")
     (license license:isc)))
+
+(define-public git-repo
+  (package
+    (name "git-repo")
+    (version "2.54")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://gerrit.googlesource.com/git-repo")
+             (commit (string-append "v" version))))
+       (file-name (string-append "git-repo-" version "-checkout"))
+       (sha256
+        (base32 "0a1qa7gq3ink0cfgdxx3l3p26jm2w5vsifqs9xdvb98kkswak45d"))))
+    (build-system python-build-system)
+    (arguments
+     (list
+      #:tests? #f ;tests consist of just formatting the code
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'build 'set-executable-paths
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (substitute* '("repo" "git_command.py")
+                (("^GIT = 'git'")
+                 (string-append "GIT = '"
+                                (search-input-file inputs "/bin/git"))))
+              (substitute* "git_config.py"
+                ((" command_base = \\['ssh',")
+                 (string-append " command_base = ['"
+                                (search-input-file inputs "/bin/ssh") ",")))))
+          (replace 'install
+            (lambda* (#:key outputs #:allow-other-keys)
+              (let* ((bin-dir (string-append #$output "/bin"))
+                     (repo-dir (string-append #$output "/share/git-repo")))
+                (mkdir-p bin-dir)
+                (mkdir-p repo-dir)
+                (copy-recursively "." repo-dir)
+                (delete-file-recursively (string-append repo-dir "/tests"))
+                (symlink (string-append repo-dir "/repo")
+                         (string-append bin-dir "/repo"))
+                (wrap-program (string-append bin-dir "/repo")
+                  '("REPO_SKIP_SELF_UPDATE" =
+                    ("1"))
+                  '("REPO_TRACE" =
+                    ("0")))))))))
+    (inputs (list git openssh bash-minimal))
+    (home-page "https://gerrit.googlesource.com/git-repo/")
+    (synopsis "Helps to manage many Git repositories")
+    (description
+     "Repo is a tool built on top of Git.  Repo helps manage many
+Git repositories, does the uploads to revision control systems, and automates
+parts of the development workflow.  Repo is not meant to replace Git, only to
+make it easier to work with Git.  The repo command is an executable Python
+script that you can put anywhere in your path.")
+    (license license:asl2.0)))

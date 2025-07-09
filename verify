@@ -24,7 +24,7 @@
 (define to-test
   (list android-translation-layer
         axmldec
-        simg2img
+        git-repo
         squirrel-3.2
         shepherd-core
         fwupd-nonfree-polkit
