@@ -230,35 +230,3 @@
     (description
      "AndroidManifest.xml in an APK file is binary encoded. This tool accepts either a binary or a text XML file and prints the decoded XML to the standard output or a file. It also allows you to extract the decoded AndroidManifest.xml directly from an APK file.")
     (license license:isc)))
-
-(define-public simg2img
-  (package
-    (name "simg2img")
-    (version "1.1.5")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/anestisb/android-simg2img")
-             (commit "1.1.5")))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0drwvqxbhajka580j93z8ldckhjlpr0i84nh20krdpxcp54xvldh"))))
-    (build-system gnu-build-system)
-    (inputs (list zlib))
-    (arguments
-     (list
-      #:tests? #f
-      #:phases
-      #~(modify-phases %standard-phases
-          (replace 'configure
-            (lambda* (#:key outputs #:allow-other-keys)
-              (setenv "PREFIX"
-                      (assoc-ref outputs "out")))))))
-    (home-page "https://github.com/anestisb/android-simg2img")
-    (synopsis "Tool to convert Android sparse images to raw images")
-    (description
-     "Tool to convert Android sparse images to raw images.
-
-Since image tools are not part of Android SDK, this standalone port of AOSP libsparse aims to avoid complex building chains.")
-    (license license:gpl3+)))
