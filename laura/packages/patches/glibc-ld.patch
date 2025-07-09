@@ -7,7 +7,7 @@ diff --color --recursive --unified a/elf/rtld.c b/elf/rtld.c
    audit_list_init (&state->audit_list);
 -  state->library_path = NULL;
 -  state->library_path_source = NULL;
-+  state->library_path = "/run/current-system/profile/lib:~/.guix-profile/lib/:~/.guix-profile/lib/nss";
++  state->library_path = "/run/current-system/profile/lib:/home/laura/.guix-profile/lib/:/home/laura/.guix-profile/lib/nss";
 +  state->library_path_source = "LD_LIBRARY_PATH";
    state->preloadlist = NULL;
    state->preloadarg = NULL;
