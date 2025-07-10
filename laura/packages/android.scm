@@ -6,6 +6,7 @@
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system meson)
   #:use-module (guix build-system gnu)
+  #:use-module (guix build-system python)
   #:use-module (gnu packages cmake)
   #:use-module ((guix licenses)
                 #:prefix license:)
