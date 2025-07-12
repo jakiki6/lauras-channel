@@ -34,7 +34,9 @@
   #:use-module (gnu packages video)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages webkit)
-  #:use-module (gnu packages boost))
+  #:use-module (gnu packages boost)
+  #:use-module (gnu packages version-control)
+  #:use-module (gnu packages ssh))
 
 (define-public android-translation-layer
   (package
