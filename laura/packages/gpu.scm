@@ -2,7 +2,9 @@
   #:use-module (guix packages)
   #:use-module (gnu packages xdisorg)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix build-system cargo)
+  #:use-module (guix build-system cmake)
   #:use-module ((guix licenses)
                 #:prefix license:)
   #:use-module (laura packages rust-common))
@@ -36,3 +38,22 @@ The tool displays information gathered from performance counters (GRBM, GRBM2), 
 performance counters (GRBM, GRBM2), sensors, fdinfo, gpu_metrics and AMDGPU
 driver.")
     (license license:expat)))
+
+(define-public clrx
+  (package
+    (name "clrx")
+    (version "0.1.9")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/CLRX/CLRX-mirror")
+              (commit "fb8fbf9")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "03yy2scmskgpxbjmkrqiz2f9hl5js5r7kragjpj2y4rkq7a3ff2l"))))
+    (build-system cmake-build-system)
+    (arguments (list #:build-type "Release" #:tests? #f))
+    (home-page "http://clrx.nativeboinc.org/")
+    (synopsis "CLRadeonExtender (GCN assembler, Radeon assembler)")
+    (description "CLRadeonExtender provides tools to develop software in low-level for the Radeon GPU's compatible with GCN 1.0/1.1/1.2/1.4 (AMD VEGA) architecture. Since version 0.1.8 also AMD VEGA Deep Learning extensions has been supported.")
+    (license (list license:gpl2 license:lgpl2.1 license:fdl1.2+))))
