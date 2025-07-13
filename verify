@@ -95,6 +95,7 @@
         ssh-x25519
         die-engine
         glibc-ld
+        sqlitefs
         otptool
         ctrtool
         makerom

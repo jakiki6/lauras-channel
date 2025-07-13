@@ -18601,3 +18601,227 @@ Argument Parser.")
      "This package provides a simple to use, efficient, and full-featured Command Line
 Argument Parser.")
     (license (list license:expat license:asl2.0))))
+
+(define-public rust-clap-builder-4.5.26
+  (package
+    (name "rust-clap-builder")
+    (version "4.5.26")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "clap_builder" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "08f1mzcvi7zjhm7hvz6al4jnv70ccqhwiaq74hihlspwnl0iic4n"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-anstream" ,rust-anstream-0.6)
+                       ("rust-anstyle" ,rust-anstyle-1)
+                       ("rust-backtrace" ,rust-backtrace-0.3)
+                       ("rust-clap-lex" ,rust-clap-lex-0.7)
+                       ("rust-strsim" ,rust-strsim-0.11)
+                       ("rust-terminal-size" ,rust-terminal-size-0.4)
+                       ("rust-unicase" ,rust-unicase-2)
+                       ("rust-unicode-width" ,rust-unicode-width-0.2))
+       #:cargo-development-inputs (("rust-color-print" ,rust-color-print-0.3)
+                                   ("rust-static-assertions" ,rust-static-assertions-1)
+                                   ("rust-unic-emoji-char" ,rust-unic-emoji-char-0.9))))
+    (home-page "https://github.com/clap-rs/clap")
+    (synopsis
+     "simple to use, efficient, and full-featured Command Line Argument Parser")
+    (description
+     "This package provides a simple to use, efficient, and full-featured Command Line
+Argument Parser.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-clap-4.5.26
+  (package
+    (name "rust-clap")
+    (version "4.5.26")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "clap" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "10v7qvn90calfbhap1c4r249i5c7fbxj09fn3szfz9pkis85xsx8"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-clap-builder" ,rust-clap-builder-4.5.26)
+                       ("rust-clap-derive" ,rust-clap-derive-4))
+       #:cargo-development-inputs (("rust-automod" ,rust-automod-1)
+                                   ("rust-clap-cargo" ,rust-clap-cargo-0.14)
+                                   ("rust-humantime" ,rust-humantime-2)
+                                   ("rust-rustversion" ,rust-rustversion-1)
+                                   ("rust-shlex" ,rust-shlex-1)
+                                   ("rust-snapbox" ,rust-snapbox-0.6)
+                                   ("rust-trybuild" ,rust-trybuild-1)
+                                   ("rust-trycmd" ,rust-trycmd-0.15))))
+    (home-page "https://github.com/clap-rs/clap")
+    (synopsis
+     "simple to use, efficient, and full-featured Command Line Argument Parser")
+    (description
+     "This package provides a simple to use, efficient, and full-featured Command Line
+Argument Parser.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-thread-scoped-1
+  (package
+    (name "rust-thread-scoped")
+    (version "1.0.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "thread-scoped" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "16dxl8grpii4vh20qikv2x7r871ggsf9m733xysv1lz506inmfxw"))))
+    (build-system cargo-build-system)
+    (home-page "https://github.com/arcnmx/thread-scoped-rs")
+    (synopsis "Unsafe and deprecated std::thread::scoped")
+    (description
+     "This package provides Unsafe and deprecated std::thread::scoped.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-fuse-0.3
+  (package
+    (name "rust-fuse")
+    (version "0.3.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "fuse" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0q46kr5z0d0ljallydb417dwgcd2ib5q2ak6jgpvyrh9a5q71rc0"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-libc" ,rust-libc-0.2)
+                       ("rust-log" ,rust-log-0.3)
+                       ("rust-pkg-config" ,rust-pkg-config-0.3)
+                       ("rust-thread-scoped" ,rust-thread-scoped-1)
+                       ("rust-time" ,rust-time-0.1))
+       #:cargo-development-inputs (("rust-env-logger" ,rust-env-logger-0.3))))
+    (home-page "https://github.com/zargony/rust-fuse")
+    (synopsis "Rust library for filesystems in userspace (FUSE)")
+    (description
+     "This package provides Rust library for filesystems in userspace (FUSE).")
+    (license license:expat)))
+
+(define-public rust-cexpr-0.3
+  (package
+    (name "rust-cexpr")
+    (version "0.3.6")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "cexpr" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "07fdfj4ff2974y33yixrb657riq9zl9b9h9lr0h7ridhhvxvbrgw"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-nom" ,rust-nom-4))
+       #:cargo-development-inputs (("rust-clang-sys" ,rust-clang-sys-0.28))))
+    (home-page "https://github.com/jethrogb/rust-cexpr")
+    (synopsis "C expression parser and evaluator")
+    (description "This package provides a C expression parser and evaluator.")
+    (license (list license:asl2.0 license:expat))))
+
+(define-public rust-bindgen-0.51
+  (package
+    (name "rust-bindgen")
+    (version "0.51.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "bindgen" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0x9gndlnwmxsihxvsc3izyyss7g8b2djn0daafshj1gcy69i7mzb"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-cexpr" ,rust-cexpr-0.3)
+                       ("rust-cfg-if" ,rust-cfg-if-0.1)
+                       ("rust-clang-sys" ,rust-clang-sys-0.28)
+                       ("rust-clap" ,rust-clap-2)
+                       ("rust-env-logger" ,rust-env-logger-0.6)
+                       ("rust-lazy-static" ,rust-lazy-static-1)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-peeking-take-while" ,rust-peeking-take-while-0.1)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-regex" ,rust-regex-1)
+                       ("rust-rustc-hash" ,rust-rustc-hash-1)
+                       ("rust-shlex" ,rust-shlex-0.1)
+                       ("rust-which" ,rust-which-3))
+       #:cargo-development-inputs (("rust-clap" ,rust-clap-2)
+                                   ("rust-diff" ,rust-diff-0.1)
+                                   ("rust-shlex" ,rust-shlex-0.1))))
+    (home-page "https://rust-lang.github.io/rust-bindgen/")
+    (synopsis
+     "Automatically generates Rust FFI bindings to C and C++ libraries")
+    (description
+     "This package provides Automatically generates Rust FFI bindings to C and C++ libraries.")
+    (license license:bsd-3)))
+
+(define-public rust-libsqlite3-sys-0.16
+  (package
+    (name "rust-libsqlite3-sys")
+    (version "0.16.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "libsqlite3-sys" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "09dfyakr6qdm35isn4c543yh9qprny6j6h68imv920ikkkl9ansy"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-bindgen" ,rust-bindgen-0.51)
+                       ("rust-cc" ,rust-cc-1)
+                       ("rust-pkg-config" ,rust-pkg-config-0.3)
+                       ("rust-vcpkg" ,rust-vcpkg-0.2))))
+    (home-page "https://github.com/rusqlite/rusqlite")
+    (synopsis "Native bindings to the libsqlite3 library")
+    (description
+     "This package provides Native bindings to the libsqlite3 library.")
+    (license license:expat)))
+
+(define-public rust-rusqlite-0.20
+  (package
+    (name "rust-rusqlite")
+    (version "0.20.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "rusqlite" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0lfhxmx1isrk29vmbqg6jwsgf991vh81phhvb9j3aw2jxxrl669a"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-byteorder" ,rust-byteorder-1)
+                       ("rust-chrono" ,rust-chrono-0.4)
+                       ("rust-csv" ,rust-csv-1)
+                       ("rust-fallible-iterator" ,rust-fallible-iterator-0.2)
+                       ("rust-fallible-streaming-iterator" ,rust-fallible-streaming-iterator-0.1)
+                       ("rust-lazy-static" ,rust-lazy-static-1)
+                       ("rust-libsqlite3-sys" ,rust-libsqlite3-sys-0.16)
+                       ("rust-lru-cache" ,rust-lru-cache-0.1)
+                       ("rust-memchr" ,rust-memchr-2)
+                       ("rust-serde-json" ,rust-serde-json-1)
+                       ("rust-time" ,rust-time-0.1)
+                       ("rust-url" ,rust-url-2)
+                       ("rust-uuid" ,rust-uuid-0.7))
+       #:cargo-development-inputs (("rust-lazy-static" ,rust-lazy-static-1)
+                                   ("rust-regex" ,rust-regex-1)
+                                   ("rust-tempdir" ,rust-tempdir-0.3)
+                                   ("rust-unicase" ,rust-unicase-2)
+                                   ("rust-uuid" ,rust-uuid-0.7))))
+    (home-page "https://github.com/rusqlite/rusqlite")
+    (synopsis "Ergonomic wrapper for SQLite")
+    (description "This package provides Ergonomic wrapper for SQLite.")
+    (license license:expat)))

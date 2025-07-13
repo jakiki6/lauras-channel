@@ -71,6 +71,7 @@
   #:use-module (gnu packages fpga)
   #:use-module (gnu packages sagemath)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages crates-database)
   #:use-module (gnu system uuid)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
@@ -2126,20 +2127,51 @@ ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
     (inherit glibc)
     (name "glibc-ld")
     (version (package-version glibc))
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "git://sourceware.org/git/glibc.git")
-                    ;; This is the latest commit from the
-                    ;; 'release/2.39/master' branch, where CVEs and other
-                    ;; important bug fixes are cherry picked.
-                    (commit "2c882bf9c15d206aaf04766d1b8e3ae5b1002cc2")))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "111yf24g0qcfcxywfzrilmjxysahlbkzxfimcz9rq8p00qzvvf51"))
-              (patches (append (map search-patch
-                            (fold (cut delete <...>)
-                                  %glibc-patches
-                                  '("glibc-2.39-git-updates.patch")))
-                         (search-patches "laura/packages/patches/glibc-ld.patch")))))))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "git://sourceware.org/git/glibc.git")
+             ;; This is the latest commit from the
+             ;; 'release/2.39/master' branch, where CVEs and other
+             ;; important bug fixes are cherry picked.
+             (commit "2c882bf9c15d206aaf04766d1b8e3ae5b1002cc2")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "111yf24g0qcfcxywfzrilmjxysahlbkzxfimcz9rq8p00qzvvf51"))
+       (patches (append (map search-patch
+                             (fold (cut delete <...>) %glibc-patches
+                                   '("glibc-2.39-git-updates.patch")))
+                        (search-patches
+                         "laura/packages/patches/glibc-ld.patch")))))))
+
+(define-public sqlitefs
+  (package
+    (name "sqlitefs")
+    (version "0.1.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/narumatt/sqlitefs")
+             (commit "ad19579")))
+       (file-name (git-file-name name version))
+       (modules '((guix build utils)))
+       (snippet #~(substitute* "Cargo.toml"
+                    (("\\[\"fs\"\\]")
+                     "[\"fs\", \"dir\"]")))
+       (sha256
+        (base32 "0d1y03dd4bxigjrpw1cbghx083309qsr3y2h3icjvv112zga0gjx"))))
+    (build-system cargo-build-system)
+    (native-inputs (list pkg-config))
+    (inputs (list fuse-2))
+    (arguments
+     (list
+      #:cargo-development-inputs (list rust-chrono-0.4 rust-clap-4.5.26
+                                       rust-fuse-0.3 rust-nix-0.29.0
+                                       rust-rusqlite-0.20)))
+    (home-page "https://github.com/narumatt/sqlitefs")
+    (synopsis "sqlite as a filesystem")
+    (description
+     "sqlite-fs allows Linux and MacOS to mount a sqlite database file as a normal filesystem.")
+    (license license:expat)))
