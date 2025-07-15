@@ -1,0 +1,23 @@
+diff --color --recursive --unified a/Makefile b/Makefile
+--- a/Makefile	2025-07-15 03:58:44.214616567 +0200
++++ b/Makefile	2025-07-15 03:58:56.728905181 +0200
+@@ -1,16 +1,6 @@
+-# Work around 'user' r2 installation...
+-prefix=/home/$$USER/bin/prefix/radare2
+-exec_prefix=${prefix}
+-libdir=/home/$$USER/bin/prefix/radare2/lib
+-includedir=${prefix}/include
+-CFLAGS=-g -fPIC -I${includedir}/libr
+-ASM_LDFLAGS=-shared -L${libdir} -lr_asm
+-ANAL_LDFLAGS=-shared -L${libdir} -lr_anal
+-
+-# ...or use pkg-config if installed normally
+-#CFLAGS=-g -fPIC $(shell pkg-config --cflags r_asm)
+-#ASM_LDFLAGS=-shared $(shell pkg-config --libs r_asm)
+-#ANAL_LDFLAGS=-shared $(shell pkg-config --libs r_anal)
++CFLAGS=-g -fPIC $(shell pkg-config --cflags r_asm)
++ASM_LDFLAGS=-shared $(shell pkg-config --libs r_asm)
++ANAL_LDFLAGS=-shared $(shell pkg-config --libs r_anal)
+ 
+ ASM_OBJS=asm_u8.o u8_disas.o u8_inst.o
+ ANAL_OBJS=anal_u8.o u8_inst.o

@@ -97,6 +97,7 @@
         die-engine
         glibc-ld
         sqlitefs
+        u8_r2_plugin
         otptool
         ctrtool
         makerom
