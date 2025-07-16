@@ -98,6 +98,7 @@
         glibc-ld
         sqlitefs
         u8_r2_plugin
+        acarsdec
         otptool
         ctrtool
         makerom
