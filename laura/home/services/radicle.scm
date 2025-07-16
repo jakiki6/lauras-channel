@@ -9,7 +9,7 @@
                           (documentation "Start radicle")
                           (start #~(make-forkexec-constructor (list (string-append #$radicle
                                                                      "/bin/radicle-node")
-                                                                    "-f")))
+                                                                    "--force")))
                           (stop #~(make-kill-destructor)))))
 
 (define-public home-radicle-service-type
