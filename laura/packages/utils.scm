@@ -2110,42 +2110,36 @@ ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
     (license license:expat)))
 
 (define %glibc-patches
-  (list "glibc-2.39-git-updates.patch"
-        "glibc-ldd-powerpc.patch"
-        "glibc-2.38-ldd-x86_64.patch"
-        "glibc-dl-cache.patch"
+  (list "glibc-ldd-powerpc.patch"
+        "glibc-2.41-ldd-x86_64.patch"
+        "glibc-2.40-dl-cache.patch"
         "glibc-2.37-versioned-locpath.patch"
-        ;; "glibc-allow-kernel-2.6.32.patch"
         "glibc-reinstate-prlimit64-fallback.patch"
         "glibc-supported-locales.patch"
         "glibc-2.37-hurd-clock_t_centiseconds.patch"
-        "glibc-2.37-hurd-local-clock_gettime_MONOTONIC.patch"
+        "glibc-2.41-hurd-local-clock_gettime_MONOTONIC.patch"
         "glibc-hurd-mach-print.patch"
         "glibc-hurd-gettyent.patch"
-        "glibc-hurd-getauxval.patch"))
+        "glibc-hurd-getauxval.patch"
+        "glibc-hurd-pthread_setcancelstate.patch"
+        "glibc-hurd-2.41-pthread-once.patch"
+        "glibc-hurd-2.41-pthread-sigmask.patch"
+        "glibc-hurd-2.41-symlink.patch"
+        "glibc-hurd64-intr-msg-clobber.patch"
+        "glibc-hurd64-gcc-14.2-tls-bug.patch"))
 
 (define-public glibc-ld
   (package
     (inherit glibc)
     (name "glibc-ld")
     (version (package-version glibc))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "git://sourceware.org/git/glibc.git")
-             ;; This is the latest commit from the
-             ;; 'release/2.39/master' branch, where CVEs and other
-             ;; important bug fixes are cherry picked.
-             (commit "2c882bf9c15d206aaf04766d1b8e3ae5b1002cc2")))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "111yf24g0qcfcxywfzrilmjxysahlbkzxfimcz9rq8p00qzvvf51"))
-       (patches (append (map search-patch
-                             (fold (cut delete <...>) %glibc-patches
-                                   '("glibc-2.39-git-updates.patch")))
-                        (search-patches
-                         "laura/packages/patches/glibc-ld.patch")))))))
+    (source (origin
+            (method url-fetch)
+            (uri (string-append "mirror://gnu/glibc/glibc-" version ".tar.xz"))
+            (sha256
+             (base32
+              "00g95047sshv0zxk9ja3mi7lzwi8wh8qx0nxngbvgmj5yli6p8m5"))
+            (patches (map search-patch (append %glibc-patches (list "laura/packages/patches/glibc-ld.patch"))))))))
 
 (define-public sqlitefs
   (package
