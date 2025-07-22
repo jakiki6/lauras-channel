@@ -2103,7 +2103,7 @@ ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
      (list
       #:tests? #f
       #:build-type "Release"))
-    (inputs (list qtbase-5 qtsvg-5 qtscript))
+    (inputs (list qtbase-5 qtsvg-5 qtscript-5))
     (home-page "https://github.com/horsicq/DIE-engine")
     (synopsis "DIE engine")
     (description "GUI & console sources for Detect It Easy(DiE)")
