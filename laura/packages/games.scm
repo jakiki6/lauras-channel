@@ -502,14 +502,14 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
 (define-public rust-uesave-lib-0.6
   (package
     (name "rust-uesave-lib")
-    (version "0.6.1")
+    (version "0.6.2")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "uesave" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "03hqng0j0cg6ss0j6sydcnidb56dv3ln3qkjv4lg2scjgsln1v85"))))
+        (base32 "1sk11fnzd7v09214qnr74xn7sa3z9jnwvbzhnz0x779vg8zy4ndq"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build? #t
@@ -528,14 +528,14 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
 (define-public uesave
   (package
     (name "uesave")
-    (version "0.6.1")
+    (version "0.6.2")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "uesave_cli" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "18j0a64if5m2qvrs3xgsslk5fxb56dhy7kid5ir1q9j4xr7ldvs5"))))
+        (base32 "0lxmiflmnfrrwj0zvabw52fqgfaqshc885544359y5116hsran30"))))
     (build-system cargo-build-system)
     (arguments
      `(#:cargo-inputs (("rust-anyhow" ,rust-anyhow-1)
