@@ -30,6 +30,7 @@
         fwupd-nonfree-polkit
         openssl-3.4.1
         openscad-bumped
+        ffmpeg-7.1.1
         drand-rs
         minecraft-launcher
         ScuffedMinecraft

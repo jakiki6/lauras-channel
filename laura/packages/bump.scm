@@ -8,6 +8,7 @@
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system meson)
   #:use-module (guix gexp)
+  #:use-module (guix utils)
   #:use-module (guix platform)
   #:use-module (gnu packages)
   #:use-module (gnu packages squirrel)
@@ -63,7 +64,15 @@
   #:use-module (gnu packages tbb)
   #:use-module (gnu packages llvm)
   #:use-module (gnu packages imagemagick)
-  #:use-module (gnu packages xorg))
+  #:use-module (gnu packages xorg)
+  #:use-module (gnu packages xiph)
+  #:use-module (gnu packages audio)
+  #:use-module (gnu packages mp3)
+  #:use-module (gnu packages cdrom)
+  #:use-module (gnu packages pulseaudio)
+  #:use-module (gnu packages sdl)
+  #:use-module (gnu packages networking)
+  #:use-module (gnu packages assembly))
 
 (define-public squirrel-3.2
   (package
@@ -277,3 +286,243 @@ automatic, safe and reliable.  It is used by tools such as GNOME Software. Now w
                                       (substitute* "src/glview/PolySetRenderer.cc"
                                         (("isnan")
                                          "std::isnan")))))))))
+
+(define-public libvvenc
+  (package
+    (name "libvvenc")
+    (version "1.13.1")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/fraunhoferhhi/vvenc")
+              (commit "v1.13.1")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "045f917yzi67c8mcla0ak9ky3966dm21q4z84d53hkhqclg7bx0c"))))
+    (build-system cmake-build-system)
+    (arguments (list #:tests? #f #:build-type "Release" #:configure-flags #~(list "-DBUILD_SHARED_LIBS=ON" "-DVVENC_LIBRARY_ONLY=ON")))
+    (home-page "https://www.hhi.fraunhofer.de/en/departments/vca/technologies-and-solutions/h266-vvc.html")
+    (synopsis "VVenC, the Fraunhofer Versatile Video Encoder")
+    (description "VVenC, the Fraunhofer Versatile Video Encoder, is a fast and efficient software H.266/VVC encoder implementation.")
+    (license license:bsd-3)))
+
+(define-public ffmpeg-7.1.1
+  (package
+    (name "ffmpeg")
+    (version "7.1.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://ffmpeg.org/releases/ffmpeg-"
+                                  version ".tar.xz"))
+              (sha256
+               (base32
+                "1c837agaw8ljhjx6ndp2w7hffi2mkb22vnmb8v0fbfqdbqwq8fbk"))))
+    (outputs '("out" "debug"))
+    (build-system gnu-build-system)
+    (inputs
+     (append
+      (if (supported-package? rav1e) (list rav1e) '())
+      (list dav1d
+            fontconfig
+            freetype
+            frei0r-plugins
+            gnutls
+            opus
+            ladspa
+            lame
+            libaom
+            libass
+            libbluray
+            libcaca
+            libcdio-paranoia
+            libdrm
+            libtheora
+            libva
+            libvdpau
+            libvorbis
+            libvpx
+            libvvenc
+            libwebp
+            libx11
+            libx264
+            mesa
+            openal
+            pulseaudio
+            sdl2
+            soxr
+            speex
+            srt
+            svt-av1
+            twolame
+            vidstab
+            x265
+            xvid
+            zlib)))
+    (native-inputs
+     (list bc
+           perl
+           pkg-config
+           texinfo
+           speex
+           yasm))
+    (arguments
+     (list
+      #:test-target "fate"
+      #:configure-flags
+      ;; possible additional inputs:
+      ;;   --enable-avisynth        enable reading of AviSynth script
+      ;;                            files [no]
+      ;;   --enable-libaacplus      enable AAC+ encoding via libaacplus [no]
+      ;;   --enable-libcelt         enable CELT decoding via libcelt [no]
+      ;;   --enable-libdc1394       enable IIDC-1394 grabbing using libdc1394
+      ;;                            and libraw1394 [no]
+      ;;   --enable-libfdk-aac      enable AAC de/encoding via libfdk-aac [no]
+      ;;   --enable-libflite        enable flite (voice synthesis) support via
+      ;;                            libflite [no]
+      ;;   --enable-libgme          enable Game Music Emu via libgme [no]
+      ;;   --enable-libgsm          enable GSM de/encoding via libgsm [no]
+      ;;   --enable-libiec61883     enable iec61883 via libiec61883 [no]
+      ;;   --enable-libilbc         enable iLBC de/encoding via libilbc [no]
+      ;;   --enable-libmodplug      enable ModPlug via libmodplug [no]
+      ;;   --enable-libnut          enable NUT (de)muxing via libnut,
+      ;;                            native (de)muxer exists [no]
+      ;;   --enable-libopencore-amrnb    enable AMR-NB de/encoding via
+      ;;                                 libopencore-amrnb [no]
+      ;;   --enable-libopencore-amrwb    enable AMR-WB decoding via
+      ;;                                 libopencore-amrwb [no]
+      ;;   --enable-libopencv       enable video filtering via libopencv [no]
+      ;;   --enable-libopenjpeg     enable JPEG 2000 de/encoding via
+      ;;                            OpenJPEG [no]
+      ;;   --enable-librtmp         enable RTMP[E] support via librtmp [no]
+      ;;   --enable-libschroedinger enable Dirac de/encoding via
+      ;;                            libschroedinger [no]
+      ;;   --enable-libshine        enable fixed-point MP3 encoding via
+      ;;                            libshine [no]
+      ;;   --enable-libssh          enable SFTP protocol via libssh [no]
+      ;;                            (libssh2 does not work)
+      ;;   --enable-libstagefright-h264  enable H.264 decoding via
+      ;;                                 libstagefright [no]
+      ;;   --enable-libutvideo      enable Ut Video encoding and decoding via
+      ;;                            libutvideo [no]
+      ;;   --enable-libv4l2         enable libv4l2/v4l-utils [no]
+      ;;   --enable-libvo-aacenc    enable AAC encoding via libvo-aacenc [no]
+      ;;   --enable-libvo-amrwbenc  enable AMR-WB encoding via
+      ;;                            libvo-amrwbenc [no]
+      ;;   --enable-libwavpack      enable wavpack encoding via libwavpack [no]
+      ;;   --enable-libxavs         enable AVS encoding via xavs [no]
+      ;;   --enable-libzmq          enable message passing via libzmq [no]
+      ;;   --enable-libzvbi         enable teletext support via libzvbi [no]
+      ;;   --enable-opencl          enable OpenCL code
+      #~(list
+         #$@(if (target-powerpc?)
+                ;; These tests fail on powerpc64-le (see:
+                ;; https://trac.ffmpeg.org/ticket/9604).
+                '("--ignore-tests=checkasm-sw_scale,filter-scale2ref_keep_aspect")
+                '())
+         "--enable-gpl"                 ;enable optional gpl licensed parts
+         "--enable-shared"
+         "--enable-frei0r"
+         "--enable-fontconfig"
+         "--enable-gnutls"
+         "--enable-ladspa"
+         "--enable-libaom"
+         "--enable-libass"
+         "--enable-libbluray"
+         "--enable-libcaca"
+         "--enable-libcdio"
+         "--enable-libdav1d"
+         "--enable-libfreetype"
+         "--enable-libmp3lame"
+         "--enable-libopus"
+         "--enable-libpulse"
+         #$@(if (this-package-input "rav1e")
+                '("--enable-librav1e")
+                '())
+         "--enable-libsoxr"
+         "--enable-libspeex"
+         "--enable-libsrt"
+         "--enable-libsvtav1"
+         "--enable-libtheora"
+         "--enable-libtwolame"
+         "--enable-libvidstab"
+         "--enable-libvorbis"
+         "--enable-libvpx"
+         "--enable-libwebp"
+         "--enable-libxvid"
+         "--enable-libx264"
+         "--enable-libx265"
+         "--enable-libvvenc"
+         "--enable-openal"
+         "--enable-opengl"
+         "--enable-libdrm"
+         "--enable-vaapi"
+
+         "--enable-runtime-cpudetect"
+
+         ;; The HTML pages take 7.2 MiB
+         "--disable-htmlpages"
+
+         ;; The static libraries are 23 MiB
+         "--disable-static"
+
+         "--disable-stripping"
+
+         #$@(if (target-riscv64?)
+                '("--extra-cflags=-fPIC")
+                '())
+
+         ;; Runtime cpu detection is not implemented on
+         ;; MIPS, so we disable some features.
+         "--disable-mips32r2"
+         "--disable-mipsdsp"
+         "--disable-mipsdspr2"
+         "--disable-mipsfpu")
+      #:phases
+      #~(modify-phases %standard-phases
+          #$@(if (target-x86-32?)
+                 #~((add-before 'configure 'bypass-openal-check
+                      ;; configure fails linking to openal when using binutils
+                      ;; >= 2.38 due to openal's usage of protected visibility
+                      ;; for its dynamic symbols. Bypass this configure time
+                      ;; check for now. See:
+                      ;; https://lists.gnu.org/archive/html/guix-devel/2024-08/msg00159.html
+                      (lambda _
+                        (substitute* "configure"
+                          ;; This string only matches on ffmpeg v6 and above.
+                          ;; Replace it with the one defined at ffmpeg-5 which
+                          ;; matches on all ffmpeg versions. See #71917.
+                          (("alGetError \\|\\|")
+                           "alGetError \|\| true \|\|")))))
+                 #~())
+          (replace 'configure
+            ;; configure does not work followed by "SHELL=..." and
+            ;; "CONFIG_SHELL=..."; set environment variables instead
+            (lambda* (#:key outputs configure-flags #:allow-other-keys)
+              (let ((out (assoc-ref outputs "out")))
+                (substitute* "configure"
+                  (("#! /bin/sh") (string-append "#!" (which "sh"))))
+                (substitute* "configure"
+                  (("#!/bin/sh") (string-append "#!" (which "sh"))))
+                (setenv "SHELL" (which "bash"))
+                (setenv "CONFIG_SHELL" (which "bash"))
+                (apply invoke
+                       "./configure"
+                       (string-append "--prefix=" out)
+                       ;; Add $libdir to the RUNPATH of all the binaries.
+                       (string-append "--extra-ldflags=-Wl,-rpath="
+                                      out "/lib")
+                       configure-flags))))
+          (add-before 'check 'set-ld-library-path
+            (lambda _
+              ;; Allow $(top_builddir)/ffmpeg to find its dependencies when
+              ;; running tests.
+              (let* ((dso  (find-files "." "\\.so$"))
+                     (path (string-join (map dirname dso) ":")))
+                (format #t "setting LD_LIBRARY_PATH to ~s~%" path)
+                (setenv "LD_LIBRARY_PATH" path)))))))
+    (home-page "https://www.ffmpeg.org/")
+    (synopsis "Audio and video framework")
+    (description "FFmpeg is a complete, cross-platform solution to record,
+convert and stream audio and video.  It includes the libavcodec
+audio/video codec library.")
+    (license license:gpl2+)))
