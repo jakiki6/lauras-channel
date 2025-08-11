@@ -10,16 +10,18 @@
 
 (define-public (patched-upstream-guix issues)
   (let* ((urls (map (lambda (issue)
-                      (if (nil? (cdr issue))
-                          (string-append
-                           "https://codeberg.org/guix/guix/pulls/"
-                           (number->string (car issue)) ".patch")
-                          (string-append "https://issues.guix.gnu.org/issue/"
-                                         (number->string (car issue))
-                                         "/attachment/"
-                                         (string-join (map number->string
-                                                           (cdr issue)) "/"))))
-                    issues))
+                      (if (string? issue)
+                          (string-append "file:///"
+                                         (canonicalize-path issue))
+                          (if (nil? (cdr issue))
+                              (string-append
+                               "https://codeberg.org/guix/guix/pulls/"
+                               (number->string (car issue)) ".patch")
+                              (string-append
+                               "https://issues.guix.gnu.org/issue/"
+                               (number->string (car issue)) "/attachment/"
+                               (string-join (map number->string
+                                                 (cdr issue)) "/"))))) issues))
          (patches (map (lambda (url)
                          (http-get url)) urls)))
     (lambda (checkout)
