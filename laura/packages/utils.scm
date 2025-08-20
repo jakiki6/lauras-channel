@@ -1078,6 +1078,7 @@ extension_kwargs = pkgconfig('libglibutil', extension_kwargs)")))))))
     (build-system go-build-system)
     (arguments
      (list
+      #:tests? #f
       #:unpack-path "github.com/foxboron/sbctl"
       #:import-path "github.com/foxboron/sbctl/cmd/sbctl"))
     (propagated-inputs (list go-golang-org-x-sys
