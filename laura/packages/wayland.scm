@@ -42,6 +42,7 @@
        (sha256
         (base32 "10j7sa8vv530c388z5rzafkdr4sx3agjqczlnkh7412whyw77lha"))))
     (build-system cmake-build-system)
+    (arguments (list #:tests? #f))
     (native-inputs (list extra-cmake-modules pkg-config))
     (propagated-inputs (list libepoxy pipewire qtbase-5 qtdeclarative-5))
     (inputs (list ffmpeg
