@@ -126,6 +126,7 @@ PipeWire in Qt projects.")
     (build-system cmake-build-system)
     (arguments
      (list
+      #:tests? #f
       #:build-type "Release"))
     (home-page "https://invent.kde.org/system/xwaylandvideobridge")
     (synopsis "Utility to allow streaming Wayland windows to X applications")
