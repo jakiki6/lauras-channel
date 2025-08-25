@@ -74,6 +74,8 @@
   #:use-module (gnu packages crates-database)
   #:use-module (gnu packages engineering)
   #:use-module (gnu packages radio)
+  #:use-module (gnu packages image)
+  #:use-module (gnu packages ncurses)
   #:use-module (gnu system uuid)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
@@ -2134,13 +2136,15 @@ ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
     (inherit glibc)
     (name "glibc-ld")
     (version (package-version glibc))
-    (source (origin
-            (method url-fetch)
-            (uri (string-append "mirror://gnu/glibc/glibc-" version ".tar.xz"))
-            (sha256
-             (base32
-              "00g95047sshv0zxk9ja3mi7lzwi8wh8qx0nxngbvgmj5yli6p8m5"))
-            (patches (map search-patch (append %glibc-patches (list "laura/packages/patches/glibc-ld.patch"))))))))
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://gnu/glibc/glibc-" version ".tar.xz"))
+       (sha256
+        (base32 "00g95047sshv0zxk9ja3mi7lzwi8wh8qx0nxngbvgmj5yli6p8m5"))
+       (patches (map search-patch
+                     (append %glibc-patches
+                             (list "laura/packages/patches/glibc-ld.patch"))))))))
 
 (define-public sqlitefs
   (package
@@ -2239,4 +2243,40 @@ ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
     (synopsis "ACARS SDR decoder")
     (description
      "Acarsdec is a multi-channels acars decoder with built-in rtl_sdr, airspy front end or sdrplay device. Since 3.0, It comes with a database backend : acarsserv to store received acars messages.")
+    (license license:gpl2)))
+
+(define-public vdr
+  (package
+    (name "vdr")
+    (version "2.7.7")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "git://git.tvdr.de/vdr.git")
+             (commit "2.7.7")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1wkz3rs496r4501hvw9g6p0vb1r7sisy619l7lyfxrn4hikw0cwx"))))
+    (build-system gnu-build-system)
+    (native-inputs (list pkg-config gettext-minimal))
+    (inputs (list fontconfig freetype ijg-libjpeg libcap ncurses))
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'configure
+            (lambda _
+              (setenv "PREFIX"
+                      #$output)
+              (substitute* "Makefile"
+                (("install-pc install-bin install-conf install-doc install-plugins install-i18n install-includes")
+                 "install-pc install-bin install-doc install-plugins install-i18n install-includes")))))))
+    (home-page "https://tvdr.de/")
+    (synopsis "The Video Disk Recorder")
+    (description
+     "\"VCR\" was short for \"Video Cassette Recorder\", a device that recorded analog video on tape cassettes. When digital tv came up in the late 1990s, it was only natural to record that data on computer harddisks instead of cassettes. So, in the year 2000 the very first steps were made into programming a \"VDR\", which stands for \"Video Disk Recorder\".
+
+Version 1 of VDR was able to record and play plain old SDTV. The new version 2 can now handle HDTV (High Definition Television).")
     (license license:gpl2)))
