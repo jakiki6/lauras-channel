@@ -17,7 +17,7 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages sdl)
   #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages crates-io)
+  #:use-module (past-crates packages crates-io)
   #:use-module (gnu packages lua)
   #:use-module (gnu packages curl)
   #:use-module (gnu packages algebra)

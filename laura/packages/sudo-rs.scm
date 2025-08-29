@@ -6,7 +6,7 @@
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix packages)
-  #:use-module (gnu packages crates-io)
+  #:use-module (past-crates packages crates-io)
   #:use-module (gnu packages base)
   #:use-module (gnu packages linux))
 

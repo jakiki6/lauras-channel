@@ -3,6 +3,10 @@
  (url "https://github.com/jakiki6/lauras-channel")
  (dependencies
   (channel
+    (name guix-rust-past-crates)
+    (url "https://codeberg.org/guix/guix-rust-past-crates.git")
+    (branch "trunk"))
+  (channel
    (name nonguix)
    (url "https://gitlab.com/nonguix/nonguix"))
   (channel
