@@ -526,3 +526,26 @@ automatic, safe and reliable.  It is used by tools such as GNOME Software. Now w
 convert and stream audio and video.  It includes the libavcodec
 audio/video codec library.")
     (license license:gpl2+)))
+
+(define-public p7zip-nonfree
+  (package/inherit p7zip
+    (name "p7zip-nonfree")
+    (version "16.02")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://sourceforge/" name "/" name "/"
+                                  version "/p7zip_" version
+                                  "_src_all.tar.bz2"))
+              (sha256
+               (base32
+                "07rlwbbgszq8i7m8jh3x6j2w2hc9a72dc7fmqawnqkwlwb00mcjy"))
+              (modules '((guix build utils)))
+              (snippet
+               '(begin
+                  ;; Fix FTBFS with gcc-10.
+                  (substitute* "CPP/Windows/ErrorMsg.cpp"
+                    (("switch\\(errorCode\\) \\{")
+                     "switch(static_cast<HRESULT>(errorCode)) {"))))
+              (patches (search-patches "p7zip-CVE-2016-9296.patch"
+                                       "p7zip-CVE-2017-17969.patch"
+                                       "p7zip-fix-build-with-gcc-11.patch"))))))

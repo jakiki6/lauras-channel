@@ -31,6 +31,7 @@
         openssl-3.4.1
         openscad-bumped
         ffmpeg-7.1.1
+        p7zip-nonfree
         drand-rs
         minecraft-launcher
         ScuffedMinecraft

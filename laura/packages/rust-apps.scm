@@ -1,0 +1,8 @@
+(define-module (laura packages rust-apps)
+  #:use-module (guix build-system cargo)
+  #:use-module (guix download)
+  #:use-module (guix gexp)
+  #:use-module (guix git-download)
+  #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (guix packages)
+  #:use-module (guix utils))
