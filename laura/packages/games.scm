@@ -352,30 +352,6 @@ chdir(strcat(dirname(argv[0]), \"/../share/scuffed_mc\"));")))
     (description "A Minecraft clone made in C++ and OpenGL")
     (license license:expat)))
 
-(define-public fceux
-  (package
-    (name "fceux")
-    (version "2.6.6")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/TASEmulators/fceux")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "02s5qmxdxpsa71977z9bs5vfhnszn5nr5hk05wns8cm9nshbg7as"))))
-    (build-system cmake-build-system)
-    (arguments
-     `(#:tests? #f))
-    (inputs (list qtbase-5 zlib minizip sdl2))
-    (native-inputs (list pkg-config))
-    (synopsis "FCEUX, a NES Emulator")
-    (description
-     "An open source NES Emulator for Windows and Unix that features solid emulation accuracy and state of the art tools for power users. For some reason casual gamers use it too.")
-    (home-page "https://fceux.com")
-    (license license:gpl2)))
-
 (define-public rpcs3
   (package
     (name "rpcs3")
