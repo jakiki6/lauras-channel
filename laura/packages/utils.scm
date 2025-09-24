@@ -70,6 +70,7 @@
   #:use-module (gnu packages radio)
   #:use-module (gnu packages image)
   #:use-module (gnu packages ncurses)
+  #:use-module (gnu packages ruby)
   #:use-module (gnu system uuid)
   #:use-module (guix build utils)
   #:use-module (guix build-system cmake)
@@ -2214,16 +2215,16 @@ ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
 (define-public acarsdec
   (package
     (name "acarsdec")
-    (version "3.7")
+    (version "4.3.1")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
-             (url "https://github.com/TLeconte/acarsdec")
-             (commit "7920079")))
+             (url "https://github.com/f00b4r0/acarsdec")
+             (commit "v4.3.1")))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0wlrvn81xfzpnz9m1m9cgjiczpfjzj23l1na61m9kj5d62c1lks8"))))
+        (base32 "1lgzc7n30xmi2c8llzccvv908mcl3arz72jf91jl5jql1nnjp8mp"))))
     (build-system cmake-build-system)
     (native-inputs (list pkg-config))
     (inputs (list libacars rtl-sdr))
@@ -2274,3 +2275,25 @@ ssh-ed25519 keys into X25519 keys preserving keypair correspondence.")
 
 Version 1 of VDR was able to record and play plain old SDTV. The new version 2 can now handle HDTV (High Definition Television).")
     (license license:gpl2)))
+
+(define-public fil-c
+  (package
+    (name "fil-c")
+    (version "0.670")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/pizlonator/fil-c")
+              (commit "v0.670")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1k20h712q8ad5y5bswg9sz45cz3qjyp8k2inl0kq0g9izi2cz6az"))))
+    (build-system cmake-build-system)
+    (native-inputs (list python-wrapper patchelf ruby clang))
+    (arguments (list #:phases #~(modify-phases %standard-phases
+      (delete 'configure)
+      (replace 'build (lambda _ (invoke "./build_all_fast.sh"))))))
+    (home-page "https://github.com/pizlonator/fil-c")
+    (synopsis "Fil-C: completely compatible memory safety for C and C++ ")
+    (description "Fil-C is a fanatically compatible memory-safe implementation of C and C++. Lots of software compiles and runs with Fil-C with zero or minimal changes. All memory safety errors are caught as Fil-C panics. Fil-C achieves this using a combination of concurrent garbage collection and invisible capabilities (each pointer in memory has a corresponding capability, not visible to the C address space). Every fundamental C operation (as seen in LLVM IR) is checked against the capability. Fil-C has no unsafe escape hatch of any kind.")
+    (license license:asl2.0)))
