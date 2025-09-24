@@ -12,7 +12,6 @@
   #:use-module (guix platform)
   #:use-module (gnu packages)
   #:use-module (gnu packages squirrel)
-  #:use-module (gnu packages fpga)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages bison)
   #:use-module (gnu packages flex)
