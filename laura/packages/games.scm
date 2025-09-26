@@ -662,22 +662,41 @@ The tool is designed for high performance and supports Minecraft Java Edition ma
     (name "prismlauncher")
     (version "9.4")
     (source
-      (origin
-        (method git-fetch)
-        (uri (git-reference
-              (url "https://github.com/PrismLauncher/PrismLauncher")
-              (recursive? #t)
-              (commit "9.4")))
-        (file-name (git-file-name name version))
-        (sha256 (base32 "1xxgyx0z5r3hk3yk4gglbfwvq2qk1j9a0dkrv55j4vrlkni79nrm"))))
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/PrismLauncher/PrismLauncher")
+             (recursive? #t)
+             (commit "9.4")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1xxgyx0z5r3hk3yk4gglbfwvq2qk1j9a0dkrv55j4vrlkni79nrm"))))
     (build-system qt-build-system)
-    (native-inputs (list pkg-config (list openjdk17 "jdk") scdoc extra-cmake-modules))
-    (inputs (list qtbase qt5compat qtnetworkauth))
-    (arguments (list
-                #:build-type "Release"))
+    (native-inputs (list pkg-config
+                         (list openjdk17 "jdk") scdoc extra-cmake-modules))
+    (inputs (list qtbase
+                  qt5compat
+                  qtnetworkauth
+                  glfw-3.4
+                  mesa
+                  openal))
+    (arguments
+     (list
+      #:build-type "Release"
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'wrap
+            (lambda _
+              (wrap-program (string-append #$output "/bin/prismlauncher")
+                `("LD_LIBRARY_PATH" ":" =
+                  (,(string-append #$glfw-3.4 "/lib") ,(string-append #$mesa
+                                                                      "/lib")
+                   ,(string-append #$openal "/lib")))))))))
     (home-page "https://prismlauncher.org/")
-    (synopsis "A custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once (Fork of MultiMC)")
-    (description "Prism Launcher is a custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once.
+    (synopsis
+     "A custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once (Fork of MultiMC)")
+    (description
+     "Prism Launcher is a custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once.
 
 This is a fork of the MultiMC Launcher and is not endorsed by it.")
     (license license:gpl3)))
