@@ -65,6 +65,9 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages golang-build)
+  #:use-module (gnu packages java)
+  #:use-module (gnu packages man)
+  #:use-module (gnu packages kde-frameworks)
   #:use-module (guix build-system qt)
   #:use-module (nonguix licenses)
   #:use-module (nonguix build-system binary)
@@ -652,4 +655,29 @@ To reach the end, a new player will take about 4 to 6 hours, a full playthrough 
      "Cubiomes Viewer provides a graphical interface for the efficient and flexible seed-finding utilities provided by cubiomes and a map viewer for the Minecraft biomes and structure generation.
 
 The tool is designed for high performance and supports Minecraft Java Edition main releases up to 1.21.")
+    (license license:gpl3)))
+
+(define-public prismlauncher
+  (package
+    (name "prismlauncher")
+    (version "9.4")
+    (source
+      (origin
+        (method git-fetch)
+        (uri (git-reference
+              (url "https://github.com/PrismLauncher/PrismLauncher")
+              (recursive? #t)
+              (commit "9.4")))
+        (file-name (git-file-name name version))
+        (sha256 (base32 "1xxgyx0z5r3hk3yk4gglbfwvq2qk1j9a0dkrv55j4vrlkni79nrm"))))
+    (build-system qt-build-system)
+    (native-inputs (list pkg-config (list openjdk17 "jdk") scdoc extra-cmake-modules))
+    (inputs (list qtbase qt5compat qtnetworkauth))
+    (arguments (list
+                #:build-type "Release"))
+    (home-page "https://prismlauncher.org/")
+    (synopsis "A custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once (Fork of MultiMC)")
+    (description "Prism Launcher is a custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once.
+
+This is a fork of the MultiMC Launcher and is not endorsed by it.")
     (license license:gpl3)))
