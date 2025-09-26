@@ -679,7 +679,10 @@ The tool is designed for high performance and supports Minecraft Java Edition ma
                   qtnetworkauth
                   glfw-3.4
                   mesa
-                  openal))
+                  openal
+                  libxcursor
+                  libxrandr
+                  libxxf86vm))
     (arguments
      (list
       #:build-type "Release"
@@ -689,9 +692,12 @@ The tool is designed for high performance and supports Minecraft Java Edition ma
             (lambda _
               (wrap-program (string-append #$output "/bin/prismlauncher")
                 `("LD_LIBRARY_PATH" ":" =
-                  (,(string-append #$glfw-3.4 "/lib") ,(string-append #$mesa
-                                                                      "/lib")
-                   ,(string-append #$openal "/lib")))))))))
+                  (,(string-append #$glfw-3.4 "/lib")
+                   ,(string-append #$mesa "/lib")
+                   ,(string-append #$openal "/lib")
+                   ,(string-append #$libxcursor "/lib")
+                   ,(string-append #$libxrandr "/lib")
+                   ,(string-append #$libxxf86vm "/lib")))))))))
     (home-page "https://prismlauncher.org/")
     (synopsis
      "A custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once (Fork of MultiMC)")
